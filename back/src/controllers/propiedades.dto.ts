@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import {
     IsArray,
     IsEnum,
@@ -6,16 +7,14 @@ import {
     IsNotEmpty,
     IsOptional,
     IsString,
-    IsUUID,
     MaxLength,
     Min,
+    Max,
     IsNumberString,
-    isString,
 } from "class-validator";
 
-import { TipoPropiedad, Operacion } from "../entities/enums";
+import { TipoPropiedad, Operacion, EstadoPropiedad } from "../entities/enums";
 
-// Datos permitidos para crear una propiedad
 export class CrearPropiedadDto {
     @IsString()
     @IsNotEmpty()
@@ -80,9 +79,9 @@ export class CrearPropiedadDto {
     @IsString({ each: true })
     amenities?: string[];
 
-    // La inmobiliaria se recibe por id. El service verifica que exista
-    @IsUUID()
-    inmobiliariaId!: string;
+    @IsInt()
+    @Min(1)
+    inmobiliariaId!: number;
 }
 
 export class ActualizarPropiedadDto {
@@ -157,4 +156,66 @@ export class ActualizarPropiedadDto {
     @IsArray()
     @IsString({ each: true })
     amenities?: string[];
+}
+
+export class FiltrarPropiedadesDto {
+    @IsOptional()
+    @IsEnum(TipoPropiedad)
+    tipo?: TipoPropiedad;
+
+    @IsOptional()
+    @IsEnum(Operacion)
+    operacion?: Operacion;
+
+    @IsOptional()
+    @IsString()
+    @IsNotEmpty()
+    zona?: string;
+
+    @IsOptional()
+    @IsNumberString()
+    precioMin?: string;
+
+    @IsOptional()
+    @IsNumberString()
+    precioMax?: string;
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsInt()
+    @Min(1)
+    ambientes?: number;
+
+    @IsOptional()
+    @IsString()
+    amenities?: string;
+
+    // Texto libre
+    @IsOptional()
+    @IsString()
+    @IsNotEmpty()
+    q?: string;
+
+    @IsOptional()
+    @IsIn(["precio", "fechaPublicacion", "superficieTotal"])
+    sort?: "precio" | "fechaPublicacion" | "superficieTotal";
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsInt()
+    @Min(1)
+    page?: number;
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsInt()
+    @Min(1)
+    @Max(50)
+    limit?: number;
+
+}
+
+export class CambiarEstadoPropiedadDto {
+    @IsEnum(EstadoPropiedad)
+    estado!: EstadoPropiedad;
 }
