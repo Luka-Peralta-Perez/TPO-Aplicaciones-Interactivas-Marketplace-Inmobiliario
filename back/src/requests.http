@@ -1,0 +1,242 @@
+@baseUrl = http://localhost:3000
+@tokenJuan = 
+
+### Health
+GET {{baseUrl}}/health
+
+
+// AUTENTICACIÓN
+
+### Registrar nuevo vendedor e inmobiliaria
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Mora Ivanec",
+  "email": "mora.ivanec@costaatlantica.com",
+  "contrasenia": "Clave123!",
+  "telefono": "2254-512345",
+  "nombreInmobiliaria": "Costa Atlántica Inmuebles",
+  "descripcion": "Inmobiliaria especializada en venta y alquiler de propiedades en Pinamar y la Costa Atlántica.",
+  "telefonoContacto": "2254-523456",
+  "emailContacto": "info@costaatlanticainmuebles.com",
+  "direccionOficina": "Av. Bunge 780, Pinamar"
+}
+
+### Login Juan
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "juan@pinamarpropiedades.com",
+  "contrasenia": "Clave123!"
+}
+
+
+// PROPIEDADES
+
+### Listar propiedades publicadas
+GET {{baseUrl}}/properties
+
+### Filtrar propiedades por tipo y operación
+GET {{baseUrl}}/properties?tipo=CASA&operacion=VENTA
+
+### Ver detalle de una propiedad
+GET {{baseUrl}}/properties/1
+
+### Ver propiedades publicadas de la inmobiliaria de Juan
+GET {{baseUrl}}/agencies/1/properties
+
+### Crear una propiedad nueva para Juan
+POST {{baseUrl}}/properties
+Authorization: Bearer {{tokenJuan}}
+Content-Type: application/json
+
+{
+  "titulo": "Casa con jardín y pileta en Pinamar",
+  "descripcion": "Casa luminosa de cuatro ambientes, con amplio jardín, pileta y cochera cubierta.",
+  "tipo": "CASA",
+  "operacion": "VENTA",
+  "precio": "190000",
+  "moneda": "USD",
+  "direccion": "De las Artes 1240",
+  "zona": "Pinamar",
+  "superficieCubiertaM2": "160",
+  "superficieTotalM2": "420",
+  "ambientes": 4,
+  "dormitorios": 3,
+  "banios": 2,
+  "antiguedadAnios": 5,
+  "amenities": ["pileta", "cochera", "jardin"],
+  "inmobiliariaId": 1
+}
+
+### Actualizar propiedad 2 de Juan
+PUT {{baseUrl}}/properties/2
+Authorization: Bearer {{tokenJuan}}
+Content-Type: application/json
+
+{
+  "titulo": "Terreno en Ostende actualizado",
+  "precio": "57000"
+}
+
+### Cambiar propiedad 2 de BORRADOR a PUBLICADA
+PATCH {{baseUrl}}/properties/2/status
+Authorization: Bearer {{tokenJuan}}
+Content-Type: application/json
+
+{
+  "estado": "PUBLICADA"
+}
+
+### Ver historial de estados de propiedad 2
+GET {{baseUrl}}/properties/2/status-history
+Authorization: Bearer {{tokenJuan}}
+
+### Eliminar propiedad 2
+DELETE {{baseUrl}}/properties/2
+Authorization: Bearer {{tokenJuan}}
+
+
+// COMENTARIOS
+
+### Ver comentarios de la propiedad 1
+GET {{baseUrl}}/properties/1/comments
+
+### Crear un comentario en la propiedad 1
+POST {{baseUrl}}/properties/1/comments
+Content-Type: application/json
+
+{
+  "nombreAutor": "Lucía",
+  "contenido": "¿La propiedad sigue disponible?"
+}
+
+### Responder comentario 2
+PATCH {{baseUrl}}/comments/2/reply
+Authorization: Bearer {{tokenJuan}}
+Content-Type: application/json
+
+{
+  "respuesta": "Sí, tiene calefacción."
+}
+
+
+// SOLICITUDES DE VISITA
+
+### Crear solicitud de visita para la propiedad 1
+POST {{baseUrl}}/properties/1/visit-requests
+Content-Type: application/json
+
+{
+  "nombreSolicitante": "Federico",
+  "telefono": "2254-555555",
+  "fechaPropuesta": "2026-10-10T15:00:00.000Z",
+  "mensaje": "Me gustaría conocer la propiedad."
+}
+
+### Ver solicitudes de visita de Juan
+GET {{baseUrl}}/agencies/1/visit-requests
+Authorization: Bearer {{tokenJuan}}
+
+### Confirmar solicitud de visita 1
+PATCH {{baseUrl}}/visit-requests/1/status
+Authorization: Bearer {{tokenJuan}}
+Content-Type: application/json
+
+{
+  "estado": "CONFIRMADA"
+}
+
+### Marcar solicitud de visita 1 como realizada
+PATCH {{baseUrl}}/visit-requests/1/status
+Authorization: Bearer {{tokenJuan}}
+Content-Type: application/json
+
+{
+  "estado": "REALIZADA"
+}
+
+
+// INMOBILIARIAS
+
+### Ver inmobiliaria de Juan
+GET {{baseUrl}}/agencies/1
+
+### Actualizar inmobiliaria de Juan
+PUT {{baseUrl}}/agencies/1
+Authorization: Bearer {{tokenJuan}}
+Content-Type: application/json
+
+{
+  "descripcion": "Inmobiliaria especializada en venta y alquiler de propiedades residenciales en Pinamar y alrededores."
+}
+
+### Intentar eliminar inmobiliaria 1
+DELETE {{baseUrl}}/agencies/1
+Authorization: Bearer {{tokenJuan}}
+
+
+// RESEÑAS
+
+### Ver reseñas de la inmobiliaria de Juan
+GET {{baseUrl}}/agencies/1/reviews
+
+### Crear una reseña para la inmobiliaria de Juan
+POST {{baseUrl}}/agencies/1/reviews
+Content-Type: application/json
+
+{
+  "nombreAutor": "Luka",
+  "contenido": "Muy buena atención.",
+  "calificacion": 5
+}
+
+
+// ACTIVIDAD
+
+### Ver actividad de la inmobiliaria de Juan
+GET {{baseUrl}}/agencies/1/activity
+Authorization: Bearer {{tokenJuan}}
+
+### Juan intenta ver la actividad de María
+GET {{baseUrl}}/agencies/2/activity
+Authorization: Bearer {{tokenJuan}}
+
+### Ver cantidad de actividades no leídas
+GET {{baseUrl}}/agencies/1/activity/unread-count
+Authorization: Bearer {{tokenJuan}}
+
+### Marcar actividad 1 como leída
+PATCH {{baseUrl}}/activity/1/read
+Authorization: Bearer {{tokenJuan}}
+
+### Volver a consultar cantidad de no leídas
+GET {{baseUrl}}/agencies/1/activity/unread-count
+Authorization: Bearer {{tokenJuan}}
+
+
+// PRUEBAS DE ERRORES
+
+### 400 - Reseña con calificación inválida
+POST {{baseUrl}}/agencies/1/reviews
+Content-Type: application/json
+
+{
+  "nombreAutor": "Prueba Error",
+  "contenido": "Esta reseña debería fallar.",
+  "calificacion": 6
+}
+
+### 404 - Propiedad inexistente
+GET {{baseUrl}}/properties/999999
+
+### 409 - Intentar responder nuevamente el comentario 2
+PATCH {{baseUrl}}/comments/2/reply
+Authorization: Bearer {{tokenJuan}}
+Content-Type: application/json
+
+{
+  "respuesta": "Intento de segunda respuesta."
+}
