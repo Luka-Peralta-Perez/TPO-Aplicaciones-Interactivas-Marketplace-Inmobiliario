@@ -23,7 +23,7 @@ export enum EstadoPropiedad {
 export enum EstadoSolicitudVisita {
   PENDIENTE = "PENDIENTE",
   CONFIRMADA = "CONFIRMADA",
-  COMPLETADA = "COMPLETADA",
+  REALIZADA = "REALIZADA",
   CANCELADA = "CANCELADA",
   RECHAZADA = "RECHAZADA",
 }

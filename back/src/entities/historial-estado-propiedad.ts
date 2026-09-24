@@ -4,8 +4,8 @@ import { EstadoPropiedad } from "./enums";
 
 @Entity("historial_estado_propiedad")
 export class HistorialEstadoPropiedad {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  @PrimaryGeneratedColumn()
+    id!: number;
 
   @Column({ type: "enum", enum: EstadoPropiedad })
   estadoAnterior!: EstadoPropiedad;
@@ -13,7 +13,11 @@ export class HistorialEstadoPropiedad {
   @Column({ type: "enum", enum: EstadoPropiedad })
   estadoNuevo!: EstadoPropiedad;
 
-  @ManyToOne(() => Propiedad, { nullable: false, onDelete: "CASCADE" })
+  @ManyToOne(() => Propiedad, { 
+    nullable: false, 
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE", 
+  })
   @JoinColumn({ name: "propiedad_id" })
   propiedad!: Propiedad;
 

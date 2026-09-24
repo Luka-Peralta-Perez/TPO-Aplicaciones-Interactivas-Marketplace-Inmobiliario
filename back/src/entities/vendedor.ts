@@ -1,9 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Inmobiliaria } from "./inmobiliaria";
 
 @Entity("vendedores")
 export class Vendedor {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  @PrimaryGeneratedColumn()
+    id!: number;
 
   @Column({ length: 120 })
   nombreCompleto!: string;
@@ -12,10 +13,13 @@ export class Vendedor {
   email!: string;
 
   @Column({ length: 255 })
-  hashContrasena!: string;
+  hashContrasenia!: string;
 
   @Column({ type: "varchar", nullable: true, length: 40 })
   telefono!: string | null;
+
+  @OneToOne(() => Inmobiliaria, (inmobiliaria) => inmobiliaria.vendedor)
+  inmobiliaria!: Inmobiliaria;
 
   @CreateDateColumn()
   creadoEn!: Date;

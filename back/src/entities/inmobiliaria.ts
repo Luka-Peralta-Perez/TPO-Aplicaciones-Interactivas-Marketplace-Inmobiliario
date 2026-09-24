@@ -1,10 +1,12 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Vendedor } from "./vendedor";
+import { Resenia } from "./resenia";
+import { Propiedad } from "./propiedad";
 
 @Entity("inmobiliarias")
 export class Inmobiliaria {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  @PrimaryGeneratedColumn()
+    id!: number;
 
   @Column({ unique: true, length: 120 })
   nombre!: string;
@@ -24,9 +26,19 @@ export class Inmobiliaria {
   @Column({ type: "varchar", nullable: true, length: 255 })
   direccionOficina!: string | null;
 
-  @OneToOne(() => Vendedor, { nullable: false })
+  @OneToOne(() => Vendedor, { 
+    nullable: false,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE", 
+  })
   @JoinColumn({ name: "vendedor_id" })
   vendedor!: Vendedor;
+
+  @OneToMany(() => Propiedad, (propiedad) => propiedad.inmobiliaria)
+  propiedades!: Propiedad[];
+
+  @OneToMany(() => Resenia, (resenia) => resenia.inmobiliaria)
+  resenias!: Resenia[];
 
   @CreateDateColumn()
   creadoEn!: Date;

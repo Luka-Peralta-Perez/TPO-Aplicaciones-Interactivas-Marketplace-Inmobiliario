@@ -1,11 +1,14 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Inmobiliaria } from "./inmobiliaria";
 import { Operacion, EstadoPropiedad, TipoPropiedad } from "./enums";
+import { Comentario } from "./comentario";
+import { SolicitudVisita } from "./solicitud-visita";
+import { HistorialEstadoPropiedad } from "./historial-estado-propiedad";
 
 @Entity("propiedades")
 export class Propiedad {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  @PrimaryGeneratedColumn()
+    id!: number;
 
   @Column({ length: 160 })
   titulo!: string;
@@ -22,7 +25,7 @@ export class Propiedad {
   @Column({ type: "decimal", precision: 14, scale: 2 })
   precio!: string;
 
-  @Column({ length: 3 })
+  @Column({ type: "varchar", length: 3 })
   moneda!: "ARS" | "USD";
 
   @Column({ length: 255 })
@@ -55,9 +58,22 @@ export class Propiedad {
   @Column({ type: "enum", enum: EstadoPropiedad, default: EstadoPropiedad.BORRADOR })
   estado!: EstadoPropiedad;
 
-  @ManyToOne(() => Inmobiliaria, { nullable: false })
+  @ManyToOne(() => Inmobiliaria, { 
+    nullable: false,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE", 
+  })
   @JoinColumn({ name: "inmobiliaria_id" })
   inmobiliaria!: Inmobiliaria;
+
+  @OneToMany(() => Comentario, (comentario) => comentario.propiedad)
+  comentarios!: Comentario[];
+
+  @OneToMany(() => SolicitudVisita, (solicitudVisita) => solicitudVisita.propiedad)
+  solicitudesVisita!: SolicitudVisita[];
+
+  @OneToMany(() => HistorialEstadoPropiedad, (historial) => historial.propiedad)
+  historialEstados!: HistorialEstadoPropiedad[];
 
   @CreateDateColumn()
   creadoEn!: Date;
