@@ -7,22 +7,23 @@ import { router } from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
+const port = Number(process.env.PORT ?? 3000);
 
 app.use(cors());
 app.use(express.json());
 app.use(router);
-
 app.use(errorHandler);
-
-const PORT = Number(process.env.PORT ?? 3000);
-
 
 AppDataSource.initialize()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`API running on http://localhost:${PORT}`);
+    console.log("Fuente de datos inicializada");
+    app.listen(port, () => {
+      console.log(`API ejecutándose en http://localhost:${port}`);
     });
   })
-  .catch((error) => {
-    console.error("Error al conectar con la base de datos:", error);
+  .catch((error: unknown) => {
+    console.error("Error al inicializar la fuente de datos", error);
+    process.exit(1);
   });
+
+export { app };
