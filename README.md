@@ -101,5 +101,5 @@ npm run dev
 
 ## Equipo
 
-- Ivanec
-- Peralta
+- Ivanec, Mora Amalia
+- Peralta Perez, Luka Andrés
