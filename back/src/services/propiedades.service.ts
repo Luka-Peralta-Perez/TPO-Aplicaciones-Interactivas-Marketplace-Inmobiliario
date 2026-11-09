@@ -41,6 +41,7 @@ const TRANSICIONES_PERMITIDAS: Record<EstadoPropiedad, EstadoPropiedad[]> = {
         EstadoPropiedad.RESERVADA,
         EstadoPropiedad.PAUSADA,
         EstadoPropiedad.CANCELADA,
+        EstadoPropiedad.VENDIDA,
     ],
     [EstadoPropiedad.PAUSADA]: [
         EstadoPropiedad.PUBLICADA,
