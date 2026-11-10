@@ -1,6 +1,5 @@
 @baseUrl = http://localhost:3000
 @tokenJuan = 
-
 ### Health
 GET {{baseUrl}}/health
 
@@ -39,8 +38,7 @@ Content-Type: application/json
 GET {{baseUrl}}/properties
 
 ### Filtrar propiedades por tipo y operación
-GET {{baseUrl}}/properties?tipo=CASA&operacion=VENTA
-
+GET {{baseUrl}}/properties?q=pinamar
 ### Ver detalle de una propiedad
 GET {{baseUrl}}/properties/1
 
@@ -72,7 +70,7 @@ Content-Type: application/json
 }
 
 ### Actualizar propiedad 2 de Juan
-PUT {{baseUrl}}/properties/2
+PUT {{baseUrl}}/properties/11
 Authorization: Bearer {{tokenJuan}}
 Content-Type: application/json
 
@@ -82,12 +80,12 @@ Content-Type: application/json
 }
 
 ### Cambiar propiedad 2 de BORRADOR a PUBLICADA
-PATCH {{baseUrl}}/properties/2/status
+PATCH {{baseUrl}}/properties/1/status
 Authorization: Bearer {{tokenJuan}}
 Content-Type: application/json
 
 {
-  "estado": "PUBLICADA"
+  "estado": "VENDIDA"
 }
 
 ### Ver historial de estados de propiedad 2
@@ -132,7 +130,7 @@ Content-Type: application/json
 {
   "nombreSolicitante": "Federico",
   "telefono": "2254-555555",
-  "fechaPropuesta": "2026-10-10T15:00:00.000Z",
+  "fechaPropuesta": "2025-10-10T15:00:00.000Z",
   "mensaje": "Me gustaría conocer la propiedad."
 }
 
@@ -162,7 +160,7 @@ Content-Type: application/json
 // INMOBILIARIAS
 
 ### Ver inmobiliaria de Juan
-GET {{baseUrl}}/agencies/1
+GET {{baseUrl}}/agencies/1/properties
 
 ### Actualizar inmobiliaria de Juan
 PUT {{baseUrl}}/agencies/1
@@ -214,6 +212,20 @@ Authorization: Bearer {{tokenJuan}}
 
 ### Volver a consultar cantidad de no leídas
 GET {{baseUrl}}/agencies/1/activity/unread-count
+Authorization: Bearer {{tokenJuan}}
+
+// REPORTES
+
+### Cantidad de propiedades por estado
+GET {{baseUrl}}/agencies/1/reports/status-summary
+Authorization: Bearer {{tokenJuan}}
+
+### Publicaciones, ventas y alquileres por mes
+GET {{baseUrl}}/agencies/1/reports/monthly
+Authorization: Bearer {{tokenJuan}}
+
+### Promedio de tiempo en mercado
+GET {{baseUrl}}/agencies/1/reports/avg-time-on-market
 Authorization: Bearer {{tokenJuan}}
 
 
