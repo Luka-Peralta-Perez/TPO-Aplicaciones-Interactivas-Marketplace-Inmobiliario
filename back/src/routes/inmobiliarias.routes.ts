@@ -4,6 +4,7 @@ import { requireAuth } from "../middlewares/requireAuth";
 import { solicitudesVisitaController } from "../controllers/solicitudes-visita.controller";
 import { reseniasController } from "../controllers/resenias.controller";
 import { actividadesController } from "../controllers/actividades.controller";
+import { reportesController } from "../controllers/reportes.controller";
 
 export const inmobiliariasRouter = Router();
 
@@ -41,4 +42,16 @@ inmobiliariasRouter.get("/:id/activity", requireAuth, (req, res) =>
 
 inmobiliariasRouter.get("/:id/activity/unread-count", requireAuth, (req, res) =>
     actividadesController.contarNoLeidas(req, res) 
+);
+
+inmobiliariasRouter.get("/:id/reports/status-summary", requireAuth, (req, res) =>
+    reportesController.resumenPorEstado(req, res)
+);
+
+inmobiliariasRouter.get("/:id/reports/monthly", requireAuth, (req, res) =>
+    reportesController.resumenMensual(req, res) 
+);
+
+inmobiliariasRouter.get("/:id/reports/avg-time-on-market", requireAuth, (req, res) =>
+    reportesController.promedioTiempoEnMercado(req, res) 
 );
