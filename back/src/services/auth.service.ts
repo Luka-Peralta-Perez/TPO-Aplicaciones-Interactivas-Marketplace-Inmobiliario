@@ -92,7 +92,26 @@ export const authService = {
             jwtSecret,
             { expiresIn: "2h" }
         );
-        return { token };
+        
+        const inmobiliaria = await inmobiliariasRepository.buscarPorVendedorId(vendedor.id);
+
+        if (!inmobiliaria) {
+            throw new Error("El vendedor no tiene una inmobiliaria asociada");
+        }
+
+        return {
+            token,
+            vendedor: {
+                id: vendedor.id,
+                nombreCompleto: vendedor.nombreCompleto,
+                email: vendedor.email,
+                telefono: vendedor.telefono,
+            },
+            inmobiliaria: {
+                id: inmobiliaria.id,
+                nombre: inmobiliaria.nombre,
+            },
+        };
     },
 
 };

@@ -37,6 +37,17 @@ export class InmobiliariasRepository {
         return this.repo.findOneBy({ id });
     }
 
+    // Buscar la inmobiliaria que el vendedor tiene ese id
+    buscarPorVendedorId(vendedorId: number): Promise<Inmobiliaria | null> {
+        return this.repo.findOne({
+            where: {
+                vendedor: {
+                    id: vendedorId,
+                },
+            },
+        });
+    }
+
     // Crea y guarda una inmobiliaria
     async crear(datos: Partial<Inmobiliaria>): Promise<Inmobiliaria> {
         const inmobiliaria = this.repo.create(datos);
