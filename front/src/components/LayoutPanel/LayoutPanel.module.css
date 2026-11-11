@@ -1,0 +1,27 @@
+.header {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.enlace {
+  color: inherit;
+  text-decoration: none;
+}
+
+.activo {
+  font-weight: bold;
+}
+
+.contenido {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0;
+}

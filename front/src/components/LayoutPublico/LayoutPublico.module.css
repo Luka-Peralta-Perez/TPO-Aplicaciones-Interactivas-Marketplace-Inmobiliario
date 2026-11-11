@@ -1,0 +1,38 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  flex-wrap: wrap;
+}
+
+.marca {
+  font-weight: bold;
+  text-decoration: none;
+  color: inherit;
+}
+
+.busqueda {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.busqueda input {
+  width: 100%;
+  min-width: 0;
+}
+
+.contenido {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0;
+}
+
+@media (max-width: 600px) {
+  .busqueda {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
