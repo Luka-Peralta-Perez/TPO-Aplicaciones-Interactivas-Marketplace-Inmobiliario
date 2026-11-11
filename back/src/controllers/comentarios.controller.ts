@@ -77,6 +77,20 @@ export class ComentariosController {
         const comentario = await comentariosService.responder(comentarioId, dto, req.vendedorId!);
         res.status(200).json(comentario);
     }
+
+    async listarPorInmobiliaria(req: Request, res: Response) {
+        const inmobiliariaId = Number(req.params.id);
+
+        if (!Number.isInteger(inmobiliariaId) || inmobiliariaId <= 0) {
+            res.status(404).json({
+                error: "Inmobiliaria no encontrada",
+            });
+            return;
+        }
+
+        const comentarios = await comentariosService.listarPorInmobiliaria(inmobiliariaId, req.vendedorId!);
+        res.status(200).json(comentarios);
+    }
 }
 
 export const comentariosController = new ComentariosController();

@@ -7,6 +7,7 @@ import { ConflictError } from "../errors/inmobiliaria.errors";
 import { ForbiddenError } from "../errors/auth.errors";
 import { actividadesRepository } from "../repositories/actividades.respository";
 import { TipoActividad } from "../entities/enums";
+import { inmobiliariasRepository, InmobiliariasRepository } from "../repositories/inmobiliarias.repository";
 
 export const comentariosService = {
     async crear(propiedadId: number, datos: CrearComentarioDto): Promise<Comentario> {
@@ -63,4 +64,20 @@ export const comentariosService = {
 
         return comentariosRepository.responder(comentario, datos.respuesta);
     },
+
+    async listarPorInmobiliaria(inmobiliariaId: number, vendedorId: number): Promise<Comentario[]> {
+        const inmobiliaria = await inmobiliariasRepository.buscarPorId(inmobiliariaId);
+
+        if(!inmobiliaria) {
+            throw new NotFoundError(`Inmobiliaria ${inmobiliariaId} no encontrada`);
+        }
+
+        const esPropietario = await inmobiliariasRepository.perteneceAVendedor(inmobiliariaId, vendedorId);
+
+        if (!esPropietario) {
+            throw new ForbiddenError("No tenés permiso para ver las consultas de esta inmobiliaria");
+        }
+
+        return comentariosRepository.listarPorInmobiliaria(inmobiliariaId);
+    }
 };

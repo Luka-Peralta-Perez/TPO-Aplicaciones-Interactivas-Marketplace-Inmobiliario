@@ -120,6 +120,14 @@ Content-Type: application/json
   "respuesta": "Sí, tiene calefacción."
 }
 
+### Ver todos los comentarios de la inmobiliaria de un vendedor
+GET {{baseUrl}}/agencies/1/comments
+Authorization: Bearer {{tokenJuan}}
+
+### Juan intenta ver los comentarios de Maria
+GET {{baseUrl}}/agencies/2/comments
+Authorization: Bearer {{tokenJuan}}
+
 
 // SOLICITUDES DE VISITA
 

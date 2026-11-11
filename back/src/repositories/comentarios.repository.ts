@@ -28,6 +28,24 @@ export class ComentariosRepository {
         });
     }
 
+    listarPorInmobiliaria(inmobiliariaId: number): Promise<Comentario[]> {
+        return this.repo.find({
+            where: {
+                propiedad: {
+                    inmobiliaria: {
+                        id: inmobiliariaId,
+                    },
+                },
+            },
+            relations: {
+                propiedad: true,
+            },
+            order: {
+                creadoEn: "DESC",
+            },
+        });
+    }
+
     async crear(datos: Partial<Comentario>): Promise<Comentario> {
         const comentario = this.repo.create(datos);
 

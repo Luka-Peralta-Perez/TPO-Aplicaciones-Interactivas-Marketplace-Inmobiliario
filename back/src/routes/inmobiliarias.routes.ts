@@ -5,6 +5,7 @@ import { solicitudesVisitaController } from "../controllers/solicitudes-visita.c
 import { reseniasController } from "../controllers/resenias.controller";
 import { actividadesController } from "../controllers/actividades.controller";
 import { reportesController } from "../controllers/reportes.controller";
+import { comentariosController } from "../controllers/comentarios.controller";
 
 export const inmobiliariasRouter = Router();
 
@@ -54,4 +55,8 @@ inmobiliariasRouter.get("/:id/reports/monthly", requireAuth, (req, res) =>
 
 inmobiliariasRouter.get("/:id/reports/avg-time-on-market", requireAuth, (req, res) =>
     reportesController.promedioTiempoEnMercado(req, res) 
+);
+
+inmobiliariasRouter.get("/:id/comments", requireAuth, (req, res) => 
+    comentariosController.listarPorInmobiliaria(req, res)
 );
