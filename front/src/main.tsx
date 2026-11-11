@@ -2,6 +2,7 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { API_URL } from "./comun/api";
 import "./index.css";
+import { AuthProvider } from "./auth/AuthContext";
 
 type HealthResponse = {
   status: string;
@@ -60,6 +61,8 @@ function App() {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </StrictMode>
 );
