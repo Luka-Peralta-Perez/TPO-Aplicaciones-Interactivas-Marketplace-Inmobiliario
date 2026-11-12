@@ -1,6 +1,5 @@
 @baseUrl = http://localhost:3000
-@tokenJuan = 
-### Health
+@tokenJuan = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kZWRvcklkIjoxLCJpYXQiOjE3OTQ1MDYwMDYsImV4cCI6MTc5NDUxMzIwNn0.E4B-uZaVi1LfL79jqJlzvuLUasUAptprHN_tnc265z4
 GET {{baseUrl}}/health
 
 
@@ -34,6 +33,10 @@ Content-Type: application/json
 ### Listar propiedades publicadas
 GET {{baseUrl}}/properties
 
+### Listar todas las propiedades propias de Juan
+GET {{baseUrl}}/properties/mine
+Authorization: Bearer {{tokenJuan}}
+
 ### Filtrar propiedades por tipo y operación
 GET {{baseUrl}}/properties?q=pinamar
 ### Ver detalle de una propiedad
@@ -48,13 +51,13 @@ Authorization: Bearer {{tokenJuan}}
 Content-Type: application/json
 
 {
-  "titulo": "Casa con jardín y pileta en Pinamar",
-  "descripcion": "Casa luminosa de cuatro ambientes, con amplio jardín, pileta y cochera cubierta.",
+  "titulo": "Casa de prueba con imágenes",
+  "descripcion": "Propiedad creada para probar el formulario.",
   "tipo": "CASA",
   "operacion": "VENTA",
   "precio": "190000",
   "moneda": "USD",
-  "direccion": "De las Artes 1240",
+  "direccion": "Av. Test 500",
   "zona": "Pinamar",
   "superficieCubiertaM2": "160",
   "superficieTotalM2": "420",
@@ -62,8 +65,15 @@ Content-Type: application/json
   "dormitorios": 3,
   "banios": 2,
   "antiguedadAnios": 5,
-  "amenities": ["pileta", "cochera", "jardin"],
-  "inmobiliariaId": 1
+  "amenities": [
+    "pileta",
+    "cochera"
+  ],
+  "fotos": [
+    "https://picsum.photos/seed/nueva-casa-1/800/500",
+    "https://picsum.photos/seed/nueva-casa-2/800/500"
+  ],
+  "fotoPortada": "https://picsum.photos/seed/nueva-casa-1/800/500"
 }
 
 ### Actualizar propiedad 2 de Juan
@@ -245,6 +255,9 @@ Content-Type: application/json
   "contenido": "Esta reseña debería fallar.",
   "calificacion": 6
 }
+
+### 401 - listar propiedades propias sin autenticación
+GET {{baseUrl}}/properties/mine
 
 ### 404 - Propiedad inexistente
 GET {{baseUrl}}/properties/999999

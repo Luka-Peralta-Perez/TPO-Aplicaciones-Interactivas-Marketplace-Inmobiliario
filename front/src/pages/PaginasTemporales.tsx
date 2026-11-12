@@ -14,14 +14,6 @@ export function Registro() {
     return <h1>Registro de vendedor</h1>;
 }
 
-export function PropiedadesPanel() {
-    return <h1>Mis propiedades</h1>;
-}
-
-export function NuevaPropiedad() {
-    return <h1>Nueva propiedad</h1>;
-}
-
 export function EditarPropiedad() {
     return <h1>Editar propiedad</h1>;
 }

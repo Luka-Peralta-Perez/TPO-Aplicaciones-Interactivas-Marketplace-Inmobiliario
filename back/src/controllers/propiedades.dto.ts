@@ -79,9 +79,13 @@ export class CrearPropiedadDto {
     @IsString({ each: true })
     amenities?: string[];
 
-    @IsInt()
-    @Min(1)
-    inmobiliariaId!: number;
+    @IsArray()
+    @IsString({ each: true })
+    fotos!: string[];
+
+    @IsString()
+    @IsNotEmpty()
+    fotoPortada!: string;
 }
 
 export class ActualizarPropiedadDto {
@@ -156,6 +160,16 @@ export class ActualizarPropiedadDto {
     @IsArray()
     @IsString({ each: true })
     amenities?: string[];
+
+    @IsOptional()
+    @IsArray()
+    @IsString({ each: true })
+    fotos?: string[];
+
+    @IsOptional()
+    @IsString()
+    @IsNotEmpty()
+    fotoPortada?: string;
 }
 
 export class FiltrarPropiedadesDto {

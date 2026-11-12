@@ -33,3 +33,43 @@ export type RegistrarDto = {
     telefono?: string;
     nombreInmobiliaria: string;
 };
+
+export type PropiedadPanel = {
+    id: number;
+    titulo: string;
+    tipo: "CASA" | "DEPARTAMENTO" | "TERRENO" | "LOCAL";
+    operacion: "VENTA" | "ALQUILER";
+    precio: string;
+    moneda: "ARS" | "USD";
+    zona: string;
+    fotos: string[];
+    fotoPortada: string;
+    estado:
+    | "BORRADOR"
+    | "PUBLICADA"
+    | "RESERVADA"
+    | "PAUSADA"
+    | "VENDIDA"
+    | "ALQUILADA"
+    | "CANCELADA";
+};
+
+export type CrearPropiedadInput = {
+    titulo: string;
+    descripcion: string;
+    tipo: "CASA" | "DEPARTAMENTO" | "TERRENO" | "LOCAL";
+    operacion: "VENTA" | "ALQUILER";
+    precio: string;
+    moneda: "ARS" | "USD";
+    direccion: string;
+    zona: string;
+    superficieCubiertaM2?: string;
+    superficieTotalM2: string;
+    ambientes?: number;
+    dormitorios?: number;
+    banios?: number;
+    antiguedadAnios?: number;
+    amenities: string[];
+    fotos: string[];
+    fotoPortada: string;
+};

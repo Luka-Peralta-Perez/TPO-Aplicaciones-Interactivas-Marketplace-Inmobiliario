@@ -147,6 +147,19 @@ export class PropiedadesRepository {
 
     }
 
+    async listarTodasPorInmobiliaria(inmobiliariaId: number) {
+        return this.repo.find({
+            where: {
+                inmobiliaria: {
+                    id: inmobiliariaId,
+                },
+            },
+            order: {
+                creadoEn: "DESC",
+            },
+        });
+    }
+
     // Busco una propiedad por ID. Si no existe, devuelvo null
     buscarPorId(id: number): Promise<Propiedad | null> {
         return this.repo.findOne({

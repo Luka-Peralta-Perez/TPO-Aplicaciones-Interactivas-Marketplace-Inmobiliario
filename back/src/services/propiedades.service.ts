@@ -26,6 +26,25 @@ function validarValoresPositivos(precio?: string, superficieTotalM2?: string, su
     }
 }
 
+// Valida que la propiedad tenga fotos y que la portada pertenezca a la galeria
+function validarFotos(fotos: string[], fotoPortada: string): void {
+    if (fotos.length === 0) {
+        throw new BadRequestError("La propiedad debe tener al menos una foto");
+    }
+
+    if(fotos.some((foto) => foto.trim().length === 0)) {
+        throw new BadRequestError("Las fotos no pueden estar vacías");
+    }
+
+    if (!fotoPortada.trim()) {
+        throw new BadRequestError("La propiedad debe tener una foto de portada");
+    }
+
+    if (!fotos.includes(fotoPortada)) {
+        throw new BadRequestError("La foto de portada debe pertenecer a la galería de fotos");
+    }
+}
+
 const ESTADOS_NO_EDITABLES = [
     EstadoPropiedad.VENDIDA,
     EstadoPropiedad.ALQUILADA,
@@ -63,6 +82,16 @@ export const propiedadesService = {
         return propiedadesRepository.listar(filtros);
     },
 
+    async listarPropias(vendedorId: number): Promise<Propiedad[]> {
+        const inmobiliaria = await inmobiliariasRepository.buscarPorVendedorId(vendedorId);
+        
+        if (!inmobiliaria) {
+            throw new NotFoundError("Inmobiliaria no encontrada");
+        }
+
+        return propiedadesRepository.listarTodasPorInmobiliaria(inmobiliaria.id);
+    },
+
     async obtener(id: number): Promise<Propiedad> {
         const propiedad = await propiedadesRepository.buscarPorId(id);
 
@@ -79,28 +108,19 @@ export const propiedadesService = {
             datos.superficieTotalM2, 
             datos.superficieCubiertaM2
         );
+
+        validarFotos(datos.fotos, datos.fotoPortada);
         
-        // La inmobiliaria tiene que existir antes de asociarla a una propiedad
-        const inmobiliaria = await inmobiliariasRepository.buscarPorId(
-            datos.inmobiliariaId
-        );
+        // La inmobiliaria se obtiene desde el vendedor autenticado
+        const inmobiliaria = await inmobiliariasRepository.buscarPorVendedorId(vendedorId);
 
         if (!inmobiliaria) {
-            throw new NotFoundError(`Inmobiliaria ${datos.inmobiliariaId} no encontrada`);
+            throw new NotFoundError(`Inmobiliaria no encontrada`);
         }
-
-        // El vendedor sólo puede crear propiedades para su porpia inmobiliaria
-        const esPropietario = await inmobiliariasRepository.perteneceAVendedor(datos.inmobiliariaId, vendedorId);
-
-        if (!esPropietario) {
-            throw new ForbiddenError("No tenés permiso para crear propiedades para esta inmobiliaria");
-        }
-
-        const { inmobiliariaId, ...datosPropiedad } = datos;
 
         // Las propiedades nuevas empiezan en estado BORRADOR
         return propiedadesRepository.crear({
-            ...datosPropiedad,
+            ...datos,
             inmobiliaria,
             estado: EstadoPropiedad.BORRADOR,
         });
@@ -136,6 +156,12 @@ export const propiedadesService = {
             cambios.superficieTotalM2,
             cambios.superficieCubiertaM2
         );
+
+        if (cambios.fotos !== undefined || cambios.fotoPortada !== undefined) {
+            const fotos = cambios.fotos ?? propiedad.fotos;
+            const fotoPortada = cambios.fotoPortada ?? propiedad.fotoPortada;
+            validarFotos(fotos, fotoPortada);
+        }
 
         const actualizada = await propiedadesRepository.actualizar(id, cambios);
 

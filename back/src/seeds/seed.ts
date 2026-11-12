@@ -143,6 +143,13 @@ async function seed(): Promise<void> {
               "cochera",
               "jardin",
             ],
+            fotos: [
+              "https://picsum.photos/seed/casa-pinamar-1/800/500",
+              "https://picsum.photos/seed/casa-pinamar-2/800/500",
+              "https://picsum.photos/seed/casa-pinamar-3/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/casa-pinamar-1/800/500",
             estado: EstadoPropiedad.PUBLICADA,
             inmobiliaria: inmobiliaria1,
           },
@@ -164,6 +171,12 @@ async function seed(): Promise<void> {
             banios: null,
             antiguedadAnios: null,
             amenities: [],
+            fotos: [
+              "https://picsum.photos/seed/terreno-ostende-1/800/500",
+              "https://picsum.photos/seed/terreno-ostende-2/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/terreno-ostende-1/800/500",
             estado: EstadoPropiedad.BORRADOR,
             inmobiliaria: inmobiliaria1,
           },
@@ -184,7 +197,15 @@ async function seed(): Promise<void> {
             dormitorios: null,
             banios: 1,
             antiguedadAnios: 15,
-            amenities: ["apto profesional"],
+            amenities: [
+              "apto profesional",
+            ],
+            fotos: [
+              "https://picsum.photos/seed/local-pinamar-1/800/500",
+              "https://picsum.photos/seed/local-pinamar-2/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/local-pinamar-1/800/500",
             estado: EstadoPropiedad.PAUSADA,
             inmobiliaria: inmobiliaria1,
           },
@@ -210,6 +231,13 @@ async function seed(): Promise<void> {
               "balcon",
               "ascensor",
             ],
+            fotos: [
+              "https://picsum.photos/seed/depto-reservado-1/800/500",
+              "https://picsum.photos/seed/depto-reservado-2/800/500",
+              "https://picsum.photos/seed/depto-reservado-3/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/depto-reservado-1/800/500",
             estado: EstadoPropiedad.RESERVADA,
             inmobiliaria: inmobiliaria1,
           },
@@ -234,6 +262,12 @@ async function seed(): Promise<void> {
               "cochera",
               "jardin",
             ],
+            fotos: [
+              "https://picsum.photos/seed/casa-vendida-1/800/500",
+              "https://picsum.photos/seed/casa-vendida-2/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/casa-vendida-1/800/500",
             estado: EstadoPropiedad.VENDIDA,
             inmobiliaria: inmobiliaria1,
           },
@@ -259,6 +293,12 @@ async function seed(): Promise<void> {
               "balcon",
               "ascensor",
             ],
+            fotos: [
+              "https://picsum.photos/seed/depto-alquilado-1/800/500",
+              "https://picsum.photos/seed/depto-alquilado-2/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/depto-alquilado-1/800/500",
             estado: EstadoPropiedad.ALQUILADA,
             inmobiliaria: inmobiliaria1,
           },
@@ -284,6 +324,12 @@ async function seed(): Promise<void> {
               "jardin",
               "parrilla",
             ],
+            fotos: [
+              "https://picsum.photos/seed/casa-cancelada-1/800/500",
+              "https://picsum.photos/seed/casa-cancelada-2/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/casa-cancelada-1/800/500",
             estado: EstadoPropiedad.CANCELADA,
             inmobiliaria: inmobiliaria1,
           },
@@ -313,6 +359,13 @@ async function seed(): Promise<void> {
               "balcon",
               "cochera",
             ],
+            fotos: [
+              "https://picsum.photos/seed/depto-mar-1/800/500",
+              "https://picsum.photos/seed/depto-mar-2/800/500",
+              "https://picsum.photos/seed/depto-mar-3/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/depto-mar-1/800/500",
             estado: EstadoPropiedad.PUBLICADA,
             inmobiliaria: inmobiliaria2,
           },
@@ -340,6 +393,13 @@ async function seed(): Promise<void> {
               "jardin",
               "admite mascotas",
             ],
+            fotos: [
+              "https://picsum.photos/seed/casa-valeria-1/800/500",
+              "https://picsum.photos/seed/casa-valeria-2/800/500",
+              "https://picsum.photos/seed/casa-valeria-3/800/500",
+            ],
+            fotoPortada:
+              "https://picsum.photos/seed/casa-valeria-1/800/500",
             estado: EstadoPropiedad.RESERVADA,
             inmobiliaria: inmobiliaria2,
           },

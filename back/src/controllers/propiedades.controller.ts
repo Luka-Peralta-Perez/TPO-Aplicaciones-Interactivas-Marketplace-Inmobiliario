@@ -28,6 +28,12 @@ export class PropiedadesController {
         res.status(200).json(propiedades);
     }
 
+    async listarPropias(req: Request, res: Response) {
+        // El vendedor se identifica con el jwt de la ruta protegida
+        const propiedades = await propiedadesService.listarPropias(req.vendedorId!);
+        res.status(200).json(propiedades);
+    }
+
     async obtener(req: Request, res: Response) {
         // Convertimos y validamos el id numérico recibido por parámaetro
         const id = Number(req.params.id);

@@ -55,6 +55,12 @@ export class Propiedad {
   @Column({ type: "simple-array", default: "" })
   amenities!: string[];
 
+  @Column({ type: "simple-array", default: "" })
+  fotos!: string[];
+
+  @Column({ type: "text", default: "" })
+  fotoPortada!: string;
+
   @Column({ type: "enum", enum: EstadoPropiedad, default: EstadoPropiedad.BORRADOR })
   estado!: EstadoPropiedad;
 

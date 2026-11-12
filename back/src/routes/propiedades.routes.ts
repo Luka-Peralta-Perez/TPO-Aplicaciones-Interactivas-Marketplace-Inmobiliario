@@ -10,9 +10,14 @@ propiedadesRouter.get("/", (req, res) =>
     propiedadesController.listar(req, res)
 );
 
+propiedadesRouter.get("/mine", requireAuth, (req, res) =>
+    propiedadesController.listarPropias(req, res)
+);
+
 propiedadesRouter.get("/:id", (req, res) =>
     propiedadesController.obtener(req, res)
 );
+
 
 propiedadesRouter.get("/:id/comments", (req, res) =>
     comentariosController.listar(req, res)
