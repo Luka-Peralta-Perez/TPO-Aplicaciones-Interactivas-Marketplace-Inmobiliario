@@ -24,3 +24,12 @@ export type ApiErrorResponse = {
     error: string;
     details?: unknown;
 };
+
+export type RegistrarDto = {
+    nombre: string;
+    apellido: string;
+    email: string;
+    contrasenia: string;
+    telefono?: string;
+    nombreInmobiliaria: string;
+};

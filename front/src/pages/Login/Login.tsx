@@ -17,10 +17,15 @@ export default function Login() {
     const location = useLocation();
 
     // SI viene de una ruta protegida, se vuelve ahí después del login
-    const desde = (location.state as {
-        desde?: string;
-    } | null
-    )?.desde ?? "/panel/propiedades";
+    const estado = location.state as
+        | {
+            desde?: string;
+            registroExitoso?: boolean;
+        }
+        | null;
+
+    const desde = estado?.desde ?? "/panel/propiedades";
+    const registroExitoso = estado?.registroExitoso === true;
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -61,6 +66,12 @@ export default function Login() {
     return (
         <section className={styles.contenedor}>
             <h1>Ingresar como vendedor</h1>
+            {registroExitoso && (
+                <p>
+                    Cuenta creada correctamente. Ya podés iniciar sesión.
+                </p>
+            )}
+
             <form
                 className={styles.formulario}
                 onSubmit={handleSubmit}

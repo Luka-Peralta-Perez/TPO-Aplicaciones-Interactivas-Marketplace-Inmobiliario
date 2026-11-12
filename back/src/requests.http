@@ -11,15 +11,12 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "nombreCompleto": "Mora Ivanec",
-  "email": "mora.ivanec@costaatlantica.com",
+  "nombre": "Mora",
+  "apellido": "Ivanec",
+  "email": "mora.prueba@gmail.com",
   "contrasenia": "Clave123!",
-  "telefono": "2254-512345",
-  "nombreInmobiliaria": "Costa Atlántica Inmuebles",
-  "descripcion": "Inmobiliaria especializada en venta y alquiler de propiedades en Pinamar y la Costa Atlántica.",
-  "telefonoContacto": "2254-523456",
-  "emailContacto": "info@costaatlanticainmuebles.com",
-  "direccionOficina": "Av. Bunge 780, Pinamar"
+  "telefono": "2254512345",
+  "nombreInmobiliaria": "Inmobiliaria Mora Prueba"
 }
 
 ### Login Juan

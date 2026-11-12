@@ -26,6 +26,7 @@ export function errorHandler(
     if (error instanceof ConflictError) {
         res.status(409).json({
             error: error.message,
+            details: error.details,
         });
         return;
     }

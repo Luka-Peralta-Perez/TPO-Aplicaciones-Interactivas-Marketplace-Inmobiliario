@@ -16,13 +16,13 @@ export const authService = {
         const emailExiste = await vendedoresRepository.existePorEmail(dto.email);
 
         if (emailExiste) {
-            throw new ConflictError("Ya existe un vendedor con ese email");
+            throw new ConflictError("Ya existe un vendedor con ese email", { field: "email"});
         }
 
         const nombreExiste = await inmobiliariasRepository.existePorNombre(dto.nombreInmobiliaria);
 
         if (nombreExiste) {
-            throw new ConflictError("Ya existe una inmobiliaria con ese nombre");
+            throw new ConflictError("Ya existe una inmobiliaria con ese nombre", {field: "nombreInmobiliaria"});
         }
 
         const hashContrasenia = await bcrypt.hash(dto.contrasenia, 10);
@@ -33,7 +33,7 @@ export const authService = {
             const inmobiliariaRepository = manager.getRepository(Inmobiliaria);
 
             const vendedor = vendedorRepository.create({
-                nombreCompleto: dto.nombreCompleto,
+                nombreCompleto: `${dto.nombre.trim()} ${dto.apellido.trim()}`,
                 email: dto.email,
                 hashContrasenia,
                 telefono: dto.telefono,
@@ -43,11 +43,11 @@ export const authService = {
 
             const inmobiliaria = inmobiliariaRepository.create({
                 nombre: dto.nombreInmobiliaria,
-                descripcion: dto.descripcion,
-                logoUrl: dto.logoUrl,
-                telefonoContacto: dto.telefonoContacto,
-                emailContacto: dto.emailContacto,
-                direccionOficina: dto.direccionOficina,
+                descripcion: "",
+                logoUrl: null,
+                telefonoContacto: dto.telefono ?? "",
+                emailContacto: dto.email,
+                direccionOficina: null,
                 vendedor,
             });
 

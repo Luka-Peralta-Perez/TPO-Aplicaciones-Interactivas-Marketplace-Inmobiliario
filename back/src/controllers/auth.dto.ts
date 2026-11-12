@@ -3,8 +3,13 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 
 export class RegistrarVendedorDto {
     @IsString()
     @IsNotEmpty()
-    @MaxLength(120)
-    nombreCompleto!: string;
+    @MaxLength(60)
+    nombre!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    @MaxLength(60)
+    apellido!: string;
 
     @IsEmail()
     @MaxLength(255)
@@ -23,29 +28,6 @@ export class RegistrarVendedorDto {
     @IsNotEmpty()
     @MaxLength(120)
     nombreInmobiliaria!: string;
-
-    @IsString()
-    @IsNotEmpty()
-    descripcion!: string;
-
-    @IsOptional()
-    @IsString()
-    @MaxLength(500)
-    logoUrl?: string;
-
-    @IsString()
-    @IsNotEmpty()
-    @MaxLength(40)
-    telefonoContacto!: string;
-
-    @IsEmail()
-    @MaxLength(255)
-    emailContacto!: string;
-
-    @IsOptional()
-    @IsString()
-    @MaxLength(255)
-    direccionOficina?: string;
 
 }
 
