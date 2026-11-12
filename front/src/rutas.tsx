@@ -3,7 +3,8 @@ import LayoutPublico from "./components/LayoutPublico/LayoutPublico";
 import LayoutPanel from "./components/LayoutPanel/LayoutPanel";
 import RequiereSesion from "./components/RequiereSesion/RequiereSesion";
 import NoEncontrada from "./pages/NoEncontrada";
-import { ActividadPanel, ConsultasPanel, DetallePropiedad, EditarPropiedad, InmobiliariaPanel, Inicio, Login, NuevaPropiedad, PropiedadesPanel, Registro, ReportesPanel, SitioInmobiliario, VisitasPanel } from "./pages/PaginasTemporales";
+import { ActividadPanel, ConsultasPanel, DetallePropiedad, EditarPropiedad, InmobiliariaPanel, Inicio, NuevaPropiedad, PropiedadesPanel, Registro, ReportesPanel, SitioInmobiliario, VisitasPanel } from "./pages/PaginasTemporales";
+import Login from "./pages/Login/Login";
 
 export const rutas: RouteObject[] = [
     {

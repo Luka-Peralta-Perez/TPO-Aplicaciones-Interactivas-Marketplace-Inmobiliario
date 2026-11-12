@@ -10,10 +10,6 @@ export function SitioInmobiliario() {
     return <h1>Inmobiliaria</h1>;
 }
 
-export function Login() {
-    return <h1>Ingresar como vendedor</h1>;
-}
-
 export function Registro() {
     return <h1>Registro de vendedor</h1>;
 }

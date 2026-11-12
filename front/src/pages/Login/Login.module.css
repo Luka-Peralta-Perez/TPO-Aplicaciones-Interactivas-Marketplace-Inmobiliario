@@ -1,0 +1,29 @@
+.contenedor {
+  width: min(420px, 100%);
+  margin: 2rem auto;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.formulario input {
+  padding: 0.65rem;
+}
+
+.campoContrasenia {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.campoContrasenia input {
+  flex: 1;
+  min-width: 0;
+}
+
+.error {
+  margin: 0;
+  color: #b00020;
+}
