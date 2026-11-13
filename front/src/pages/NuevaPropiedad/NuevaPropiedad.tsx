@@ -320,58 +320,62 @@ export default function NuevaPropiedad() {
                                 required />
                         </div>
 
-                        <div className={styles.campo}>
-                            <label htmlFor="superficieCubierta">
-                                Superficie cubierta (m²)
-                            </label>
-                            <input
-                                id="superficieCubierta"
-                                type="number"
-                                min="0.01"
-                                step="0.01"
-                                value={superficieCubiertaM2}
-                                onChange={(event) => setSuperficieCubiertaM2(event.target.value)}
-                                disabled={tipo === "TERRENO"} />
-                        </div>
+                        {tipo !== "TERRENO" && (
+                            <>
+                                <div className={styles.campo}>
+                                    <label htmlFor="superficieCubierta">
+                                        Superficie cubierta (m²)
+                                    </label>
+                                    <input
+                                        id="superficieCubierta"
+                                        type="number"
+                                        min="0.01"
+                                        step="0.01"
+                                        value={superficieCubiertaM2}
+                                        onChange={(event) => setSuperficieCubiertaM2(event.target.value)}
+                                    />
+                                </div>
 
-                        <div className={styles.campo}>
-                            <label htmlFor="ambientes">
-                                Ambientes
-                            </label>
-                            <input
-                                id="ambientes"
-                                type="number"
-                                min="1"
-                                value={ambientes}
-                                onChange={(event) => setAmbientes(event.target.value)}
-                                disabled={tipo === "TERRENO"} />
-                        </div>
+                                <div className={styles.campo}>
+                                    <label htmlFor="ambientes">
+                                        Ambientes
+                                    </label>
+                                    <input
+                                        id="ambientes"
+                                        type="number"
+                                        min="1"
+                                        value={ambientes}
+                                        onChange={(event) => setAmbientes(event.target.value)}
+                                    />
+                                </div>
 
-                        <div className={styles.campo}>
-                            <label htmlFor="dormitorios">
-                                Dormitorios
-                            </label>
-                            <input
-                                id="dormitorios"
-                                type="number"
-                                min="1"
-                                value={dormitorios}
-                                onChange={(event) => setDormitorios(event.target.value)}
-                                disabled={tipo === "TERRENO"} />
-                        </div>
+                                <div className={styles.campo}>
+                                    <label htmlFor="dormitorios">
+                                        Dormitorios
+                                    </label>
+                                    <input
+                                        id="dormitorios"
+                                        type="number"
+                                        min="1"
+                                        value={dormitorios}
+                                        onChange={(event) => setDormitorios(event.target.value)}
+                                    />
+                                </div>
 
-                        <div className={styles.campo}>
-                            <label htmlFor="banios">
-                                Baños
-                            </label>
-                            <input
-                                id="banios"
-                                type="number"
-                                min="1"
-                                value={banios}
-                                onChange={(event) => setBanios(event.target.value)}
-                                disabled={tipo === "TERRENO"} />
-                        </div>
+                                <div className={styles.campo}>
+                                    <label htmlFor="banios">
+                                        Baños
+                                    </label>
+                                    <input
+                                        id="banios"
+                                        type="number"
+                                        min="1"
+                                        value={banios}
+                                        onChange={(event) => setBanios(event.target.value)}
+                                    />
+                                </div>
+                            </>
+                        )}
 
                         <div className={styles.campo}>
                             <label htmlFor="antiguedad">

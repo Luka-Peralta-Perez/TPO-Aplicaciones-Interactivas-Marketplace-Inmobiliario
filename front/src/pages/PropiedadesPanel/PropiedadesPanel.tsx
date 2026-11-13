@@ -3,6 +3,7 @@ import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import type { PropiedadPanel as PropiedadPanelType } from "../../types";
 import styles from "./PropiedadesPanel.module.css";
+import { Link } from "react-router-dom";
 
 export default function PropiedadesPanel() {
     const [propiedades, setPropiedades] = useState<PropiedadPanelType[]>([]);
@@ -65,6 +66,7 @@ export default function PropiedadesPanel() {
                                 <th>Precio</th>
                                 <th>Zona</th>
                                 <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
 
@@ -73,9 +75,9 @@ export default function PropiedadesPanel() {
                                 <tr key={propiedad.id}>
                                     <td>
                                         <img
-                                        src={propiedad.fotoPortada}
-                                        alt={propiedad.titulo}
-                                        className={styles.imagenPropiedad}/>
+                                            src={propiedad.fotoPortada}
+                                            alt={propiedad.titulo}
+                                            className={styles.imagenPropiedad} />
                                     </td>
                                     <td>{propiedad.titulo}</td>
                                     <td>{propiedad.tipo}</td>
@@ -85,6 +87,15 @@ export default function PropiedadesPanel() {
                                     </td>
                                     <td>{propiedad.zona}</td>
                                     <td>{propiedad.estado}</td>
+                                    <td>
+                                        {propiedad.estado !== "VENDIDA" &&
+                                            propiedad.estado !== "ALQUILADA" &&
+                                            propiedad.estado !== "CANCELADA" && (
+                                                <Link to={`/panel/propiedades/${propiedad.id}/editar`}>
+                                                    Editar
+                                                </Link>
+                                            )}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

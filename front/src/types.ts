@@ -73,3 +73,32 @@ export type CrearPropiedadInput = {
     fotos: string[];
     fotoPortada: string;
 };
+
+export type PropiedadDetalle = {
+    id: number;
+    titulo: string;
+    descripcion: string;
+    tipo: "CASA" | "DEPARTAMENTO" | "TERRENO" | "LOCAL";
+    operacion: "VENTA" | "ALQUILER";
+    precio: string;
+    moneda: "ARS" | "USD";
+    direccion: string;
+    zona: string;
+    superficieCubiertaM2: string | null;
+    superficieTotalM2: string;
+    ambientes: number | null;
+    dormitorios: number | null;
+    banios: number | null;
+    antiguedadAnios: number | null;
+    amenities: string[];
+    fotos: string[];
+    fotoPortada: string;
+    estado:
+    | "BORRADOR"
+    | "PUBLICADA"
+    | "RESERVADA"
+    | "PAUSADA"
+    | "VENDIDA"
+    | "ALQUILADA"
+    | "CANCELADA";
+};
