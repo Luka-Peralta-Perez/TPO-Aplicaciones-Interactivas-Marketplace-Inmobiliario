@@ -16,6 +16,15 @@ export const inmobiliariasService = {
         return inmobiliaria
     },
 
+    async obtenerPropia(vendedorId: number): Promise<Inmobiliaria> {
+        const inmobiliaria = await inmobiliariasRepository.buscarPorVendedorId(vendedorId);
+
+        if (!inmobiliaria) {
+            throw new NotFoundError("Inmobiliaria no encontrada");
+        }
+        return inmobiliaria;
+    },
+
     async actualizar(id: number, cambios: ActualizarInmobiliariaDto, vendedorId: number): Promise<Inmobiliaria> {
         const inmobiliaria = await inmobiliariasRepository.buscarPorId(id);
 

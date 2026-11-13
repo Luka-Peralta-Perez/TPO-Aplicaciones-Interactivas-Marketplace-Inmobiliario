@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000
-@tokenJuan = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kZWRvcklkIjoxLCJpYXQiOjE3OTQ1MDYwMDYsImV4cCI6MTc5NDUxMzIwNn0.E4B-uZaVi1LfL79jqJlzvuLUasUAptprHN_tnc265z4
+@tokenJuan = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kZWRvcklkIjoxLCJpYXQiOjE3OTQ1Mzg1ODgsImV4cCI6MTc5NDU0NTc4OH0.a41tsJGIoS1F6y_zfYMwNjXyCNtRNRJKwQsGy96lEzI
 GET {{baseUrl}}/health
 
 
@@ -173,6 +173,10 @@ Content-Type: application/json
 
 
 // INMOBILIARIAS
+
+### Obtener inmobiliaria propia
+GET {{baseUrl}}/agencies/mine
+Authorization: Bearer {{tokenJuan}}
 
 ### Ver inmobiliaria de Juan
 GET {{baseUrl}}/agencies/1/properties

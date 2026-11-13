@@ -3,12 +3,13 @@ import LayoutPublico from "./components/LayoutPublico/LayoutPublico";
 import LayoutPanel from "./components/LayoutPanel/LayoutPanel";
 import RequiereSesion from "./components/RequiereSesion/RequiereSesion";
 import NoEncontrada from "./pages/NoEncontrada";
-import { ActividadPanel, ConsultasPanel, DetallePropiedad, InmobiliariaPanel, Inicio, ReportesPanel, SitioInmobiliario, VisitasPanel } from "./pages/PaginasTemporales";
+import { ActividadPanel, ConsultasPanel, DetallePropiedad, Inicio, ReportesPanel, SitioInmobiliario, VisitasPanel } from "./pages/PaginasTemporales";
 import Login from "./pages/Login/Login";
 import Registro from "./pages/Registro/Registro";
 import PropiedadesPanel from "./pages/PropiedadesPanel/PropiedadesPanel";
 import NuevaPropiedad from "./pages/NuevaPropiedad/NuevaPropiedad";
 import EditarPropiedad from "./pages/EditarPropiedad/EditarPropiedad";
+import InmobiliariaPanel from "./pages/InmobiliariaPanel/InmobiliariaPanel";
 
 export const rutas: RouteObject[] = [
     {

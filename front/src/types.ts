@@ -102,3 +102,22 @@ export type PropiedadDetalle = {
     | "ALQUILADA"
     | "CANCELADA";
 };
+
+export type InmobiliariaDatos = {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    logoUrl: string | null;
+    telefonoContacto: string;
+    emailContacto: string;
+    direccionOficina: string | null;
+};
+
+export type ActualizarInmobiliariaInput = {
+    nombre: string;
+    descripcion: string;
+    logoUrl?: string;
+    telefonoContacto: string;
+    emailContacto: string;
+    direccionOficina?: string;
+};

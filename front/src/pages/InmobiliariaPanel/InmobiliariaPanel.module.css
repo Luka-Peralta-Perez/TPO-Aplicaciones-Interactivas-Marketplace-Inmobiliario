@@ -1,0 +1,88 @@
+.contenedor {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.campo label {
+    font-weight: 600;
+}
+
+.campo input,
+.campo textarea {
+    padding: 0.7rem;
+    border: 1px solid #bdbdbd;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.logo {
+    width: 160px;
+    height: 100px;
+    object-fit: contain;
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+}
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.botonPrincipal {
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background: #222222;
+    color: white;
+    cursor: pointer;
+}
+
+.zonaPeligro {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #c62828;
+    border-radius: 8px;
+}
+
+.botonEliminar {
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.error {
+    padding: 0.8rem;
+    border: 1px solid #c62828;
+    border-radius: 6px;
+}
+
+.mensaje {
+    padding: 0.8rem;
+    border: 1px solid #777777;
+    border-radius: 6px;
+}
+
+@media (max-width: 700px) {
+    .acciones {
+        display: block;
+    }
+
+    .botonPrincipal,
+    .botonEliminar {
+        width: 100%;
+    }
+}

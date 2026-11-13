@@ -9,6 +9,10 @@ import { comentariosController } from "../controllers/comentarios.controller";
 
 export const inmobiliariasRouter = Router();
 
+inmobiliariasRouter.get("/mine", requireAuth, (req, res) =>
+    inmobiliariasController.obtenerPropia(req, res)
+);
+
 inmobiliariasRouter.get("/:id", (req, res) =>
     inmobiliariasController.obtener(req, res)
 );

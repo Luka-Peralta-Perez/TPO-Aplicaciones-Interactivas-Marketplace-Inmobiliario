@@ -22,6 +22,12 @@ export class InmobiliariasController {
         res.status(200).json(inmobiliaria);
     }
 
+    async obtenerPropia(req: Request, res: Response) {
+        const inmobiliaria = await inmobiliariasService.obtenerPropia(req.vendedorId!);
+        
+        res.status(200).json(inmobiliaria);
+    }
+
     async actualizar(req: Request, res: Response) {
         const id = Number(req.params.id);
 
