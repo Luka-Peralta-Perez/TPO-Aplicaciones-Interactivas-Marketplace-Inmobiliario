@@ -191,9 +191,12 @@ export default function InmobiliariaPanel() {
 
                     <input
                         id="teelfono"
-                        type="text"
+                        type="tel"
                         value={telefonoContacto}
                         onChange={(event) => setTelefonoContacto(event.target.value)}
+                        pattern="[0-9]{4}-[0-9]{6}"
+                        placeholder="2254-111111"
+                        title="Ingresá el teléfono con el formato 2254-111111"
                         required />
                 </div>
 

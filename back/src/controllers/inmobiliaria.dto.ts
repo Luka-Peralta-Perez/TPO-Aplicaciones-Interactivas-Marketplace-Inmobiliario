@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Max, MaxLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, Max, MaxLength } from "class-validator";
 
 export class ActualizarInmobiliariaDto {
     @IsOptional()
@@ -20,7 +20,9 @@ export class ActualizarInmobiliariaDto {
     @IsOptional()
     @IsString()
     @IsNotEmpty()
-    @MaxLength(40)
+    @Matches(/^\d{4}-\d{6}$/, {
+        message: "El teléfono debe tener el formato 2254-111111",
+    })
     telefonoContacto?: string;
 
     @IsOptional()
