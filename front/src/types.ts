@@ -121,3 +121,39 @@ export type ActualizarInmobiliariaInput = {
     emailContacto: string;
     direccionOficina?: string;
 };
+
+export type PropiedadPublica = {
+    id: number;
+    titulo: string;
+    descripcion: string;
+    tipo: "CASA" | "DEPARTAMENTO" | "TERRENO" | "LOCAL";
+    operacion: "VENTA" | "ALQUILER";
+    precio: string;
+    moneda: "ARS" | "USD";
+    zona: string;
+    ambientes: number | null;
+    superficieTotalM2: string;
+    amenities: string[];
+    fotoPortada: string;
+};
+
+export type RespuestaPropiedades = {
+    items: PropiedadPublica[];
+    page: number;
+    limit: number;
+    total: number;
+};
+
+export type FiltrosPropiedades = {
+    page?: number;
+    limit?: number;
+    tipo?: "CASA" | "DEPARTAMENTO" | "TERRENO" | "LOCAL";
+    operacion?: "VENTA" | "ALQUILER";
+    precioMin?: string;
+    precioMax?: string;
+    zona?: string;
+    ambientes?: number;
+    amenities?: string[];
+    q?: string;
+    sort?: "precio" | "fechaPublicacion" | "superficieTotal";
+};

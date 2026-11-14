@@ -1,7 +1,3 @@
-export function Inicio() {
-    return <h1>Propiedades</h1>;
-}
-
 export function DetallePropiedad() {
     return <h1>Detalle de propiedad</h1>;
 }
