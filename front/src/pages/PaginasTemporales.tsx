@@ -1,13 +1,5 @@
-export function DetallePropiedad() {
-    return <h1>Detalle de propiedad</h1>;
-}
-
 export function SitioInmobiliario() {
     return <h1>Inmobiliaria</h1>;
-}
-
-export function Registro() {
-    return <h1>Registro de vendedor</h1>;
 }
 
 export function VisitasPanel() {
