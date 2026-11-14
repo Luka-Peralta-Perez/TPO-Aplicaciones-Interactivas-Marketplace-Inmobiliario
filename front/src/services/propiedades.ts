@@ -1,5 +1,5 @@
 import { API_URL, apiFetch } from "../comun/api";
-import type { PropiedadPanel, CrearPropiedadInput, PropiedadDetalle, FiltrosPropiedades, RespuestaPropiedades } from "../types";
+import type { PropiedadPanel, CrearPropiedadInput, PropiedadDetalle, FiltrosPropiedades, RespuestaPropiedades, ComentarioPropiedad } from "../types";
 
 export const propiedadesService = {
     listarPropias(): Promise<PropiedadPanel[]> {
@@ -10,7 +10,7 @@ export const propiedadesService = {
         return apiFetch<PropiedadDetalle>(`/properties/${id}`);
     },
 
-    crear (datos: CrearPropiedadInput): Promise<PropiedadPanel> {
+    crear(datos: CrearPropiedadInput): Promise<PropiedadPanel> {
         return apiFetch<PropiedadPanel>("/properties", {
             method: "POST",
             headers: {
@@ -82,5 +82,20 @@ export const propiedadesService = {
         return apiFetch<RespuestaPropiedades>(
             query ? `/properties?${query}` : "/properties"
         );
+    },
+
+    listarComentarios(id: number): Promise<ComentarioPropiedad[]> {
+        return apiFetch<ComentarioPropiedad[]>(`/properties/${id}/comments`);
+    },
+
+    crearComentario(id: number, datos: {
+        nombreAutor: string;
+        contenido: string;
+    }): Promise<ComentarioPropiedad> {
+        return apiFetch<ComentarioPropiedad>(`/properties/${id}/comments`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify(datos),
+        });
     },
 };

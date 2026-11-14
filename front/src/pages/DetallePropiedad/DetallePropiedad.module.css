@@ -130,3 +130,55 @@
         grid-template-columns: 1fr;
     }
 }
+
+.comentarios {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.comentario {
+    padding: 1rem;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+.encabezadoComentario {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.respuesta {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    border-left: 3px solid #777777;
+}
+
+.formConsulta {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.campoConsulta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.campoConsulta input,
+.campoConsulta textarea {
+    padding: 0.7rem;
+    border: 1px solid #bbbbbb;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.errorConsulta {
+    padding: 0.8rem;
+    border: 1px solid #c62828;
+    border-radius: 6px;
+}

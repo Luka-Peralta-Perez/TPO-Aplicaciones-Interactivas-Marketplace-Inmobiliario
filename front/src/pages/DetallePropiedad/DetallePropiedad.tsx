@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
-import type { PropiedadDetalle as PropiedadDetalleType } from "../../types";
+import type { PropiedadDetalle as PropiedadDetalleType, ComentarioPropiedad } from "../../types";
 import styles from "./DetallePropiedad.module.css";
 
 export default function DetallePropiedad() {
@@ -11,6 +11,11 @@ export default function DetallePropiedad() {
     const [fotoSeleccionada, setFotoSeleccionada] = useState("");
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [comentarios, setComentarios] = useState<ComentarioPropiedad[]>([]);
+    const [nombreAutor, setNombreAutor] = useState("");
+    const [contenidoConsulta, setContenidoConsulta] = useState("");
+    const [enviandoConsulta, setEnviandoConsulta] = useState(false);
+    const [errorConsulta, setErrorConsulta] = useState<string | null>(null);
 
     useEffect(() => {
         async function cargarPropiedad() {
@@ -26,9 +31,12 @@ export default function DetallePropiedad() {
                 setCargando(true);
                 setError(null);
 
-                const datos = await propiedadesService.obtener(propiedadId);
+                const [datos, comentariosPropiedad] = await Promise.all([propiedadesService.obtener(propiedadId),
+                propiedadesService.listarComentarios(propiedadId),
+                ]);
 
                 setPropiedad(datos);
+                setComentarios(comentariosPropiedad);
                 setFotoSeleccionada(datos.fotoPortada || datos.fotos[0] || "");
             } catch (error) {
                 if (error instanceof ApiError) {
@@ -42,6 +50,48 @@ export default function DetallePropiedad() {
         }
         cargarPropiedad();
     }, [id]);
+
+    async function enviarConsulta(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        if (!propiedad) {
+            return;
+        }
+
+        setErrorConsulta(null);
+
+        if (!nombreAutor.trim()) {
+            setErrorConsulta("Ingresá tu nombre.");
+            return;
+        }
+
+        if (!contenidoConsulta.trim()) {
+            setErrorConsulta("La consulta no puede estar vacía.");
+            return;
+        }
+
+        try {
+            setEnviandoConsulta(true);
+
+            const nuevaConsulta = await propiedadesService.crearComentario(propiedad.id, {
+                nombreAutor: nombreAutor.trim(),
+                contenido: contenidoConsulta.trim(),
+            });
+
+            setComentarios((anteriores) => [...anteriores, nuevaConsulta]);
+            setNombreAutor("");
+            setContenidoConsulta("");
+        } catch (error) {
+            if (error instanceof ApiError) {
+                setErrorConsulta(error.message);
+            } else {
+                setErrorConsulta("No se pudo enviar la consulta.")
+            }
+        } finally {
+            setEnviandoConsulta(false);
+        }
+    }
+
 
     if (cargando) {
         return (
@@ -194,6 +244,84 @@ export default function DetallePropiedad() {
             <div className={styles.seccion}>
                 <h2>Descripción</h2>
                 <p>{propiedad.descripcion}</p>
+            </div>
+
+            {propiedad.inmobiliaria && (
+                <div className={styles.seccion}>
+                    <h2>Inmobiliaria</h2>
+                    <Link
+                        to={`/inmobiliarias/${propiedad.inmobiliaria.id}`}>
+                        Ver {propiedad.inmobiliaria.nombre}
+                    </Link>
+                </div>
+            )}
+
+            <div className={styles.seccion}>
+                <h2>Consultas</h2>
+                {comentarios.length === 0 ? (
+                    <p>
+                        Todavía no hay consultas sobre esta propiedad.
+                    </p>
+                ) : (
+                    <div className={styles.comentarios}>
+                        {comentarios.map((comentario) => (
+                            <article
+                                key={comentario.id}
+                                className={styles.comentario}>
+                                <div className={styles.encabezadoComentario}>
+                                    <strong>{comentario.nombreAutor}</strong>
+                                    <span>
+                                        {new Date(comentario.creadoEn).toLocaleDateString("es-AR")}
+                                    </span>
+                                </div>
+                                <p>{comentario.contenido}</p>
+                                {comentario.respuesta && (
+                                    <div className={styles.respuesta}>
+                                        <strong>Respuesta del vendedor</strong>
+                                        <p>{comentario.respuesta}</p>
+                                    </div>
+                                )}
+                            </article>
+                        ))}
+                    </div>
+                )}
+                <form
+                    className={styles.formConsulta}
+                    onSubmit={enviarConsulta}>
+                    <h3>Dejar una consulta</h3>
+                    <div className={styles.campoConsulta}>
+                        <label htmlFor="nombreAutor">
+                            Nombre
+                        </label>
+                        <input
+                            id="nombreAutor"
+                            type="text"
+                            value={nombreAutor}
+                            onChange={(event) => setNombreAutor(event.target.value)} />
+                    </div>
+
+                    <div className={styles.campoConsulta}>
+                        <label htmlFor="consulta">
+                            Consulta
+                        </label>
+                        <textarea
+                            id="consulta"
+                            rows={4}
+                            value={contenidoConsulta}
+                            onChange={(event) => setContenidoConsulta(event.target.value)} />
+                    </div>
+
+                    {errorConsulta && (
+                        <p className={styles.errorConsulta}>
+                            {errorConsulta}
+                        </p>
+                    )}
+                    <button
+                        type="submit"
+                        disabled={enviandoConsulta}>
+                        {enviandoConsulta ? "Enviando..." : "Enviar consulta"}
+                    </button>
+                </form>
             </div>
         </section>
     );

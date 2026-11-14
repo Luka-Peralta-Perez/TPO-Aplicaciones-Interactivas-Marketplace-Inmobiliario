@@ -101,6 +101,10 @@ export type PropiedadDetalle = {
     | "VENDIDA"
     | "ALQUILADA"
     | "CANCELADA";
+    inmobiliaria?: {
+        id:number;
+        nombre: string;
+    }
 };
 
 export type InmobiliariaDatos = {
@@ -156,4 +160,12 @@ export type FiltrosPropiedades = {
     amenities?: string[];
     q?: string;
     sort?: "precio" | "fechaPublicacion" | "superficieTotal";
+};
+
+export type ComentarioPropiedad = {
+    id: number;
+    nombreAutor: string;
+    contenido: string;
+    respuesta: string | null;
+    creadoEn: string;
 };
