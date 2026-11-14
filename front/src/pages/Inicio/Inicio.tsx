@@ -1,39 +1,84 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import type { FiltrosPropiedades, PropiedadPublica } from "../../types";
 import styles from "./Inicio.module.css";
 
 export default function Inicio() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [propiedades, setPropiedades] = useState<PropiedadPublica[]>([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [pagina, setPagina] = useState(1);
+    const pagina = Math.max(1, Number(searchParams.get("page")) || 1);
     const [total, setTotal] = useState(0);
     const limite = 6;
-    const [tipo, setTipo] = useState("");
-    const [operacion, setOperacion] = useState("");
-    const [precioMin, setPrecioMin] = useState("");
-    const [precioMax, setPrecioMax] = useState("");
-    const [zona, setZona] = useState("");
-    const [ambientes, setAmbientes] = useState("");
-    const [amenities, setAmenities] = useState("");
-    const [busqueda, setBusqueda] = useState("");
-    const [orden, setOrden] = useState("");
-    const [filtrosAplicados, setFiltrosAplicados] = useState<FiltrosPropiedades>({});
+    const [tipo, setTipo] = useState(searchParams.get("tipo") ?? "");
+    const [operacion, setOperacion] = useState(searchParams.get("operacion") ?? "");
+    const [precioMin, setPrecioMin] = useState(searchParams.get("precioMin") ?? "");
+    const [precioMax, setPrecioMax] = useState(searchParams.get("precioMax") ?? "");
+    const [zona, setZona] = useState(searchParams.get("zona") ?? "");
+    const [ambientes, setAmbientes] = useState(searchParams.get("ambientes") ?? "");
+    const [amenities, setAmenities] = useState(searchParams.get("amenities") ?? "");
+    const [busqueda, setBusqueda] = useState(searchParams.get("q") ?? "");
+    const [orden, setOrden] = useState(searchParams.get("sort") ?? "");
 
+    // Mantiene los campos sincronizados con la URL
+    useEffect(() => {
+        setTipo(searchParams.get("tipo") ?? "");
+        setOperacion(searchParams.get("operacion") ?? "");
+        setPrecioMin(searchParams.get("precioMin") ?? "");
+        setPrecioMax(searchParams.get("precioMax") ?? "");
+        setZona(searchParams.get("zona") ?? "");
+        setAmbientes(searchParams.get("ambientes") ?? "");
+        setAmenities(searchParams.get("amenities") ?? "");
+        setBusqueda(searchParams.get("q") ?? "");
+        setOrden(searchParams.get("sort") ?? "");
+    }, [searchParams]);
+    
     useEffect(() => {
         async function cargarPropiedades() {
             try {
                 setCargando(true);
                 setError(null);
 
-                const respuesta = await propiedadesService.listarPublicas({
-                    ...filtrosAplicados,
+                const filtros: FiltrosPropiedades = {
                     page: pagina,
                     limit: limite,
-                });
+
+                    tipo: (searchParams.get("tipo") as FiltrosPropiedades["tipo"]) ||
+                    undefined,
+
+                    operacion: (searchParams.get("operacion") as FiltrosPropiedades["operacion"]) ||
+                    undefined,
+
+                    precioMin: searchParams.get("precioMin") ||
+                    undefined,
+
+                    precioMax: searchParams.get("precioMax") ||
+                    undefined,
+
+                    zona: searchParams.get("zona") ||
+                    undefined,
+
+                    ambientes: searchParams.get("ambientes") ? Number(searchParams.get("ambientes"))
+                    : undefined,
+
+                    amenities: searchParams.get("amenities") ? searchParams
+                    .get("amenities")!
+                    .split(",")
+                    .map((amenity) => amenity.trim())
+                    .filter((amenity) => amenity !== "")
+                    : undefined,
+
+                    q: searchParams.get("q") ||
+                    undefined,
+
+                    sort: (searchParams.get("sort") as FiltrosPropiedades["sort"]) ||
+                    undefined,
+                };
+
+                const respuesta = await propiedadesService.listarPublicas(filtros);
 
                 setPropiedades(respuesta.items);
                 setTotal(respuesta.total);
@@ -48,52 +93,51 @@ export default function Inicio() {
             }
         }
         cargarPropiedades();
-    }, [filtrosAplicados, pagina]);
+    }, [searchParams, pagina]);
 
     function aplicarFiltros(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        setPagina(1);
+        const params = new URLSearchParams();
 
-        setFiltrosAplicados({
-            tipo:
-                tipo === ""
-                    ? undefined
-                    : (tipo as FiltrosPropiedades["tipo"]),
+        if (tipo) {
+            params.set("tipo", tipo);
+        }
 
-            operacion:
-                operacion === ""
-                    ? undefined
-                    : (operacion as FiltrosPropiedades["operacion"]),
+        if (operacion) {
+            params.set("operacion", operacion);
+        }
 
-            precioMin:
-                precioMin.trim() || undefined,
+        if (precioMin.trim()) {
+            params.set("precioMin", precioMin.trim());
+        }
 
-            precioMax:
-                precioMax.trim() || undefined,
+        if (precioMax.trim()) {
+            params.set("precioMax", precioMax.trim());
+        }
 
-            zona:
-                zona.trim() || undefined,
+        if (zona.trim()) {
+            params.set("zona", zona.trim());
+        }
 
-            ambientes:
-                ambientes
-                    ? Number(ambientes)
-                    : undefined,
+        if (ambientes) {
+            params.set("ambientes", ambientes);
+        }
 
-            amenities: amenities.trim()
-                ? amenities
-                    .split(",")
-                    .map((amenity) => amenity.trim())
-                    .filter((amenity) => amenity !== "")
-                : undefined,
+        if (amenities.trim()) {
+            params.set("amenities", amenities.trim());
+        }
 
-            q:
-                busqueda.trim() || undefined,
+        if (busqueda.trim()) {
+            params.set("q", busqueda.trim());
+        }
 
-            sort:
-                orden === ""
-                    ? undefined
-                    : (orden as FiltrosPropiedades["sort"]),
-        });
+        if (orden) {
+            params.set("sort", orden);
+        }
+
+        params.set("page", "1");
+
+        setSearchParams(params);
     }
 
     function limpiarFiltros() {
@@ -106,8 +150,14 @@ export default function Inicio() {
         setAmenities("");
         setBusqueda("");
         setOrden("");
-        setPagina(1);
-        setFiltrosAplicados({});
+        setSearchParams({});
+    }
+
+    function cambiarPagina(nuevaPagina: number) {
+        const params = new URLSearchParams(searchParams);
+
+        params.set("page", nuevaPagina.toString());
+        setSearchParams(params);
     }
 
     const totalPaginas = Math.ceil(total / limite);
@@ -196,7 +246,7 @@ export default function Inicio() {
                     </div>
 
                     <div className={styles.campo}>
-                        <label htmlFor="precioMaz">
+                        <label htmlFor="precioMax">
                             Precio máximo
                         </label>
                         <input
@@ -294,7 +344,7 @@ export default function Inicio() {
             ) : (
                 <>
                     <p className={styles.resultados}>
-                        {total} propiedade
+                        {total} propiedad
                         {total !== 1 ? "es" : ""} encontrada
                         {total !== 1 ? "s" : ""}
                     </p>
@@ -345,7 +395,7 @@ export default function Inicio() {
                             <button
                                 type="button"
                                 disabled={pagina === 1}
-                                onClick={() => setPagina(pagina - 1)}>
+                                onClick={() => cambiarPagina(pagina - 1)}>
                                 Anterior
                             </button>
 
@@ -357,7 +407,7 @@ export default function Inicio() {
                             <button
                                 type="button"
                                 disabled={pagina === totalPaginas}
-                                onClick={() => setPagina(pagina + 1)}>
+                                onClick={() => cambiarPagina(pagina + 1)}>
                                 Siguiente
                             </button>
                         </div>
