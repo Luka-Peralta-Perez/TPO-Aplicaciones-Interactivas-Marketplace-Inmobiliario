@@ -1,7 +1,3 @@
-export function VisitasPanel() {
-    return <h1>Solicitudes de visita</h1>;
-}
-
 export function ConsultasPanel() {
     return <h1>Consultas</h1>;
 }
