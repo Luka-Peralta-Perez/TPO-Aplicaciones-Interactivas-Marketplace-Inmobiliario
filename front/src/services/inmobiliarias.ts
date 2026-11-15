@@ -1,5 +1,5 @@
 import { apiFetch } from "../comun/api";
-import type { ActualizarInmobiliariaInput, InmobiliariaDatos } from "../types";
+import type { ActualizarInmobiliariaInput, InmobiliariaDatos, PropiedadPublica, ReseniaPublica, RespuestaPropiedades } from "../types";
 
 export const inmobiliariasService = {
     obtenerPropia(): Promise<InmobiliariaDatos> {
@@ -21,4 +21,31 @@ export const inmobiliariasService = {
             method: "DELETE",
         });
     },
+
+    obtenerPublica(id: number): Promise<InmobiliariaDatos> {
+        return apiFetch<InmobiliariaDatos>(`/agencies/${id}`);
+    },
+
+    listarPropiedadesPublicas(id: number): Promise<PropiedadPublica[] | RespuestaPropiedades> {
+        return apiFetch<PropiedadPublica[] | RespuestaPropiedades>(`/agencies/${id}/properties`);
+    },
+
+    listarResenias(id: number): Promise<ReseniaPublica[]> {
+        return apiFetch<ReseniaPublica[]>(`/agencies/${id}/reviews`);
+    },
+
+    crearResenia(id: number, datos: {
+        nombreAutor: string;
+        contenido: string;
+        calificacion: number;
+    }): Promise<ReseniaPublica> {
+        return apiFetch<ReseniaPublica>(`/agencies/${id}/reviews`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(datos),
+        });
+    },
+
 };

@@ -169,3 +169,11 @@ export type ComentarioPropiedad = {
     respuesta: string | null;
     creadoEn: string;
 };
+
+export type ReseniaPublica = {
+    id: number;
+    nombreAutor: string;
+    contenido: string;
+    calificacion: number;
+    creadoEn: string
+};

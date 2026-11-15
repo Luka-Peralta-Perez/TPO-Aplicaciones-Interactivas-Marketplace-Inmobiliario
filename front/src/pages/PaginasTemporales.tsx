@@ -1,7 +1,3 @@
-export function SitioInmobiliario() {
-    return <h1>Inmobiliaria</h1>;
-}
-
 export function VisitasPanel() {
     return <h1>Solicitudes de visita</h1>;
 }

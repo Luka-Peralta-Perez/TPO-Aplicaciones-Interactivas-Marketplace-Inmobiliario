@@ -1,0 +1,139 @@
+.contenedor {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.perfil {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin: 2rem 0;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.contacto {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.contacto div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+.seccion {
+    margin-top: 2.5rem;
+}
+
+.propiedades {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.tarjeta {
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+.tarjeta img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.contenidoTarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+}
+
+.contenidoTarjeta h3,
+.contenidoTarjeta p {
+    margin: 0;
+}
+
+.resenias {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.resenia {
+    padding: 1rem;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+.encabezadoResenia {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.formResenia {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    padding: 0.7rem;
+    border: 1px solid #bbbbbb;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.error {
+    padding: 0.8rem;
+    border: 1px solid #c62828;
+    border-radius: 6px;
+}
+
+@media (max-width: 800px) {
+    .propiedades {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .contacto {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 550px) {
+    .perfil {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .propiedades {
+        grid-template-columns: 1fr;
+    }
+}
