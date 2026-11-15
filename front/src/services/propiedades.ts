@@ -1,4 +1,4 @@
-import { API_URL, apiFetch } from "../comun/api";
+import { apiFetch} from "../comun/api";
 import type { PropiedadPanel, CrearPropiedadInput, PropiedadDetalle, FiltrosPropiedades, RespuestaPropiedades, ComentarioPropiedad } from "../types";
 
 export const propiedadesService = {
@@ -13,9 +13,6 @@ export const propiedadesService = {
     crear(datos: CrearPropiedadInput): Promise<PropiedadPanel> {
         return apiFetch<PropiedadPanel>("/properties", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
             body: JSON.stringify(datos),
         });
     },
@@ -23,9 +20,6 @@ export const propiedadesService = {
     actualizar(id: number, datos: CrearPropiedadInput): Promise<PropiedadDetalle> {
         return apiFetch<PropiedadDetalle>(`/properties/${id}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
             body: JSON.stringify(datos),
         });
     },
@@ -94,7 +88,6 @@ export const propiedadesService = {
     }): Promise<ComentarioPropiedad> {
         return apiFetch<ComentarioPropiedad>(`/properties/${id}/comments`, {
             method: "POST",
-            headers: { "Content-Type": "application/json", },
             body: JSON.stringify(datos),
         });
     },
@@ -107,9 +100,6 @@ export const propiedadesService = {
     }): Promise<void> {
         return apiFetch<void>(`/properties/${id}/visit-requests`, {
             method: "POST",
-            headers: {"Content-Type": "application/json",
-
-            },
             body: JSON.stringify(datos),
         });
     },

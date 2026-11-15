@@ -102,7 +102,7 @@ export type PropiedadDetalle = {
     | "ALQUILADA"
     | "CANCELADA";
     inmobiliaria?: {
-        id:number;
+        id: number;
         nombre: string;
     }
 };
@@ -176,4 +176,75 @@ export type ReseniaPublica = {
     contenido: string;
     calificacion: number;
     creadoEn: string
+};
+
+export type EstadoSolicitudVisita =
+    | "PENDIENTE"
+    | "CONFIRMADA"
+    | "REALIZADA"
+    | "CANCELADA"
+    | "RECHAZADA";
+
+export type SolicitudVisita = {
+    id: number;
+    nombreSolicitante: string;
+    telefono: string;
+    fechaPropuesta: string;
+    mensaje: string | null;
+    estado: EstadoSolicitudVisita;
+    creadoEn: string;
+    propiedad: {
+        id: number;
+        titulo: string;
+    };
+};
+
+export type TipoActividad =
+    | "COMENTARIO"
+    | "SOLICITUD_VISITA"
+    | "CAMBIO_ESTADO_PROPIEDAD"
+    | "RESEÑA";
+
+export type Actividad = {
+    id: number;
+    tipo: TipoActividad;
+    referenciaOrigen: number;
+    leida: boolean;
+    creadoEn: string;
+};
+
+export type EstadoPropiedad =
+    | "BORRADOR"
+    | "PUBLICADA"
+    | "RESERVADA"
+    | "PAUSADA"
+    | "VENDIDA"
+    | "ALQUILADA"
+    | "CANCELADA";
+
+    export type ReportePropiedadesPorEstado =
+    Record<EstadoPropiedad, number>;
+
+export type ReporteMensual = {
+    mes: string;
+    publicacionesNuevas: number;
+    ventas: number;
+    alquileres: number;
+};
+
+export type ReporteTiempoMercado = {
+    promedioDias: number;
+    propiedadesConsideradas: number;
+};
+
+export type CrearComentarioInput = {
+    nombreAutor: string;
+    contenido: string;
+}
+
+export type CrearSolicitudVisitaInput = {
+    nombreSolicitante: string;
+    telefono: string;
+    fechaPropuesta: string;
+    mensaje?: string;
 };
