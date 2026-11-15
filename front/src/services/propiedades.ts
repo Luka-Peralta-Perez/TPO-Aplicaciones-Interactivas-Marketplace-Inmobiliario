@@ -98,4 +98,19 @@ export const propiedadesService = {
             body: JSON.stringify(datos),
         });
     },
+
+    crearSolicitudVisita(id: number, datos: {
+        nombreSolicitante: string;
+        telefono: string;
+        fechaPropuesta: string;
+        mensaje?: string;
+    }): Promise<void> {
+        return apiFetch<void>(`/properties/${id}/visit-requests`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json",
+
+            },
+            body: JSON.stringify(datos),
+        });
+    },
 };

@@ -11,11 +11,21 @@ export default function DetallePropiedad() {
     const [fotoSeleccionada, setFotoSeleccionada] = useState("");
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
     const [comentarios, setComentarios] = useState<ComentarioPropiedad[]>([]);
     const [nombreAutor, setNombreAutor] = useState("");
     const [contenidoConsulta, setContenidoConsulta] = useState("");
     const [enviandoConsulta, setEnviandoConsulta] = useState(false);
     const [errorConsulta, setErrorConsulta] = useState<string | null>(null);
+
+    const [nombreVisita, setNombreVisita] = useState("");
+    const [telefonoVisita, setTelefonoVisita] = useState("");
+    const [fechaVisita, setFechaVisita] = useState("");
+    const [mensajeVisita, setMensajeVisita] = useState("");
+    const [enviandoVisita, setEnviandoVisita] = useState(false);
+    const [errorVisita, setErrorVisita] = useState<string | null>(null);
+    const [exitoVisita, setExitoVisita] = useState<string | null>(null);
+    const [mostrarFormularioVisita, setMostrarFormularioVisita] = useState(false);
 
     useEffect(() => {
         async function cargarPropiedad() {
@@ -89,6 +99,62 @@ export default function DetallePropiedad() {
             }
         } finally {
             setEnviandoConsulta(false);
+        }
+    }
+
+    async function enviarSolicitudVisita(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        if (!propiedad) {
+            return;
+        }
+        setErrorVisita(null);
+        setExitoVisita(null);
+
+        if (!nombreVisita.trim()) {
+            setErrorVisita("Ingresá tu nombre.");
+            return;
+        }
+
+        if (!telefonoVisita.trim()) {
+            setErrorVisita("Ingresá tu teléfono.");
+            return;
+        }
+
+        if (!fechaVisita) {
+            setErrorVisita("Seleccioná una fecha y hora.");
+            return;
+        }
+        const fechaSeleccionada = new Date(fechaVisita);
+
+        if (Number.isNaN(fechaSeleccionada.getTime()) ||
+            fechaSeleccionada <= new Date()
+        ) {
+            setErrorVisita("La fecha de la visita debe ser futura.");
+            return;
+        }
+
+        try {
+            setEnviandoVisita(true);
+            await propiedadesService.crearSolicitudVisita(propiedad.id, {
+                nombreSolicitante: nombreVisita.trim(),
+                telefono: telefonoVisita.trim(),
+                fechaPropuesta: fechaSeleccionada.toISOString(),
+                mensaje: mensajeVisita.trim() || undefined,
+            });
+            setNombreVisita("");
+            setTelefonoVisita("");
+            setFechaVisita("");
+            setMensajeVisita("");
+            setExitoVisita("La solicitud de visita fue enviada correctamente.");
+        } catch (error) {
+            if (error instanceof ApiError) {
+                setErrorVisita(error.message);
+            } else {
+                setErrorVisita("No se pudo enviar la solicitud de visita");
+            }
+        } finally {
+            setEnviandoVisita(false);
         }
     }
 
@@ -253,6 +319,84 @@ export default function DetallePropiedad() {
                         to={`/inmobiliarias/${propiedad.inmobiliaria.id}`}>
                         Ver {propiedad.inmobiliaria.nombre}
                     </Link>
+                </div>
+            )}
+
+            {propiedad.estado === "PUBLICADA" && (
+                <div className={styles.seccion}>
+                    <button
+                        type="button"
+                        onClick={() => setMostrarFormularioVisita((anterior) => !anterior)}>
+                        {mostrarFormularioVisita ? "Cerrar formulario" : "Pedir visita"}
+                    </button>
+                    {mostrarFormularioVisita && (
+                        <form className={styles.formConsulta}
+                            onSubmit={enviarSolicitudVisita}>
+                            <div className={styles.campoConsulta}>
+                                <label htmlFor="nombreVisita">
+                                    Nombre
+                                </label>
+                                <input
+                                    id="nombreVisita"
+                                    type="text"
+                                    value={nombreVisita}
+                                    onChange={(event) => setNombreVisita(event.target.value)} />
+                            </div>
+
+                            <div className={styles.campoConsulta}>
+                                <label htmlFor="telefonoVisita">
+                                    Teléfono
+                                </label>
+                                <input
+                                    id="telefonoVisita"
+                                    type="tel"
+                                    value={telefonoVisita}
+                                    onChange={(event) => setTelefonoVisita(event.target.value)} />
+                            </div>
+
+                            <div className={styles.campoConsulta}>
+                                <label htmlFor="fechaVisita">
+                                    Fecha y hora
+                                </label>
+                                <input
+                                    id="fechaVisita"
+                                    type="datetime-local"
+                                    value={fechaVisita}
+                                    min={new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                                        .toISOString()
+                                        .slice(0, 16)}
+                                    onChange={(event) => setFechaVisita(event.target.value)} />
+                            </div>
+
+                            <div className={styles.campoConsulta}>
+                                <label htmlFor="mensajeVisita">
+                                    Mensaje (opcional)
+                                </label>
+                                <textarea
+                                    id="mensajeVisita"
+                                    rows={4}
+                                    value={mensajeVisita}
+                                    onChange={(event) => setMensajeVisita(event.target.value)} />
+                            </div>
+
+                            {errorVisita && (
+                                <p className={styles.errorConsulta}>
+                                    {errorVisita}
+                                </p>
+                            )}
+                            {exitoVisita && (
+                                <p className={styles.exitoVisita}>
+                                    {exitoVisita}
+                                </p>
+                            )}
+
+                            <button
+                                type="submit"
+                                disabled={enviandoVisita}>
+                                {enviandoVisita ? "Enviando..." : "Pedir visita"}
+                            </button>
+                        </form>
+                    )}
                 </div>
             )}
 
