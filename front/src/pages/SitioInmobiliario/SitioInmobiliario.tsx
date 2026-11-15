@@ -163,7 +163,9 @@ export default function SitioInmobiliario() {
                     <strong>
                         Teléfono
                     </strong>
-                    <span>{inmobiliaria.telefonoContacto}</span>
+                    <a href={`tel:${inmobiliaria.telefonoContacto}`}>
+                        {inmobiliaria.telefonoContacto}
+                    </a>
                 </div>
 
                 <div>
