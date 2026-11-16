@@ -1,0 +1,149 @@
+.contenedor {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.titulo {
+    margin-bottom: 2rem;
+}
+
+.seccion {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+
+.seccion h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(130px, 1fr)
+    );
+    gap: 1rem;
+}
+
+.tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.nombreEstado {
+    font-size: 0.9rem;
+}
+
+.cantidad {
+    font-size: 2rem;
+}
+
+.grafico {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    min-height: 220px;
+    overflow-x: auto;
+    padding: 1rem 0;
+}
+
+.grupoMes {
+    min-width: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.barras {
+    height: 170px;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.barra {
+    width: 28px;
+    min-height: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 4px;
+    border-radius: 5px 5px 0 0;
+    font-size: 0.75rem;
+}
+
+.publicaciones {
+    background: #315a8a;
+    color: white;
+}
+
+.ventas {
+    background: #4e8b57;
+    color: white;
+}
+
+.alquileres {
+    background: #c78a32;
+    color: white;
+}
+
+.mes {
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.tiempoPromedio {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tiempoPromedio strong {
+    font-size: 3rem;
+}
+
+.tiempoPromedio span {
+    font-size: 1.2rem;
+}
+
+.tiempoPromedio p {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.error {
+    color: #b00020;
+}
+
+.vacio {
+    color: #666;
+}
+
+@media (max-width: 600px) {
+    .contenedor {
+        padding: 1rem;
+    }
+
+    .seccion {
+        padding: 1rem;
+    }
+}
