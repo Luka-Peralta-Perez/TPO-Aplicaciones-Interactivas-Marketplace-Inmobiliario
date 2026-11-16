@@ -1,5 +1,5 @@
 import { apiFetch} from "../comun/api";
-import type { PropiedadPanel, CrearPropiedadInput, PropiedadDetalle, FiltrosPropiedades, RespuestaPropiedades, ComentarioPropiedad } from "../types";
+import type { PropiedadPanel, CrearPropiedadInput, PropiedadDetalle, FiltrosPropiedades, RespuestaPropiedades, ComentarioPropiedad, HistorialEstadoPropiedad } from "../types";
 
 export const propiedadesService = {
     listarPropias(): Promise<PropiedadPanel[]> {
@@ -102,5 +102,16 @@ export const propiedadesService = {
             method: "POST",
             body: JSON.stringify(datos),
         });
+    },
+
+    cambiarEstado(id: number, estado: PropiedadPanel["estado"]): Promise<PropiedadPanel> {
+        return apiFetch<PropiedadPanel>(`/properties/${id}/status`, {
+            method: "PATCH",
+            body: JSON.stringify({estado}),
+        });
+    },
+
+    obtenerHistorial(id: number): Promise<HistorialEstadoPropiedad[]> {
+        return apiFetch<HistorialEstadoPropiedad[]>(`/properties/${id}/status-history`);
     },
 };

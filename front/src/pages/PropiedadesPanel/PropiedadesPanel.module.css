@@ -39,3 +39,113 @@
     object-fit: cover;
     border-radius: 6px;
 }
+
+.acciones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 150px;
+}
+
+.botonAccion {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    background: white;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+}
+
+.botonAccion:hover:not(:disabled) {
+    background: #f3f3f3;
+}
+
+.botonAccion:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.botonDestructivo {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid #c62828;
+    border-radius: 7px;
+    background: white;
+    color: #c62828;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+}
+
+.botonDestructivo:hover:not(:disabled) {
+    background: #fff1f1;
+}
+
+.editar {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 7px 10px;
+    border-radius: 7px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #ccc;
+}
+
+.editar:hover {
+    background: #f3f3f3;
+}
+
+.estado {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: #f1f1f1;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.historial {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f7f7f7;
+}
+
+.historialLista {
+    margin: 8px 0 0;
+    padding-left: 18px;
+}
+
+.historialItem {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.botonHistorial {
+    padding: 6px 10px;
+    border: none;
+    background: transparent;
+    text-decoration: underline;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .contenedor {
+        padding: 1rem;
+    }
+
+    .imagenPropiedad {
+        width: 90px;
+        height: 65px;
+    }
+
+    .acciones {
+        min-width: 130px;
+    }
+}

@@ -248,3 +248,10 @@ export type CrearSolicitudVisitaInput = {
     fechaPropuesta: string;
     mensaje?: string;
 };
+
+export type HistorialEstadoPropiedad = {
+    id: number;
+    estadoAnterior: PropiedadPanel["estado"];
+    estadoNuevo: PropiedadPanel["estado"];
+    creadoEn: string;
+}
