@@ -1,10 +1,39 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/useAuth";
+import { actividadesService } from "../../services/actividades";
+import { inmobiliariasService } from "../../services/inmobiliarias";
 import styles from "./LayoutPanel.module.css";
 
 export default function LayoutPanel() {
     const { cerrarSesion } = useAuth();
     const navigate = useNavigate();
+    const [noLeidas, setNoLeidas] = useState(0);
+
+    useEffect(() => {
+        let activo = true;
+
+        async function actualizarContador() {
+            try {
+                const inmobiliaria = await inmobiliariasService.obtenerPropia();
+                const respuesta = await actividadesService.contarNoLeidas(inmobiliaria.id);
+
+                if (activo) {
+                    setNoLeidas(respuesta.unreadCount);
+                }
+            } catch {
+
+            }
+        }
+        actualizarContador();
+
+        const intervalo = window.setInterval(actualizarContador, 10000);
+
+        return () => {
+            activo = false;
+            window.clearInterval(intervalo);
+        };
+    }, []);
 
     function salir() {
         cerrarSesion();
@@ -52,6 +81,12 @@ export default function LayoutPanel() {
                         className={claseEnlace}
                     >
                         Actividad
+
+                        {noLeidas > 0 && (
+                            <span>
+                                {" "}🔔 {noLeidas}
+                            </span>
+                        )}
                     </NavLink>
 
                     <NavLink
@@ -72,7 +107,14 @@ export default function LayoutPanel() {
             </header>
 
             <main className={styles.contenido}>
-                <Outlet />
+                <Outlet
+                    context={{
+                        disminuirNoLeidas: () =>
+                            setNoLeidas((actual) =>
+                                Math.max(0, actual - 1)
+                            ),
+                    }}
+                />
             </main>
         </>
     );

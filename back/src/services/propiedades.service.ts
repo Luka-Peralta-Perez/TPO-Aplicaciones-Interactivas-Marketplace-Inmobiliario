@@ -1,5 +1,5 @@
 import { Propiedad } from "../entities/propiedad";
-import { EstadoPropiedad } from "../entities/enums";
+import { EstadoPropiedad, TipoActividad } from "../entities/enums";
 import { propiedadesRepository, ResultadoPropiedades } from "../repositories/propiedades.repository";
 import { inmobiliariasRepository } from "../repositories/inmobiliarias.repository";
 import { NotFoundError, BadRequestError } from "../errors/propiedades.errors";
@@ -10,6 +10,7 @@ import { ForbiddenError } from "../errors/auth.errors";
 import { AppDataSource } from "../config/data-source";
 import { HistorialEstadoPropiedad } from "../entities/historial-estado-propiedad";
 import { historialEstadoPropiedadRepository } from "../repositories/historial-estado-propiedad.repository";
+import { Actividad } from "../entities/actividad";
 
 // Valida las reglas de negocio para precio y superficies
 function validarValoresPositivos(precio?: string, superficieTotalM2?: string, superficieCubiertaM2?: string): void {
@@ -186,6 +187,12 @@ export const propiedadesService = {
             throw new ForbiddenError("No tenés permiso para cambiar el estado de esta propiedad");
         }
 
+        const inmobiliaria = await inmobiliariasRepository.buscarPorVendedorId(vendedorId);
+
+        if (!inmobiliaria) {
+            throw new NotFoundError("Inmobiliaria no encontrada");
+        }
+
         const estadoAnterior = propiedad.estado;
         const estadoNuevo = datos.estado;
         const permitidos = TRANSICIONES_PERMITIDAS[estadoAnterior];
@@ -198,6 +205,7 @@ export const propiedadesService = {
         return AppDataSource.transaction(async (manager) => {
             const propiedadRepository = manager.getRepository(Propiedad);
             const historialRepository = manager.getRepository(HistorialEstadoPropiedad);
+            const actividadRepository = manager.getRepository(Actividad);
 
             propiedad.estado = estadoNuevo;
 
@@ -209,6 +217,15 @@ export const propiedadesService = {
             });
 
             await historialRepository.save(historial);
+
+            const actividad = actividadRepository.create({
+                tipo: TipoActividad.CAMBIO_ESTADO_PROPIEDAD,
+                referenciaOrigen: actualizada.id,
+                leida: false,
+                inmobiliaria,
+            });
+            await actividadRepository.save(actividad);
+            
             return actualizada;
         });
     },

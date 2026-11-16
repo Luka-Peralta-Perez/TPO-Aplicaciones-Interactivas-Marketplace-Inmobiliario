@@ -3,7 +3,7 @@ import LayoutPublico from "./components/LayoutPublico/LayoutPublico";
 import LayoutPanel from "./components/LayoutPanel/LayoutPanel";
 import RequiereSesion from "./components/RequiereSesion/RequiereSesion";
 import NoEncontrada from "./pages/NoEncontrada";
-import { ActividadPanel, ReportesPanel } from "./pages/PaginasTemporales";
+import { ReportesPanel } from "./pages/PaginasTemporales";
 import Login from "./pages/Login/Login";
 import Registro from "./pages/Registro/Registro";
 import PropiedadesPanel from "./pages/PropiedadesPanel/PropiedadesPanel";
@@ -15,6 +15,7 @@ import DetallePropiedad from "./pages/DetallePropiedad/DetallePropiedad";
 import SitioInmobiliario from "./pages/SitioInmobiliario/SitioInmobiliario";
 import SolicitudesVisita from "./pages/SolicitudesVisita/SolicitudesVisita";
 import Consultas from "./pages/Consultas/Consultas";
+import Actividad from "./pages/Actividad/Actividad";
 
 export const rutas: RouteObject[] = [
     {
@@ -85,7 +86,7 @@ export const rutas: RouteObject[] = [
                     },
                     {
                         path: "actividad",
-                        element: <ActividadPanel />,
+                        element: <Actividad />,
                     },
                     {
                         path: "reportes",

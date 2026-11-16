@@ -203,7 +203,7 @@ export type TipoActividad =
     | "COMENTARIO"
     | "SOLICITUD_VISITA"
     | "CAMBIO_ESTADO_PROPIEDAD"
-    | "RESEÑA";
+    | "RESENA";
 
 export type Actividad = {
     id: number;
@@ -222,7 +222,7 @@ export type EstadoPropiedad =
     | "ALQUILADA"
     | "CANCELADA";
 
-    export type ReportePropiedadesPorEstado =
+export type ReportePropiedadesPorEstado =
     Record<EstadoPropiedad, number>;
 
 export type ReporteMensual = {
@@ -240,7 +240,7 @@ export type ReporteTiempoMercado = {
 export type CrearComentarioInput = {
     nombreAutor: string;
     contenido: string;
-}
+};
 
 export type CrearSolicitudVisitaInput = {
     nombreSolicitante: string;
@@ -254,4 +254,4 @@ export type HistorialEstadoPropiedad = {
     estadoAnterior: PropiedadPanel["estado"];
     estadoNuevo: PropiedadPanel["estado"];
     creadoEn: string;
-}
+};
