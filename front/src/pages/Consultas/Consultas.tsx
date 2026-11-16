@@ -3,6 +3,7 @@ import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import { comentariosService } from "../../services/comentarios";
 import type { ComentarioPropiedad, PropiedadPanel } from "../../types";
+import styles from "./Consultas.module.css"
 
 type GrupoConsultas = {
     propiedad: PropiedadPanel;
@@ -97,35 +98,51 @@ export default function Consultas() {
 
     if (cargando) {
         return (
-            <section>
-                <p>Cargando consultas...</p>
+            <section className={styles.contenedor}>
+                <p className={styles.vacio}>
+                    Cargando consultas...
+                </p>
             </section>
         );
     }
 
     return (
-        <section>
-            <h1>Consultas recibidas</h1>
-            {error && <p>{error}</p>}
+        <section className={styles.contenedor}>
+            <h1 className={styles.titulo}>
+                Consultas recibidas
+            </h1>
+            {error && (
+                <p className={styles.error}>
+                    {error}
+                </p>
+            )}
             {grupos.length === 0 ? (
-                <p>No hay consultas recibidas.</p>
+                <p className={styles.vacio}>
+                    No hay consultas recibidas.
+                </p>
             ) : (
                 grupos.map((grupo) => (
-                    <section key={grupo.propiedad.id}>
-                        <h2>{grupo.propiedad.titulo}</h2>
+                    <section key={grupo.propiedad.id}
+                        className={styles.grupoPropiedad}>
+                        <h2 className={styles.tituloPropiedad}>
+                            {grupo.propiedad.titulo}
+                        </h2>
                         {grupo.comentarios.map((comentario) => (
-                            <article key={comentario.id}>
-                                <p>
+                            <article
+                                key={comentario.id}
+                                className={styles.tarjeta}>
+                                <div className={styles.encabezadoConsulta}>
                                     <strong>{comentario.nombreAutor}</strong>
-                                    {" — "}
-                                    {new Date(comentario.creadoEn).toLocaleDateString("es-AR")}
-                                </p>
+                                    <span className={styles.fecha}>
+                                        {new Date(comentario.creadoEn).toLocaleDateString("es-AR")}
+                                    </span>
+                                </div>
                                 <p>{comentario.contenido}</p>
                                 {comentario.respuesta ? (
-                                    <div>
-                                        <p>
-                                            <strong>Respondida ✓</strong>
-                                        </p>
+                                    <div className={styles.respuesta}>
+                                        <span className={styles.estadoRespondida}>
+                                            Respondida ✓
+                                        </span>
                                         <p>
                                             <strong>Respuesta:</strong>
                                             {" "}
@@ -133,11 +150,12 @@ export default function Consultas() {
                                         </p>
                                     </div>
                                 ) : (
-                                    <div>
-                                        <p>
-                                            <strong>Pendiente</strong>
-                                        </p>
+                                    <div className={styles.formRespuesta}>
+                                        <span className={styles.estadoPendiente}>
+                                            Pendiente
+                                        </span>
                                         <textarea
+                                            className={styles.textarea}
                                             rows={3}
                                             placeholder="Escribir respuesta..."
                                             value={respuestas[comentario.id] ?? ""}
@@ -148,9 +166,12 @@ export default function Consultas() {
                                             }
                                         />
                                         {errorRespuesta[comentario.id] && (
-                                            <p>{errorRespuesta[comentario.id]}</p>
+                                            <p className={styles.error}>
+                                                {errorRespuesta[comentario.id]}
+                                            </p>
                                         )}
                                         <button
+                                            className={styles.boton}
                                             type="button"
                                             disabled={respondiendoId === comentario.id}
                                             onClick={() => responderComentario(comentario.id)}>

@@ -1,0 +1,108 @@
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.titulo {
+    margin: 0;
+    font-size: 28px;
+}
+
+.filtros {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.botonFiltro {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+}
+
+.botonFiltro:disabled {
+    background: #222;
+    color: white;
+    cursor: default;
+}
+
+.grupoPropiedad {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tituloPropiedad {
+    margin: 0;
+    font-size: 21px;
+}
+
+.tarjeta {
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+}
+
+.tarjeta p {
+    margin: 6px 0;
+}
+
+.telefono {
+    color: inherit;
+    font-weight: 600;
+}
+
+.estado {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #f1f1f1;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.boton {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.boton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.vacio {
+    color: #666;
+}
+
+.error {
+    color: #b00020;
+}
+
+@media (max-width: 600px) {
+    .tarjeta {
+        padding: 14px;
+    }
+
+    .acciones {
+        flex-direction: column;
+    }
+
+    .boton {
+        width: 100%;
+    }
+}

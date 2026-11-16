@@ -3,6 +3,7 @@ import { ApiError } from "../../comun/api";
 import { inmobiliariasService } from "../../services/inmobiliarias";
 import { visitasService } from "../../services/visitas";
 import type { EstadoSolicitudVisita, SolicitudVisita } from "../../types";
+import styles from "./SolicitudesVisita.module.css"
 
 export default function SolicitudesVisita() {
     const [solicitudes, setSolicitudes] = useState<SolicitudVisita[]>([]);
@@ -60,17 +61,23 @@ export default function SolicitudesVisita() {
 
     if (cargando) {
         return (
-            <section>
-                <p>Cargando solicitudes de visita...</p>
+            <section className={styles.contenedor}>
+                <p className={styles.vacio}>
+                    Cargando solicitudes de visita...
+                    </p>
             </section>
         );
     }
 
     if (error) {
         return (
-            <section>
-                <h1>Solicitudes de visita</h1>
-                <p>{error}</p>
+            <section className={styles.contenedor}>
+                <h1 className={styles.titulo}>
+                    Solicitudes de visita
+                </h1>
+                <p className={styles.error}>
+                    {error}
+                </p>
             </section>
         );
     }
@@ -97,16 +104,20 @@ export default function SolicitudesVisita() {
     );
 
     return (
-        <section>
-            <h1>Solicitudes de visita</h1>
-            <div>
+        <section className={styles.contenedor}>
+            <h1 className={styles.titulo}>
+                Solicitudes de visita
+            </h1>
+            <div className={styles.filtros}>
                 <button
+                    className={styles.botonFiltro}
                     type="button"
                     onClick={() => setFiltro("PENDIENTES")}
                     disabled={filtro === "PENDIENTES"}>
                     Pendientes
                 </button>
                 <button
+                    className={styles.botonFiltro}
                     type="button"
                     onClick={() => setFiltro("TODAS")}
                     disabled={filtro === "TODAS"}>
@@ -114,21 +125,28 @@ export default function SolicitudesVisita() {
                 </button>
             </div>
             {solicitudesFiltradas.length === 0 ? (
-                <p>No hay solicitudes de visita.</p>
+                <p className={styles.vacio}>
+                    No hay solicitudes de visita.
+                </p>
             ) : (
                 Object.entries(solicitudesPorPropiedad).map(
                     ([propiedadId, grupo]) => (
-                        <section key={propiedadId}>
-                            <h2>{grupo.titulo}</h2>
+                        <section key={propiedadId}
+                            className={styles.grupoPropiedad}>
+                            <h2 className={styles.tituloPropiedad}>
+                                {grupo.titulo}
+                            </h2>
                             {grupo.solicitudes.map((solicitud) => (
-                                <article key={solicitud.id}>
+                                <article key={solicitud.id}
+                                    className={styles.tarjeta}>
                                     <p>
                                         <strong>Nombre:</strong>{" "}
                                         {solicitud.nombreSolicitante}
                                     </p>
                                     <p>
                                         <strong>Teléfono:</strong>{" "}
-                                        <a href={`tel:${solicitud.telefono.replace(/[^\d+]/g, "")}`}>
+                                        <a className={styles.telefono}
+                                            href={`tel:${solicitud.telefono.replace(/[^\d+]/g, "")}`}>
                                             {solicitud.telefono}
                                         </a>
                                     </p>
@@ -144,18 +162,22 @@ export default function SolicitudesVisita() {
                                     )}
                                     <p>
                                         <strong>Estado:</strong>{" "}
-                                        {solicitud.estado}
+                                        <span className={styles.estado}>
+                                            {solicitud.estado}
+                                        </span>
                                     </p>
 
                                     {solicitud.estado === "PENDIENTE" && (
-                                        <div>
+                                        <div className={styles.acciones}>
                                             <button
+                                                className={styles.boton}
                                                 type="button"
                                                 disabled={actualizadoId === solicitud.id}
                                                 onClick={() => cambiarEstado(solicitud.id, "CONFIRMADA")}>
                                                 Confirmar
                                             </button>
                                             <button
+                                                className={styles.boton}
                                                 type="button"
                                                 disabled={actualizadoId === solicitud.id}
                                                 onClick={() => cambiarEstado(solicitud.id, "RECHAZADA")}>
@@ -165,14 +187,16 @@ export default function SolicitudesVisita() {
                                     )}
 
                                     {solicitud.estado === "CONFIRMADA" && (
-                                        <div>
+                                        <div className={styles.acciones}>
                                             <button
+                                                className={styles.boton}
                                                 type="button"
                                                 disabled={actualizadoId === solicitud.id}
                                                 onClick={() => cambiarEstado(solicitud.id, "REALIZADA")}>
                                                 Marcar realizada
                                             </button>
                                             <button
+                                                className={styles.boton}
                                                 type="button"
                                                 disabled={actualizadoId === solicitud.id}
                                                 onClick={() => cambiarEstado(solicitud.id, "CANCELADA")}>

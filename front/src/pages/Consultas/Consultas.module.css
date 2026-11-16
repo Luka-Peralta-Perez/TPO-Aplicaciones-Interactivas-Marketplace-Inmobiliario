@@ -1,0 +1,111 @@
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.titulo {
+    margin: 0;
+    font-size: 28px;
+}
+
+.grupoPropiedad {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tituloPropiedad {
+    margin: 0;
+    font-size: 21px;
+}
+
+.tarjeta {
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+}
+
+.tarjeta p {
+    margin: 6px 0;
+}
+
+.encabezadoConsulta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.fecha {
+    color: #666;
+    font-size: 14px;
+}
+
+.estadoPendiente,
+.estadoRespondida {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #f1f1f1;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.respuesta {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f7f7f7;
+}
+
+.formRespuesta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.textarea {
+    width: 100%;
+    resize: vertical;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.boton {
+    align-self: flex-start;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.boton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error {
+    color: #b00020;
+}
+
+.vacio {
+    color: #666;
+}
+
+@media (max-width: 600px) {
+    .tarjeta {
+        padding: 14px;
+    }
+
+    .boton {
+        width: 100%;
+    }
+}
