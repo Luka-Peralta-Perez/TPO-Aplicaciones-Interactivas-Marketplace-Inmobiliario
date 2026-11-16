@@ -4,6 +4,7 @@ import { propiedadesService } from "../../services/propiedades";
 import { comentariosService } from "../../services/comentarios";
 import type { ComentarioPropiedad, PropiedadPanel } from "../../types";
 import styles from "./Consultas.module.css"
+import { useSearchParams } from "react-router-dom";
 
 type GrupoConsultas = {
     propiedad: PropiedadPanel;
@@ -17,6 +18,8 @@ export default function Consultas() {
     const [respuestas, setRespuestas] = useState<Record<number, string>>({});
     const [respondiendoId, setRespondiendoId] = useState<number | null>(null);
     const [errorRespuesta, setErrorRespuesta] = useState<Record<number, string>>({});
+    const [searchParams] = useSearchParams();
+    const comentarioOrigen = searchParams.get("comentario");
 
     useEffect(() => {
         async function cargarConsultas() {
@@ -47,6 +50,19 @@ export default function Consultas() {
         }
         cargarConsultas();
     }, []);
+
+    useEffect(() => {
+        if (cargando || !comentarioOrigen) {
+            return;
+        }
+
+        const elemento = document.getElementById(`comentario-${comentarioOrigen}`);
+
+        elemento?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+        });
+    }, [cargando, comentarioOrigen]);
 
     async function responderComentario(comentarioId: number) {
         const respuesta = respuestas[comentarioId]?.trim();
@@ -130,6 +146,7 @@ export default function Consultas() {
                         {grupo.comentarios.map((comentario) => (
                             <article
                                 key={comentario.id}
+                                id={`comentario-${comentario.id}`}
                                 className={styles.tarjeta}>
                                 <div className={styles.encabezadoConsulta}>
                                     <strong>{comentario.nombreAutor}</strong>

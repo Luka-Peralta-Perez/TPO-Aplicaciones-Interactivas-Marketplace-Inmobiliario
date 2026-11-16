@@ -3,7 +3,7 @@ import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import type { HistorialEstadoPropiedad, PropiedadPanel as PropiedadPanelType } from "../../types";
 import styles from "./PropiedadesPanel.module.css";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export default function PropiedadesPanel() {
     const [propiedades, setPropiedades] = useState<PropiedadPanelType[]>([]);
@@ -15,6 +15,8 @@ export default function PropiedadesPanel() {
     const [historialAbiertoId, setHistorialAbiertoId] = useState<number | null>(null);
     const [cargandoHistorialId, setCargandoHistorialId] = useState<number | null>(null);
     const [errorHistorial, setErrorHistorial] = useState<Record<number, string>>({});
+    const [searchParams] = useSearchParams();
+    const propiedadOrigen = searchParams.get("propiedad");
 
     useEffect(() => {
         async function cargarPropiedades() {
@@ -36,6 +38,19 @@ export default function PropiedadesPanel() {
         }
         cargarPropiedades();
     }, []);
+
+    useEffect(() => {
+        if (cargando || !propiedadOrigen) {
+            return;
+        }
+
+        const elemento = document.getElementById(`propiedad-${propiedadOrigen}`);
+
+        elemento?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+        });
+    }, [cargando, propiedadOrigen]);
 
     async function cambiarEstado(propiedadId: number, nuevoEstado: PropiedadPanelType["estado"]) {
         if (
@@ -170,7 +185,10 @@ export default function PropiedadesPanel() {
 
                         <tbody>
                             {propiedades.map((propiedad) => (
-                                <tr key={propiedad.id}>
+                                <tr 
+                                key={propiedad.id}
+                                id={`propiedad-${propiedad.id}`}
+                                >
                                     <td>
                                         <img
                                             src={propiedad.fotoPortada}

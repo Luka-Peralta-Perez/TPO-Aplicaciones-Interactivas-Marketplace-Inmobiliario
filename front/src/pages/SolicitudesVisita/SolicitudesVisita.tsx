@@ -4,6 +4,7 @@ import { inmobiliariasService } from "../../services/inmobiliarias";
 import { visitasService } from "../../services/visitas";
 import type { EstadoSolicitudVisita, SolicitudVisita } from "../../types";
 import styles from "./SolicitudesVisita.module.css"
+import { useSearchParams } from "react-router-dom";
 
 export default function SolicitudesVisita() {
     const [solicitudes, setSolicitudes] = useState<SolicitudVisita[]>([]);
@@ -11,6 +12,8 @@ export default function SolicitudesVisita() {
     const [error, setError] = useState<string | null>(null);
     const [actualizadoId, setActualizadoId] = useState<number | null>(null);
     const [filtro, setFiltro] = useState<"PENDIENTES" | "TODAS">("PENDIENTES");
+    const [searchParams] = useSearchParams();
+    const visitaOrigen = searchParams.get("visita");
 
     useEffect(() => {
         async function cargarSolicitudes() {
@@ -34,6 +37,25 @@ export default function SolicitudesVisita() {
         }
         cargarSolicitudes();
     }, []);
+
+    useEffect(() => {
+        if (visitaOrigen) {
+            setFiltro("TODAS");
+        }
+    }, [visitaOrigen]);
+
+    useEffect(() => {
+        if (cargando || !visitaOrigen || filtro !== "TODAS") {
+            return;
+        }
+
+        const elemento = document.getElementById(`visita-${visitaOrigen}`);
+
+        elemento?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+        });
+    }, [cargando, visitaOrigen, filtro]);
 
     async function cambiarEstado(solicitudId: number, nuevoEstado: EstadoSolicitudVisita) {
         try {
@@ -64,7 +86,7 @@ export default function SolicitudesVisita() {
             <section className={styles.contenedor}>
                 <p className={styles.vacio}>
                     Cargando solicitudes de visita...
-                    </p>
+                </p>
             </section>
         );
     }
@@ -137,7 +159,9 @@ export default function SolicitudesVisita() {
                                 {grupo.titulo}
                             </h2>
                             {grupo.solicitudes.map((solicitud) => (
-                                <article key={solicitud.id}
+                                <article
+                                    key={solicitud.id}
+                                    id={`visita-${solicitud.id}`}
                                     className={styles.tarjeta}>
                                     <p>
                                         <strong>Nombre:</strong>{" "}

@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ApiError} from "../../comun/api";
 import { inmobiliariasService } from "../../services/inmobiliarias";
 import type { InmobiliariaDatos, PropiedadPublica, ReseniaPublica } from "../../types";
@@ -18,6 +18,8 @@ export default function SitioInmobiliario() {
     const [calificacion, setCalificacion] = useState(5);
     const [enviando, setEnviando] = useState(false);
     const [errorResenia, setErrorResenia] = useState<string | null>(null);
+    const [searchParams] = useSearchParams();
+    const reseniaOrigen = searchParams.get("resenia");
 
     useEffect(() => {
         async function cargarInmobiliaria() {
@@ -57,6 +59,19 @@ export default function SitioInmobiliario() {
         }
         cargarInmobiliaria();
     }, [id]);
+
+    useEffect(() => {
+        if (cargando || !reseniaOrigen) {
+            return;
+        }
+
+        const elemento = document.getElementById(`resenia-${reseniaOrigen}`);
+
+        elemento?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }, [cargando, reseniaOrigen]);
 
     async function enviarResenia(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -222,6 +237,7 @@ export default function SitioInmobiliario() {
                         {resenias.map((resenia) => (
                             <article
                                 key={resenia.id}
+                                id={`resenia-${resenia.id}`}
                                 className={styles.resenia}>
                                 <div className={styles.encabezadoResenia}>
                                     <strong>{resenia.nombreAutor}</strong>
