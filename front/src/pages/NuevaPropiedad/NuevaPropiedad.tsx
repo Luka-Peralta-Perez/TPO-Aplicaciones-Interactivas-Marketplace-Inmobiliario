@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import type { CrearPropiedadInput } from "../../types";
-import styles from "./NuevaPropiedad.module.css"
+import styles from "./NuevaPropiedad.module.css";
+import { DialogoConfirmacion } from "../../components/DialogoConfirmacion/DialogoConfirmacion";
 
 const AMENITIES = [
     "pileta",
@@ -38,6 +39,7 @@ export default function NuevaPropiedad() {
     const [fotoPortada, setFotoPortada] = useState("");
     const [guardando, setGuardando] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [fotoAEliminar, setFotoAEliminar] = useState<number | null>(null);
 
     function cambiarAmenity(amenity: string) {
         if (amenities.includes(amenity)) {
@@ -72,6 +74,14 @@ export default function NuevaPropiedad() {
         if (fotoPortada === fotoEliminada) {
             setFotoPortada("");
         }
+    }
+
+    function confirmarEliminarFoto() {
+        if (fotoAEliminar === null) {
+            return;
+        }
+        eliminarFoto(fotoAEliminar);
+        setFotoAEliminar(null);
     }
 
     function moverFoto(indice: number, direccion: number) {
@@ -130,7 +140,7 @@ export default function NuevaPropiedad() {
             ambientes: !esTerreno && ambientes ? Number(ambientes) : undefined,
             dormitorios: !esTerreno && dormitorios ? Number(dormitorios) : undefined,
             banios: !esTerreno && banios ? Number(banios) : undefined,
-            antiguedadAnios: !esTerreno && banios ? Number(antiguedadAnios) : undefined,
+            antiguedadAnios: !esTerreno && antiguedadAnios ? Number(antiguedadAnios) : undefined,
             amenities,
             fotos: fotosLimpias,
             fotoPortada: portada,
@@ -467,7 +477,7 @@ export default function NuevaPropiedad() {
 
                                         <button
                                             type="button"
-                                            onClick={() => eliminarFoto(indice)}>
+                                            onClick={() => setFotoAEliminar(indice)}>
                                             Eliminar
                                         </button>
                                     </div>
@@ -508,6 +518,16 @@ export default function NuevaPropiedad() {
                     </button>
                 </div>
             </form>
+
+            <DialogoConfirmacion
+            abierto={fotoAEliminar !== null}
+            titulo="Eliminar foto"
+            mensaje="¿Seguro que querés eliminar esta foto de la propiedad?"
+            textoConfirmar="Eliminar"
+            onConfirmar={confirmarEliminarFoto}
+            onCancelar={() => setFotoAEliminar(null)}
+            />
+
         </section>
     );
 }

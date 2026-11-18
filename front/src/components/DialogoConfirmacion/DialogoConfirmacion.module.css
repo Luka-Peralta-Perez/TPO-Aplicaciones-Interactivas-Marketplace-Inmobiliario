@@ -1,0 +1,53 @@
+.fondo {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 1000;
+}
+
+.dialogo {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.dialogo h2 {
+    margin-top: 0;
+}
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.cancelar,
+.confirmar {
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.cancelar {
+    background: white;
+    border: 1px solid #ccc;
+}
+
+.confirmar {
+    background: #b00020;
+    color: white;
+    border: none;
+}
+
+.cancelar:disabled,
+.confirmar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

@@ -5,6 +5,7 @@ import { propiedadesService } from "../../services/propiedades";
 import type { CrearPropiedadInput, PropiedadDetalle } from "../../types";
 import styles from "../NuevaPropiedad/NuevaPropiedad.module.css";
 import { EstadoCarga, EstadoError } from "../../components/Estados/Estados";
+import { DialogoConfirmacion } from "../../components/DialogoConfirmacion/DialogoConfirmacion";
 
 const AMENITIES = [
     "pileta",
@@ -42,6 +43,7 @@ export default function EditarPropiedad() {
     const [cargando, setCargando] = useState(true);
     const [guardando, setGuardando] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [fotoAEliminar, setFotoAEliminar] = useState<number | null>(null);
 
     useEffect(() => {
         async function cargarPropiedad() {
@@ -123,6 +125,14 @@ export default function EditarPropiedad() {
         if (fotoPortada === fotoEliminada) {
             setFotoPortada("");
         }
+    }
+
+    function confirmarEliminarFoto() {
+        if (fotoAEliminar === null) {
+            return;
+        }
+        eliminarFoto(fotoAEliminar);
+        setFotoAEliminar(null);
     }
 
     function moverFoto(indice: number, direccion: number) {
@@ -562,7 +572,7 @@ export default function EditarPropiedad() {
 
                                         <button
                                             type="button"
-                                            onClick={() => eliminarFoto(indice)}>
+                                            onClick={() => setFotoAEliminar(indice)}>
                                             Eliminar
                                         </button>
                                     </div>
@@ -603,6 +613,16 @@ export default function EditarPropiedad() {
                     </button>
                 </div>
             </form>
+        
+        <DialogoConfirmacion
+            abierto={fotoAEliminar !== null}
+            titulo="Eliminar foto"
+            mensaje="¿Seguro que querés eliminar esta foto de la propiedad?"
+            textoConfirmar="Eliminar"
+            onConfirmar={confirmarEliminarFoto}
+            onCancelar={() => setFotoAEliminar(null)}
+            />
+
         </section>
     );
 }

@@ -5,6 +5,15 @@ import type { HistorialEstadoPropiedad, PropiedadPanel as PropiedadPanelType } f
 import styles from "./PropiedadesPanel.module.css";
 import { Link, useSearchParams } from "react-router-dom";
 import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
+import { DialogoConfirmacion } from "../../components/DialogoConfirmacion/DialogoConfirmacion";
+
+type ConfirmacionEstado = {
+    propiedadId: number;
+    nuevoEstado: PropiedadPanelType["estado"];
+    titulo: string;
+    mensaje: string;
+    textoConfirmar: string;
+};
 
 export default function PropiedadesPanel() {
     const [propiedades, setPropiedades] = useState<PropiedadPanelType[]>([]);
@@ -18,6 +27,7 @@ export default function PropiedadesPanel() {
     const [errorHistorial, setErrorHistorial] = useState<Record<number, string>>({});
     const [searchParams] = useSearchParams();
     const propiedadOrigen = searchParams.get("propiedad");
+    const [confirmacion, setConfirmacion] = useState<ConfirmacionEstado | null>(null);
 
     useEffect(() => {
         async function cargarPropiedades() {
@@ -53,25 +63,7 @@ export default function PropiedadesPanel() {
         });
     }, [cargando, propiedadOrigen]);
 
-    async function cambiarEstado(propiedadId: number, nuevoEstado: PropiedadPanelType["estado"]) {
-        if (
-            nuevoEstado === "CANCELADA" ||
-            nuevoEstado === "VENDIDA" ||
-            nuevoEstado === "ALQUILADA"
-        ) {
-            const mensajes = {
-                CANCELADA: "¿Seguro que querés dar de baja esta propiedad?",
-                VENDIDA: "¿Seguro que querés marcar esta propiedad como vendida?",
-                ALQUILADA: "¿Seguro que querés marcar esta propiedad como alquilada?",
-            };
-
-            const confirmado = window.confirm(mensajes[nuevoEstado]);
-
-            if (!confirmado) {
-                return;
-            }
-        }
-
+    async function ejecutarCambioEstado(propiedadId: number, nuevoEstado: PropiedadPanelType["estado"]) {
         try {
             setActualizandoId(propiedadId);
             setErrorAccion(null);
@@ -82,8 +74,7 @@ export default function PropiedadesPanel() {
                 const nuevos = { ...anteriores };
                 delete nuevos[propiedadId];
                 return nuevos;
-            })
-
+            });
             setPropiedades((anteriores) =>
                 anteriores.map((propiedad) =>
                     propiedad.id === propiedadId ? {
@@ -91,8 +82,7 @@ export default function PropiedadesPanel() {
                         estado: nuevoEstado,
                     }
                         : propiedad
-                )
-            );
+                ));
         } catch (error) {
             if (error instanceof ApiError) {
                 setErrorAccion(error.message);
@@ -102,6 +92,52 @@ export default function PropiedadesPanel() {
         } finally {
             setActualizandoId(null);
         }
+    }
+
+    function cambiarEstado(propiedadId: number, nuevoEstado: PropiedadPanelType["estado"]) {
+        if (nuevoEstado === "CANCELADA") {
+            setConfirmacion({
+                propiedadId,
+                nuevoEstado,
+                titulo: "Dar de baja propiedad",
+                mensaje: "¿Seguro que querés dar de baja esta propiedad? Esta acción no se puede deshacer.",
+                textoConfirmar: "Dar de baja",
+            });
+            return;
+        }
+
+        if (nuevoEstado === "VENDIDA") {
+            setConfirmacion({
+                propiedadId,
+                nuevoEstado,
+                titulo: "Marcar propiedad como vendida",
+                mensaje: "¿Seguro que querés marcar esta propiedad como vendida?",
+                textoConfirmar: "Marcar vendida",
+            });
+            return;
+        }
+
+        if (nuevoEstado === "ALQUILADA") {
+            setConfirmacion({
+                propiedadId,
+                nuevoEstado,
+                titulo: "Marcar propiedad como alquilada",
+                mensaje: "¿Seguro que querés marcar esta propiedad como alquilada?",
+                textoConfirmar: "Marcar alquilada",
+            });
+            return;
+        }
+        void ejecutarCambioEstado(propiedadId, nuevoEstado);
+    }
+
+    async function confirmarCambioEstado() {
+        if (!confirmacion) {
+            return;
+        }
+
+        const { propiedadId, nuevoEstado } = confirmacion;
+        await ejecutarCambioEstado(propiedadId, nuevoEstado);
+        setConfirmacion(null)
     }
 
     async function verHistorial(propiedadId: number) {
@@ -144,7 +180,7 @@ export default function PropiedadesPanel() {
         return (
             <section className={styles.contenedor}>
                 <h1>Mis propiedades</h1>
-                <EstadoCarga mensaje="Cargando propiedades..."/>
+                <EstadoCarga mensaje="Cargando propiedades..." />
             </section>
         );
     }
@@ -153,7 +189,7 @@ export default function PropiedadesPanel() {
         return (
             <section className={styles.contenedor}>
                 <h1>Mis propiedades</h1>
-                <EstadoError mensaje={error}/>
+                <EstadoError mensaje={error} />
             </section>
         );
     }
@@ -167,7 +203,7 @@ export default function PropiedadesPanel() {
                 </p>
             )}
             {propiedades.length === 0 ? (
-                <EstadoVacio mensaje="No tenés propiedades cargadas."/>
+                <EstadoVacio mensaje="No tenés propiedades cargadas." />
             ) : (
                 <div className={styles.tablaContenedor}>
                     <table className={styles.tabla}>
@@ -186,9 +222,9 @@ export default function PropiedadesPanel() {
 
                         <tbody>
                             {propiedades.map((propiedad) => (
-                                <tr 
-                                key={propiedad.id}
-                                id={`propiedad-${propiedad.id}`}
+                                <tr
+                                    key={propiedad.id}
+                                    id={`propiedad-${propiedad.id}`}
                                 >
                                     <td>
                                         <img
@@ -319,9 +355,9 @@ export default function PropiedadesPanel() {
                                             {historialAbiertoId === propiedad.id && (
                                                 <div className={styles.historial}>
                                                     {cargandoHistorialId === propiedad.id ? (
-                                                        <EstadoCarga mensaje="Cargando historial..."/>
+                                                        <EstadoCarga mensaje="Cargando historial..." />
                                                     ) : errorHistorial[propiedad.id] ? (
-                                                        <EstadoError mensaje={errorHistorial[propiedad.id]}/>
+                                                        <EstadoError mensaje={errorHistorial[propiedad.id]} />
                                                     ) : historiales[propiedad.id]?.length ? (
                                                         <ul className={styles.historialLista}>
                                                             {historiales[propiedad.id].map((cambio) => (
@@ -337,7 +373,7 @@ export default function PropiedadesPanel() {
                                                             ))}
                                                         </ul>
                                                     ) : (
-                                                        <EstadoVacio mensaje="No hay cambios de estado registrados."/>
+                                                        <EstadoVacio mensaje="No hay cambios de estado registrados." />
                                                     )}
                                                 </div>
                                             )}
@@ -351,6 +387,17 @@ export default function PropiedadesPanel() {
                 </div>
             )
             }
+            <DialogoConfirmacion
+            abierto={confirmacion !== null}
+            titulo={confirmacion?.titulo ?? ""}
+            mensaje={confirmacion?.mensaje ?? ""}
+            textoConfirmar={confirmacion?.textoConfirmar ?? "Confirmar"}
+            cargando={confirmacion !== null &&
+                actualizandoId === confirmacion.propiedadId
+            }
+            onConfirmar={confirmarCambioEstado}
+            onCancelar={() => setConfirmacion(null)}
+            />
         </section >
     );
 }

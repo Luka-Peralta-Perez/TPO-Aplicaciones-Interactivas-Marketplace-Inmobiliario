@@ -5,6 +5,7 @@ import { inmobiliariasService } from "../../services/inmobiliarias";
 import type { ActualizarInmobiliariaInput, InmobiliariaDatos } from "../../types";
 import styles from "./InmobiliariaPanel.module.css";
 import { EstadoCarga, EstadoError } from "../../components/Estados/Estados";
+import { DialogoConfirmacion } from "../../components/DialogoConfirmacion/DialogoConfirmacion";
 
 export default function InmobiliariaPanel() {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function InmobiliariaPanel() {
     const [eliminando, setEliminando] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [mensaje, setMensaje] = useState<string | null>(null);
+    const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
     useEffect(() => {
         async function cargarInmobiliaria() {
@@ -85,18 +87,12 @@ export default function InmobiliariaPanel() {
 
     }
 
-    async function eliminarInmobiliaria() {
+    async function confirmarEliminarInmobiliaria() {
         if (!inmobiliaria) {
             return;
         }
-
-        const confirmar = window.confirm("¿Seguro que quiere eliminar la inmobiliaria? Esta acción no se puede deshacer.");
-
-        if (!confirmar) {
-            return;
-        }
         setError(null);
-        setMensaje(null);
+        setMensaje(null)
 
         try {
             setEliminando(true);
@@ -106,12 +102,14 @@ export default function InmobiliariaPanel() {
             if (error instanceof ApiError) {
                 setError(error.message);
             } else {
-                setError("No se pudo eliminar la inmobiliaria");
+                setError("No se pudo eliminar la inmobiliaria.");
             }
         } finally {
             setEliminando(false);
+            setMostrarConfirmacion(false);
         }
     }
+
     if (cargando) {
         return (
             <section className={styles.contenedor}>
@@ -256,13 +254,23 @@ export default function InmobiliariaPanel() {
                 <button
                     type="button"
                     className={styles.botonEliminar}
-                    onClick={eliminarInmobiliaria}
+                    onClick={() => setMostrarConfirmacion(true)}
                     disabled={eliminando}>
                     {eliminando
                         ? "Eliminando..."
                         : "Eliminar inmobiliaria"}
                 </button>
             </div>
+
+            <DialogoConfirmacion
+            abierto={mostrarConfirmacion}
+            titulo="Eliminar inmobiliaria"
+            mensaje="¿Seguro que querés eliminar la inmobiliaria? Esta acción no se puede deshacer."
+            textoConfirmar="Eliminar"
+            cargando={eliminando}
+            onConfirmar={confirmarEliminarInmobiliaria}
+            onCancelar={() => setMostrarConfirmacion(false)}
+            />
         </section>
     );
 

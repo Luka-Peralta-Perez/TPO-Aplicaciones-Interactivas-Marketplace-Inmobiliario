@@ -6,6 +6,15 @@ import type { EstadoSolicitudVisita, SolicitudVisita } from "../../types";
 import styles from "./SolicitudesVisita.module.css"
 import { useSearchParams } from "react-router-dom";
 import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
+import { DialogoConfirmacion } from "../../components/DialogoConfirmacion/DialogoConfirmacion";
+
+type ConfirmacionVisita = {
+    solicitudId: number;
+    nuevoEstado: EstadoSolicitudVisita;
+    titulo: string;
+    mensaje: string;
+    textoConfirmar: string;
+};
 
 export default function SolicitudesVisita() {
     const [solicitudes, setSolicitudes] = useState<SolicitudVisita[]>([]);
@@ -16,6 +25,7 @@ export default function SolicitudesVisita() {
     const [searchParams] = useSearchParams();
     const visitaOrigen = searchParams.get("visita");
     const [errorAccion, setErrorAccion] = useState<string | null>(null);
+    const [confirmacion, setConfirmacion] = useState<ConfirmacionVisita | null>(null);
 
     useEffect(() => {
         async function cargarSolicitudes() {
@@ -59,7 +69,7 @@ export default function SolicitudesVisita() {
         });
     }, [cargando, visitaOrigen, filtro]);
 
-    async function cambiarEstado(solicitudId: number, nuevoEstado: EstadoSolicitudVisita) {
+    async function ejecutarCambiarEstado(solicitudId: number, nuevoEstado: EstadoSolicitudVisita) {
         try {
             setActualizadoId(solicitudId);
             setErrorAccion(null);
@@ -81,6 +91,41 @@ export default function SolicitudesVisita() {
         } finally {
             setActualizadoId(null);
         }
+    }
+
+    function cambiarEstado(solicitudId: number, nuevoEstado: EstadoSolicitudVisita) {
+        if (nuevoEstado === "RECHAZADA") {
+            setConfirmacion({
+                solicitudId,
+                nuevoEstado,
+                titulo: "Rechazar solicitud",
+                mensaje: "¿Seguro que querés rechazar esta solicitud de visita?",
+                textoConfirmar: "Rechazar",
+            });
+            return;
+        }
+
+        if (nuevoEstado === "CANCELADA") {
+            setConfirmacion({
+                solicitudId,
+                nuevoEstado,
+                titulo: "Cancelar visita",
+                mensaje: "¿Seguro que querés cancelar esta visita?",
+                textoConfirmar: "Cancelar visita",
+            });
+            return;
+        }
+        void ejecutarCambiarEstado(solicitudId, nuevoEstado);
+    }
+
+    async function confirmarCambioEstado() {
+        if (!confirmacion) {
+            return;
+        }
+
+        const {solicitudId, nuevoEstado} = confirmacion;
+        await ejecutarCambiarEstado(solicitudId, nuevoEstado);
+        setConfirmacion(null);
     }
 
     if (cargando) {
@@ -238,6 +283,17 @@ export default function SolicitudesVisita() {
                     )
                 )
             )}
+            <DialogoConfirmacion
+            abierto={confirmacion !== null}
+            titulo={confirmacion?.titulo ?? ""}
+            mensaje={confirmacion?.mensaje ?? ""}
+            textoConfirmar={confirmacion?.textoConfirmar ?? "Confirmar"}
+            cargando={confirmacion !== null &&
+                actualizadoId === confirmacion.solicitudId
+            }
+            onConfirmar={confirmarCambioEstado}
+            onCancelar={() => setConfirmacion(null)}
+            />
         </section>
     );
 }
