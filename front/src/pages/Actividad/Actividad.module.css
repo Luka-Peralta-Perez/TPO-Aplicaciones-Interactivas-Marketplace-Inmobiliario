@@ -1,21 +1,25 @@
 .contenedor {
     max-width: 900px;
+    min-width: 0;
     margin: 0 auto;
     padding: 2rem;
 }
 
 .titulo {
     margin-bottom: 1.5rem;
+    overflow-wrap: anywhere;
 }
 
 .lista {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    min-width: 0;
 }
 
 .actividad {
     width: 100%;
+    min-width: 0;
     padding: 1rem;
     text-align: left;
 
@@ -25,6 +29,7 @@
     background: white;
 
     cursor: pointer;
+    overflow-wrap: anywhere;
 }
 
 .actividad:hover {
@@ -49,23 +54,31 @@
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    min-width: 0;
+}
+
+.encabezado > * {
+    min-width: 0;
 }
 
 .fecha {
     margin: 0.5rem 0 0;
     font-size: 0.9rem;
     color: #666;
+    overflow-wrap: anywhere;
 }
 
 .estado {
+    max-width: 100%;
     font-size: 0.85rem;
     color: #666;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
 }
 
 .error {
     margin-bottom: 1rem;
     color: #b00020;
+    overflow-wrap: anywhere;
 }
 
 @media (max-width: 600px) {
@@ -77,5 +90,9 @@
         align-items: flex-start;
         flex-direction: column;
         gap: 0.4rem;
+    }
+
+    .estado {
+        white-space: normal;
     }
 }

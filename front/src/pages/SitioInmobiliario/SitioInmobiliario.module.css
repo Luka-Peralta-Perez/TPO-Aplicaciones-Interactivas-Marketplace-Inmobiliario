@@ -1,5 +1,6 @@
 .contenedor {
     max-width: 1100px;
+    min-width: 0;
     margin: 0 auto;
     padding: 2rem 1.5rem;
 }
@@ -8,10 +9,21 @@
     display: flex;
     gap: 1.5rem;
     align-items: center;
+    min-width: 0;
     margin: 2rem 0;
 }
 
+.perfil > div {
+    min-width: 0;
+}
+
+.perfil h1,
+.perfil p {
+    overflow-wrap: anywhere;
+}
+
 .logo {
+    flex: 0 0 auto;
     width: 120px;
     height: 120px;
     object-fit: contain;
@@ -20,13 +32,13 @@
 
 .contacto {
     display: grid;
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
     margin-bottom: 2rem;
 }
 
 .contacto div {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
@@ -35,18 +47,24 @@
     border-radius: 8px;
 }
 
+.contacto a,
+.contacto span {
+    overflow-wrap: anywhere;
+}
+
 .seccion {
+    min-width: 0;
     margin-top: 2.5rem;
 }
 
 .propiedades {
     display: grid;
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
 }
 
 .tarjeta {
+    min-width: 0;
     overflow: hidden;
     border: 1px solid #dddddd;
     border-radius: 8px;
@@ -62,36 +80,43 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    min-width: 0;
     padding: 1rem;
 }
 
 .contenidoTarjeta h3,
 .contenidoTarjeta p {
     margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .resenias {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-width: 0;
 }
 
 .resenia {
+    min-width: 0;
     padding: 1rem;
     border: 1px solid #dddddd;
     border-radius: 8px;
+    overflow-wrap: anywhere;
 }
 
 .encabezadoResenia {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    min-width: 0;
 }
 
 .formResenia {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-width: 0;
     margin-top: 2rem;
 }
 
@@ -99,11 +124,14 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    min-width: 0;
 }
 
 .campo input,
 .campo select,
 .campo textarea {
+    width: 100%;
+    min-width: 0;
     padding: 0.7rem;
     border: 1px solid #bbbbbb;
     border-radius: 6px;
@@ -114,12 +142,12 @@
     padding: 0.8rem;
     border: 1px solid #c62828;
     border-radius: 6px;
+    overflow-wrap: anywhere;
 }
 
 @media (max-width: 800px) {
     .propiedades {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .contacto {
@@ -128,12 +156,31 @@
 }
 
 @media (max-width: 550px) {
+    .contenedor {
+        padding: 1.25rem 1rem;
+    }
+
     .perfil {
         flex-direction: column;
         align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .logo {
+        width: 100px;
+        height: 100px;
     }
 
     .propiedades {
         grid-template-columns: 1fr;
+    }
+
+    .encabezadoResenia {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .formResenia button {
+        width: 100%;
     }
 }

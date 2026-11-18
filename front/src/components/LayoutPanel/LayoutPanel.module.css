@@ -14,6 +14,7 @@
 .enlace {
   color: inherit;
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
 .activo {
@@ -22,6 +23,27 @@
 
 .contenido {
   width: min(1200px, calc(100% - 2rem));
+  min-width: 0;
   margin: 0 auto;
   padding: 1.5rem 0;
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .nav {
+    gap: 0.5rem 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .enlace {
+    padding: 0.35rem 0;
+  }
+
+  .contenido {
+    width: calc(100% - 2rem);
+    padding: 1rem 0;
+  }
 }

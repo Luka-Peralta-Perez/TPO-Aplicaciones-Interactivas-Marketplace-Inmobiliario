@@ -12,9 +12,14 @@
 .dialogo {
     width: 100%;
     max-width: 420px;
+    min-width: 0;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
     background: white;
     border-radius: 12px;
     padding: 1.5rem;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
 }
 
 .dialogo h2 {
@@ -30,9 +35,11 @@
 
 .cancelar,
 .confirmar {
+    max-width: 100%;
     padding: 0.7rem 1rem;
     border-radius: 8px;
     cursor: pointer;
+    font: inherit;
 }
 
 .cancelar {
@@ -50,4 +57,19 @@
 .confirmar:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+@media (max-width: 500px) {
+    .dialogo {
+        padding: 1.25rem;
+    }
+
+    .acciones {
+        flex-direction: column-reverse;
+    }
+
+    .cancelar,
+    .confirmar {
+        width: 100%;
+    }
 }

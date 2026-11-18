@@ -1,12 +1,14 @@
 .contenedor {
   display: flex;
   justify-content: center;
+  min-width: 0;
   padding: 3rem 1rem;
 }
 
 .tarjeta {
   width: 100%;
   max-width: 560px;
+  min-width: 0;
   padding: 2rem;
   border: 1px solid #d8d8d8;
   border-radius: 12px;
@@ -15,22 +17,26 @@
 .tarjeta h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
+  overflow-wrap: anywhere;
 }
 
 .descripcion {
   margin-bottom: 2rem;
+  overflow-wrap: anywhere;
 }
 
 .fila {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+  min-width: 0;
 }
 
 .campo {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  min-width: 0;
   margin-bottom: 1rem;
 }
 
@@ -39,10 +45,13 @@
 }
 
 .campo input {
+  width: 100%;
+  min-width: 0;
   padding: 0.75rem;
   border: 1px solid #bdbdbd;
   border-radius: 6px;
   font: inherit;
+  box-sizing: border-box;
 }
 
 .campo input:focus {
@@ -54,6 +63,7 @@
 .errorGeneral {
   margin: 0;
   font-size: 0.9rem;
+  overflow-wrap: anywhere;
 }
 
 .errorGeneral {
@@ -62,6 +72,7 @@
 
 .boton {
   width: 100%;
+  max-width: 100%;
   padding: 0.8rem;
   border: 0;
   border-radius: 6px;
@@ -78,9 +89,14 @@
 .login {
   margin-top: 1.5rem;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 500px) {
+  .contenedor {
+    padding: 1.5rem 1rem;
+  }
+
   .tarjeta {
     padding: 1.25rem;
   }

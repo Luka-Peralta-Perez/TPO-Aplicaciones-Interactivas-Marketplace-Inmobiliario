@@ -1,5 +1,6 @@
 .contenedor {
     max-width: 1100px;
+    min-width: 0;
     margin: 0 auto;
     padding: 2rem 1.5rem;
 }
@@ -9,6 +10,7 @@
 }
 
 .galeria {
+    min-width: 0;
     margin-bottom: 2rem;
 }
 
@@ -27,6 +29,7 @@
 }
 
 .botonMiniatura {
+    flex: 0 0 auto;
     padding: 0;
     border: none;
     background: none;
@@ -45,11 +48,17 @@
     justify-content: space-between;
     gap: 2rem;
     align-items: flex-start;
+    min-width: 0;
     margin-bottom: 2rem;
+}
+
+.informacion > div {
+    min-width: 0;
 }
 
 .informacion h1 {
     margin: 0.4rem 0;
+    overflow-wrap: anywhere;
 }
 
 .operacion {
@@ -58,33 +67,41 @@
 
 .zona {
     margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .precio {
     font-size: 1.6rem;
     font-weight: 700;
     margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .datos {
     display: grid;
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem;
     margin-bottom: 2rem;
 }
 
 .datos div {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
     padding: 1rem;
     border: 1px solid #dddddd;
     border-radius: 8px;
+    overflow-wrap: anywhere;
 }
 
 .seccion {
+    min-width: 0;
     margin-top: 2rem;
+}
+
+.seccion p {
+    overflow-wrap: anywhere;
 }
 
 .amenities {
@@ -94,9 +111,11 @@
 }
 
 .amenity {
+    max-width: 100%;
     padding: 0.5rem 0.8rem;
     border: 1px solid #cccccc;
     border-radius: 20px;
+    overflow-wrap: anywhere;
 }
 
 .error {
@@ -104,44 +123,23 @@
     padding: 0.8rem;
     border: 1px solid #c62828;
     border-radius: 6px;
-}
-
-@media (max-width: 800px) {
-    .fotoPrincipal {
-        height: 350px;
-    }
-
-    .datos {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .informacion {
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 500px) {
-    .fotoPrincipal {
-        height: 250px;
-    }
-
-    .datos {
-        grid-template-columns: 1fr;
-    }
+    overflow-wrap: anywhere;
 }
 
 .comentarios {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-width: 0;
     margin-bottom: 2rem;
 }
 
 .comentario {
+    min-width: 0;
     padding: 1rem;
     border: 1px solid #dddddd;
     border-radius: 8px;
+    overflow-wrap: anywhere;
 }
 
 .encabezadoComentario {
@@ -154,12 +152,14 @@
     margin-top: 1rem;
     padding: 0.8rem;
     border-left: 3px solid #777777;
+    overflow-wrap: anywhere;
 }
 
 .formConsulta {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-width: 0;
     margin-top: 2rem;
 }
 
@@ -167,10 +167,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    min-width: 0;
 }
 
 .campoConsulta input,
 .campoConsulta textarea {
+    width: 100%;
+    min-width: 0;
     padding: 0.7rem;
     border: 1px solid #bbbbbb;
     border-radius: 6px;
@@ -181,10 +184,64 @@
     padding: 0.8rem;
     border: 1px solid #c62828;
     border-radius: 6px;
+    overflow-wrap: anywhere;
 }
 
 .exitoVisita {
     padding: 0.8rem;
     border: 1px solid #2e7d32;
     border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 800px) {
+    .fotoPrincipal {
+        height: 350px;
+    }
+
+    .datos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .informacion {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .contenedor {
+        padding: 1.25rem 1rem;
+    }
+
+    .fotoPrincipal {
+        height: 250px;
+    }
+
+    .datos {
+        grid-template-columns: 1fr;
+    }
+
+    .miniaturas {
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+
+    .miniatura {
+        width: 80px;
+        height: 60px;
+    }
+
+    .encabezadoComentario {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .formConsulta button {
+        width: 100%;
+    }
+
+    .amenities {
+        gap: 0.5rem;
+    }
 }

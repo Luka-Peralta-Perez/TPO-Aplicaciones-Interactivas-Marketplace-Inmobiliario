@@ -36,6 +36,8 @@
 .campo input,
 .campo select,
 .campoBusqueda input {
+    width: 100%;
+    min-width: 0;
     padding: 0.7rem;
     border: 1px solid #bbbbbb;
     border-radius: 6px;
@@ -65,6 +67,7 @@
 }
 
 .tarjeta {
+    min-width: 0;
     border: 1px solid #dddddd;
     border-radius: 8px;
     overflow: hidden;
@@ -77,11 +80,17 @@
 }
 
 .contenido {
+    min-width: 0;
     padding: 1rem;
 }
 
 .contenido h2 {
     margin: 0.5rem 0;
+}
+
+.contenido h2, 
+.contenido p {
+    overflow-wrap: anywhere;
 }
 
 .operacion {
@@ -126,6 +135,12 @@
 }
 
 @media (max-width: 600px) {
+    .contenedor {
+        padding: 1.25rem 1rem;
+    }
+    .filtros {
+        padding: 1rem;
+    }
     .grillaFiltros,
     .propiedades {
         grid-template-columns: 1fr;
@@ -133,5 +148,19 @@
 
     .accionesFiltros {
         flex-direction: column;
+    }
+    .accionesFiltros button {
+        width: 100%;
+    }
+    .paginacion {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    .paginacion button {
+        flex: 1;
+        min-width: 0;
+    }
+    .imagen {
+        height: 200px;
     }
 }

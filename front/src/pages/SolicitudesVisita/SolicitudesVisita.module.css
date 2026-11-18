@@ -2,25 +2,30 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+    min-width: 0;
 }
 
 .titulo {
     margin: 0;
     font-size: 28px;
+    overflow-wrap: anywhere;
 }
 
 .filtros {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+    min-width: 0;
 }
 
 .botonFiltro {
+    max-width: 100%;
     padding: 8px 16px;
     border: 1px solid #ccc;
     border-radius: 8px;
     background: white;
     cursor: pointer;
+    overflow-wrap: anywhere;
 }
 
 .botonFiltro:disabled {
@@ -33,18 +38,22 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    min-width: 0;
 }
 
 .tituloPropiedad {
     margin: 0;
     font-size: 21px;
+    overflow-wrap: anywhere;
 }
 
 .tarjeta {
+    min-width: 0;
     padding: 18px;
     border: 1px solid #ddd;
     border-radius: 10px;
     background: white;
+    overflow-wrap: anywhere;
 }
 
 .tarjeta p {
@@ -54,16 +63,19 @@
 .telefono {
     color: inherit;
     font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .estado {
     display: inline-block;
+    max-width: 100%;
     margin-top: 8px;
     padding: 4px 10px;
     border-radius: 999px;
     background: #f1f1f1;
     font-size: 14px;
     font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .acciones {
@@ -71,9 +83,11 @@
     gap: 10px;
     margin-top: 16px;
     flex-wrap: wrap;
+    min-width: 0;
 }
 
 .boton {
+    max-width: 100%;
     padding: 8px 14px;
     border: none;
     border-radius: 8px;
@@ -87,13 +101,27 @@
 
 .vacio {
     color: #666;
+    overflow-wrap: anywhere;
 }
 
 .error {
     color: #b00020;
+    overflow-wrap: anywhere;
 }
 
 @media (max-width: 600px) {
+    .titulo {
+        font-size: 24px;
+    }
+
+    .filtros {
+        gap: 8px;
+    }
+
+    .botonFiltro {
+        flex: 1 1 auto;
+    }
+
     .tarjeta {
         padding: 14px;
     }

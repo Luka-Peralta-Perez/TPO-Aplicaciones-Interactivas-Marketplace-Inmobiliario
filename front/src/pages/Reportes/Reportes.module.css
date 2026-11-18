@@ -1,14 +1,17 @@
 .contenedor {
     max-width: 1100px;
+    min-width: 0;
     margin: 0 auto;
     padding: 2rem;
 }
 
 .titulo {
     margin-bottom: 2rem;
+    overflow-wrap: anywhere;
 }
 
 .seccion {
+    min-width: 0;
     margin-bottom: 2rem;
     padding: 1.5rem;
     background: white;
@@ -19,6 +22,7 @@
 .seccion h2 {
     margin-top: 0;
     margin-bottom: 1.5rem;
+    overflow-wrap: anywhere;
 }
 
 .tarjetas {
@@ -28,29 +32,35 @@
         minmax(130px, 1fr)
     );
     gap: 1rem;
+    min-width: 0;
 }
 
 .tarjeta {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    min-width: 0;
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 10px;
+    overflow-wrap: anywhere;
 }
 
 .nombreEstado {
     font-size: 0.9rem;
+    overflow-wrap: anywhere;
 }
 
 .cantidad {
     font-size: 2rem;
+    overflow-wrap: anywhere;
 }
 
 .grafico {
     display: flex;
     align-items: flex-end;
     gap: 1.5rem;
+    min-width: 0;
     min-height: 220px;
     overflow-x: auto;
     padding: 1rem 0;
@@ -100,12 +110,14 @@
 .mes {
     font-size: 0.85rem;
     text-align: center;
+    overflow-wrap: anywhere;
 }
 
 .leyenda {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
+    min-width: 0;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
 }
@@ -115,6 +127,7 @@
     align-items: baseline;
     flex-wrap: wrap;
     gap: 0.5rem;
+    min-width: 0;
 }
 
 .tiempoPromedio strong {
@@ -128,14 +141,17 @@
 .tiempoPromedio p {
     width: 100%;
     margin-bottom: 0;
+    overflow-wrap: anywhere;
 }
 
 .error {
     color: #b00020;
+    overflow-wrap: anywhere;
 }
 
 .vacio {
     color: #666;
+    overflow-wrap: anywhere;
 }
 
 @media (max-width: 600px) {
@@ -143,7 +159,43 @@
         padding: 1rem;
     }
 
+    .titulo {
+        margin-bottom: 1.5rem;
+    }
+
     .seccion {
         padding: 1rem;
+    }
+
+    .tarjetas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grafico {
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 1rem;
+        overflow-x: visible;
+    }
+
+    .grupoMes {
+        flex: 1 1 90px;
+        min-width: 0;
+        max-width: 120px;
+    }
+
+    .leyenda {
+        gap: 0.75rem 1rem;
+    }
+
+    .tiempoPromedio strong {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .tarjetas {
+        grid-template-columns: 1fr;
     }
 }

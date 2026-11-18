@@ -1,11 +1,14 @@
 .estado {
     width: 100%;
+    min-width: 0;
     padding: 1.5rem;
     text-align: center;
+    box-sizing: border-box;
 }
 
 .estado p {
     margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .carga {
@@ -18,4 +21,10 @@
 
 .error {
     color: #b00020;
+}
+
+@media (max-width: 500px) {
+    .estado {
+        padding: 1rem;
+    }
 }
