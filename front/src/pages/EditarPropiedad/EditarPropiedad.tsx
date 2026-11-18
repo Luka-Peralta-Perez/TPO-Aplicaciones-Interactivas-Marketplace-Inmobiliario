@@ -4,6 +4,7 @@ import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import type { CrearPropiedadInput, PropiedadDetalle } from "../../types";
 import styles from "../NuevaPropiedad/NuevaPropiedad.module.css";
+import { EstadoCarga, EstadoError } from "../../components/Estados/Estados";
 
 const AMENITIES = [
     "pileta",
@@ -187,7 +188,7 @@ export default function EditarPropiedad() {
             ambientes: !esTerreno && ambientes ? Number(ambientes) : undefined,
             dormitorios: !esTerreno && dormitorios ? Number(dormitorios) : undefined,
             banios: !esTerreno && banios ? Number(banios) : undefined,
-            antiguedadAnios: !esTerreno && antiguedadAnios ? Number(banios) : undefined,
+            antiguedadAnios: !esTerreno && antiguedadAnios ? Number(antiguedadAnios) : undefined,
             amenities,
             fotos: fotosLimpias,
             fotoPortada: portada,
@@ -209,15 +210,13 @@ export default function EditarPropiedad() {
     }
 
     if (cargando) {
-        return <p>Cargando propiedad...</p>
+        return <EstadoCarga mensaje="Cargando propiedad..."/>
     }
 
     if(!propiedad) {
         return (
             <section className={styles.contenedor}>
-                <p className={styles.error}>
-                    {error ?? "No se encontró la propiedad"}
-                </p>
+                <EstadoError mensaje={error ?? "No se encontró la propiedad."}/>
                 <button
                 type="button"
                 className={styles.botonSecundario}

@@ -5,6 +5,7 @@ import { actividadesService } from "../../services/actividades";
 import { inmobiliariasService } from "../../services/inmobiliarias";
 import type { Actividad as ActividadType } from "../../types";
 import styles from "./Actividad.module.css";
+import { EstadoCarga, EstadoVacio, EstadoError } from "../../components/Estados/Estados";
 
 export default function Actividad() {
     const [actividades, setActividades] = useState<ActividadType[]>([]);
@@ -58,7 +59,7 @@ export default function Actividad() {
             case "RESENA":
                 return inmobiliariaId
                 ? `/inmobiliarias/${inmobiliariaId}?resenia=${actividad.referenciaOrigen}`
-                : "panel/inmobiliaria";
+                : "/panel/inmobiliaria";
 
             default:
                 return "/panel/actividad";
@@ -115,7 +116,7 @@ export default function Actividad() {
     if (cargando) {
         return (
             <section className={styles.contenedor}>
-                <p>Cargando actividad...</p>
+                <EstadoCarga mensaje="Cargando actividad..."/>
             </section>
         );
     }
@@ -126,12 +127,10 @@ export default function Actividad() {
                 Actividad
                 </h1>
             {error && (
-                <p className={styles.error}>
-                    {error}
-                    </p>
+                <EstadoError mensaje={error}/>
             )}
             {actividades.length === 0 ? (
-                <p>No hay actividad registrada.</p>
+                <EstadoVacio mensaje="No hay actividad registrada."/>
             ) : (
                 <div className={styles.lista}>
                 {actividades.map((actividad) => (

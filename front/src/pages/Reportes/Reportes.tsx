@@ -4,6 +4,7 @@ import { inmobiliariasService } from "../../services/inmobiliarias";
 import { reportesService } from "../../services/reportes";
 import type { ReporteMensual, ReportePropiedadesPorEstado, ReporteTiempoMercado } from "../../types";
 import styles from "./Reportes.module.css";
+import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
 
 export default function Reportes() {
     const [estados, setEstados] = useState<ReportePropiedadesPorEstado | null>(null);
@@ -130,11 +131,9 @@ export default function Reportes() {
             <section className={styles.seccion}>
                 <h2>Propiedades por estado</h2>
                 {cargandoEstados ? (
-                    <p>Cargando estados...</p>
+                    <EstadoCarga mensaje="Cargando estados..."/>
                     ): errorEstados ? (
-                        <p className={styles.error}>
-                            {errorEstados}
-                        </p>
+                        <EstadoError mensaje={errorEstados}/>
                     ) : estados ? (
                         <div className={styles.tarjetas}>
                             {Object.entries(estados).map(
@@ -152,21 +151,19 @@ export default function Reportes() {
                                 )
                             )}
                         </div>
-                    ): null}
+                    ): (
+                        <EstadoVacio mensaje="No hay datos de propiedades por estado"/>
+                    )}
             </section>
 
             <section className={styles.seccion}>
                 <h2>Publicaciones y operaciones por mes</h2>
                 {cargandoMensual ? (
-                    <p>Cargando evolución mensual...</p>
+                    <EstadoCarga mensaje="Cargando evolución mensual..."/>
                     ): errorMensual ? (
-                        <p className={styles.error}>
-                            {errorMensual}
-                        </p>
+                        <EstadoError mensaje={errorMensual}/>
                     ): mensual.length === 0 ? (
-                        <p className={styles.vacio}>
-                            Todavía no hay datos mensuales.
-                        </p>
+                        <EstadoVacio mensaje="Todavía no hay datos mensuales."/>
                     ) : ( 
                         <>
                         <div className={styles.leyenda}>
@@ -218,11 +215,9 @@ export default function Reportes() {
             <section className={styles.seccion}>
                 <h2>Tiempo promedio en mercado</h2>
                 {cargandoTiempo ? (
-                    <p>Cargando tiempo promedio...</p>
+                    <EstadoCarga mensaje="Cargando tiempo promedio..."/>
                 ): errorTiempo ? (
-                    <p className={styles.error}>
-                        {errorTiempo}
-                    </p>
+                    <EstadoError mensaje={errorTiempo}/>
                 ) : tiempoMercado && tiempoMercado.propiedadesConsideradas > 0 ? (
                     <div className={styles.tiempoPromedio}>
                         <strong>{tiempoMercado.promedioDias}</strong>
@@ -238,9 +233,7 @@ export default function Reportes() {
                         </p>
                     </div>
                 ) : (
-                    <p className={styles.vacio}>
-                        Todavía no hay propiedades vendidas o alquiladas para calcular este indicador.
-                    </p>
+                    <EstadoVacio mensaje="Todavía no hay propiedades vendidas o alquiladas para calcular este indicador"/>
                 )}
             </section>
         </section>

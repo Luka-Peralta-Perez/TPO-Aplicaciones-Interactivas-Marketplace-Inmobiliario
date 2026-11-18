@@ -3,7 +3,8 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ApiError} from "../../comun/api";
 import { inmobiliariasService } from "../../services/inmobiliarias";
 import type { InmobiliariaDatos, PropiedadPublica, ReseniaPublica } from "../../types";
-import styles from "./SitioInmobiliario.module.css"
+import styles from "./SitioInmobiliario.module.css";
+import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
 
 export default function SitioInmobiliario() {
     const { id } = useParams();
@@ -124,7 +125,7 @@ export default function SitioInmobiliario() {
         return (
             <section
                 className={styles.contenedor}>
-                <p>Cargando inmobiliaria...</p>
+                <EstadoCarga mensaje="Cargando inmobiliaria..."/>
             </section>
         );
     }
@@ -135,9 +136,7 @@ export default function SitioInmobiliario() {
                 <Link to="/">
                     ← Volver
                 </Link>
-                <p className={styles.error}>
-                    {error ?? "Inmobiliaria no encontrada."}
-                </p>
+                <EstadoError mensaje={error ?? "No se encontró la inmobiliaria."}/>
             </section>
         );
     }
@@ -199,7 +198,7 @@ export default function SitioInmobiliario() {
             <div className={styles.seccion}>
                 <h2>Propiedades publicadas</h2>
                 {propiedades.length === 0 ? (
-                    <p>Esta inmobiliaria no tiene propiedades publicadas</p>
+                    <EstadoVacio mensaje="Esta inmobiliaria no tiene propiedades publicadas"/>
                 ) : (
                     <div className={styles.propiedades}>
                         {propiedades.map((propiedad) => (
@@ -231,7 +230,7 @@ export default function SitioInmobiliario() {
             <div className={styles.seccion}>
                 <h2>Reseñas</h2>
                 {resenias.length === 0 ? (
-                    <p>Esta inmobiliaria todavía no tiene reseñas.</p>
+                    <EstadoVacio mensaje="Esta inmobiliaria todavía no tiene reseñas"/>
                 ) : (
                     <div className={styles.resenias}>
                         {resenias.map((resenia) => (

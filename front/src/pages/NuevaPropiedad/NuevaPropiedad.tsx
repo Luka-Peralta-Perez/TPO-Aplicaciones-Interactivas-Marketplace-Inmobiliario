@@ -1,4 +1,4 @@
-import { use, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
@@ -130,7 +130,7 @@ export default function NuevaPropiedad() {
             ambientes: !esTerreno && ambientes ? Number(ambientes) : undefined,
             dormitorios: !esTerreno && dormitorios ? Number(dormitorios) : undefined,
             banios: !esTerreno && banios ? Number(banios) : undefined,
-            antiguedadAnios: !esTerreno && banios ? Number(banios) : undefined,
+            antiguedadAnios: !esTerreno && banios ? Number(antiguedadAnios) : undefined,
             amenities,
             fotos: fotosLimpias,
             fotoPortada: portada,

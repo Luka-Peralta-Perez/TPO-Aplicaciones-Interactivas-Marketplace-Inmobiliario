@@ -4,6 +4,7 @@ import { ApiError } from "../../comun/api";
 import { inmobiliariasService } from "../../services/inmobiliarias";
 import type { ActualizarInmobiliariaInput, InmobiliariaDatos } from "../../types";
 import styles from "./InmobiliariaPanel.module.css";
+import { EstadoCarga, EstadoError } from "../../components/Estados/Estados";
 
 export default function InmobiliariaPanel() {
     const navigate = useNavigate();
@@ -115,7 +116,7 @@ export default function InmobiliariaPanel() {
         return (
             <section className={styles.contenedor}>
                 <h1>Mi inmobiliaria</h1>
-                <p>Cargando inmobiliaria...</p>
+                <EstadoCarga mensaje="Cargando inmobiliaria..."/>
             </section>
         );
     }
@@ -124,9 +125,7 @@ export default function InmobiliariaPanel() {
         return (
             <section className={styles.contenedor}>
                 <h1>Mi inmobiliaria</h1>
-                <p className={styles.error}>
-                    {error ?? "No se encontró la inmonbiliaria."}
-                </p>
+                <EstadoError mensaje={error ?? "No se encontró la inmobiliaria."}/>
             </section>
         );
     }
@@ -190,7 +189,7 @@ export default function InmobiliariaPanel() {
                     </label>
 
                     <input
-                        id="teelfono"
+                        id="telefono"
                         type="tel"
                         value={telefonoContacto}
                         onChange={(event) => setTelefonoContacto(event.target.value)}

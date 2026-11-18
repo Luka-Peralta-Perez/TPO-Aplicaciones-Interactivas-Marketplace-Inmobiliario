@@ -4,6 +4,7 @@ import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import type { PropiedadDetalle as PropiedadDetalleType, ComentarioPropiedad } from "../../types";
 import styles from "./DetallePropiedad.module.css";
+import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
 
 export default function DetallePropiedad() {
     const { id } = useParams();
@@ -162,7 +163,7 @@ export default function DetallePropiedad() {
     if (cargando) {
         return (
             <section className={styles.contenedor}>
-                <p>Cargando propiedad...</p>
+                <EstadoCarga mensaje="Cargando propiedad..."/>
             </section>
         );
     }
@@ -171,9 +172,7 @@ export default function DetallePropiedad() {
         return (
             <section className={styles.contenedor}>
                 <Link to="/">← Volver</Link>
-                <p className={styles.error}>
-                    {error ?? "Propiedad no encontrada."}
-                </p>
+                <EstadoError mensaje={error ?? "Propiedad no encontrada."}/>
             </section>
         );
     }
@@ -403,9 +402,7 @@ export default function DetallePropiedad() {
             <div className={styles.seccion}>
                 <h2>Consultas</h2>
                 {comentarios.length === 0 ? (
-                    <p>
-                        Todavía no hay consultas sobre esta propiedad.
-                    </p>
+                    <EstadoVacio mensaje="Todavía no hay consultas sobre esta propiedad."/>
                 ) : (
                     <div className={styles.comentarios}>
                         {comentarios.map((comentario) => (

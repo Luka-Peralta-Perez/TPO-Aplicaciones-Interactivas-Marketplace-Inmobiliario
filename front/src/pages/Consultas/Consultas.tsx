@@ -3,8 +3,9 @@ import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import { comentariosService } from "../../services/comentarios";
 import type { ComentarioPropiedad, PropiedadPanel } from "../../types";
-import styles from "./Consultas.module.css"
+import styles from "./Consultas.module.css";
 import { useSearchParams } from "react-router-dom";
+import { EstadoCarga, EstadoVacio, EstadoError } from "../../components/Estados/Estados";
 
 type GrupoConsultas = {
     propiedad: PropiedadPanel;
@@ -115,9 +116,7 @@ export default function Consultas() {
     if (cargando) {
         return (
             <section className={styles.contenedor}>
-                <p className={styles.vacio}>
-                    Cargando consultas...
-                </p>
+                <EstadoCarga mensaje="Cargando consultas..."/>
             </section>
         );
     }
@@ -128,14 +127,10 @@ export default function Consultas() {
                 Consultas recibidas
             </h1>
             {error && (
-                <p className={styles.error}>
-                    {error}
-                </p>
+                <EstadoError mensaje={error}/>
             )}
             {grupos.length === 0 ? (
-                <p className={styles.vacio}>
-                    No hay consultas recibidas.
-                </p>
+                <EstadoVacio mensaje="No hay consultas recibidas."/>
             ) : (
                 grupos.map((grupo) => (
                     <section key={grupo.propiedad.id}

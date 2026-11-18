@@ -4,6 +4,7 @@ import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import type { FiltrosPropiedades, PropiedadPublica } from "../../types";
 import styles from "./Inicio.module.css";
+import { EstadoCarga, EstadoVacio, EstadoError } from "../../components/Estados/Estados";
 
 export default function Inicio() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -328,19 +329,12 @@ export default function Inicio() {
                     </button>
                 </div>
             </form>
-
-            {error && (
-                <p className={styles.error}>
-                    {error}
-                </p>
-            )}
-
             {cargando ? (
-                <p>Cargando propiedades...</p>
+                <EstadoCarga mensaje="Cargando propiedades..."/>
+            ) : error ? (
+                <EstadoError mensaje={error}/>
             ) : propiedades.length === 0 ? (
-                <p>
-                    No se encontraron propiedades con esos filtros.
-                </p>
+                <EstadoVacio mensaje="No se encontraron propiedades con esos filtros."/>
             ) : (
                 <>
                     <p className={styles.resultados}>

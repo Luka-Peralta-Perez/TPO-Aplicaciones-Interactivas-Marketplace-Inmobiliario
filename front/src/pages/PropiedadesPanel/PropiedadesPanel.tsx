@@ -4,6 +4,7 @@ import { propiedadesService } from "../../services/propiedades";
 import type { HistorialEstadoPropiedad, PropiedadPanel as PropiedadPanelType } from "../../types";
 import styles from "./PropiedadesPanel.module.css";
 import { Link, useSearchParams } from "react-router-dom";
+import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
 
 export default function PropiedadesPanel() {
     const [propiedades, setPropiedades] = useState<PropiedadPanelType[]>([]);
@@ -143,7 +144,7 @@ export default function PropiedadesPanel() {
         return (
             <section className={styles.contenedor}>
                 <h1>Mis propiedades</h1>
-                <p>Cargando propiedades...</p>
+                <EstadoCarga mensaje="Cargando propiedades..."/>
             </section>
         );
     }
@@ -152,7 +153,7 @@ export default function PropiedadesPanel() {
         return (
             <section className={styles.contenedor}>
                 <h1>Mis propiedades</h1>
-                <p className={styles.error}>{error}</p>
+                <EstadoError mensaje={error}/>
             </section>
         );
     }
@@ -166,7 +167,7 @@ export default function PropiedadesPanel() {
                 </p>
             )}
             {propiedades.length === 0 ? (
-                <p>No tenés propiedades cargadas.</p>
+                <EstadoVacio mensaje="No tenés propiedades cargadas."/>
             ) : (
                 <div className={styles.tablaContenedor}>
                     <table className={styles.tabla}>
@@ -318,11 +319,9 @@ export default function PropiedadesPanel() {
                                             {historialAbiertoId === propiedad.id && (
                                                 <div className={styles.historial}>
                                                     {cargandoHistorialId === propiedad.id ? (
-                                                        <p>Cargando historial...</p>
+                                                        <EstadoCarga mensaje="Cargando historial..."/>
                                                     ) : errorHistorial[propiedad.id] ? (
-                                                        <p className={styles.error}>
-                                                            {errorHistorial[propiedad.id]}
-                                                        </p>
+                                                        <EstadoError mensaje={errorHistorial[propiedad.id]}/>
                                                     ) : historiales[propiedad.id]?.length ? (
                                                         <ul className={styles.historialLista}>
                                                             {historiales[propiedad.id].map((cambio) => (
@@ -338,7 +337,7 @@ export default function PropiedadesPanel() {
                                                             ))}
                                                         </ul>
                                                     ) : (
-                                                        <p>No hay cambios de estado registrados.</p>
+                                                        <EstadoVacio mensaje="No hay cambios de estado registrados."/>
                                                     )}
                                                 </div>
                                             )}

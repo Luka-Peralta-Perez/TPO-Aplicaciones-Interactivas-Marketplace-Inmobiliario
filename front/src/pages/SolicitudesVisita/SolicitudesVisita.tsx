@@ -5,6 +5,7 @@ import { visitasService } from "../../services/visitas";
 import type { EstadoSolicitudVisita, SolicitudVisita } from "../../types";
 import styles from "./SolicitudesVisita.module.css"
 import { useSearchParams } from "react-router-dom";
+import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
 
 export default function SolicitudesVisita() {
     const [solicitudes, setSolicitudes] = useState<SolicitudVisita[]>([]);
@@ -14,6 +15,7 @@ export default function SolicitudesVisita() {
     const [filtro, setFiltro] = useState<"PENDIENTES" | "TODAS">("PENDIENTES");
     const [searchParams] = useSearchParams();
     const visitaOrigen = searchParams.get("visita");
+    const [errorAccion, setErrorAccion] = useState<string | null>(null);
 
     useEffect(() => {
         async function cargarSolicitudes() {
@@ -60,7 +62,7 @@ export default function SolicitudesVisita() {
     async function cambiarEstado(solicitudId: number, nuevoEstado: EstadoSolicitudVisita) {
         try {
             setActualizadoId(solicitudId);
-            setError(null);
+            setErrorAccion(null);
 
             await visitasService.cambiarEstado(solicitudId, nuevoEstado);
             setSolicitudes((anteriores) => anteriores.map((solicitud) =>
@@ -72,9 +74,9 @@ export default function SolicitudesVisita() {
             ));
         } catch (error) {
             if (error instanceof ApiError) {
-                setError(error.message);
+                setErrorAccion(error.message);
             } else {
-                setError("No se pudo actualizar la solicitud.");
+                setErrorAccion("No se pudo actualizar la solicitud.");
             }
         } finally {
             setActualizadoId(null);
@@ -84,9 +86,7 @@ export default function SolicitudesVisita() {
     if (cargando) {
         return (
             <section className={styles.contenedor}>
-                <p className={styles.vacio}>
-                    Cargando solicitudes de visita...
-                </p>
+                <EstadoCarga mensaje="Cargando solicitudes de visita..."/>
             </section>
         );
     }
@@ -97,9 +97,7 @@ export default function SolicitudesVisita() {
                 <h1 className={styles.titulo}>
                     Solicitudes de visita
                 </h1>
-                <p className={styles.error}>
-                    {error}
-                </p>
+                <EstadoError mensaje={error}/>
             </section>
         );
     }
@@ -146,10 +144,15 @@ export default function SolicitudesVisita() {
                     Todas
                 </button>
             </div>
-            {solicitudesFiltradas.length === 0 ? (
-                <p className={styles.vacio}>
-                    No hay solicitudes de visita.
+
+            {errorAccion && (
+                <p className={styles.error}>
+                    {errorAccion}
                 </p>
+            )}
+            
+            {solicitudesFiltradas.length === 0 ? (
+                <EstadoVacio mensaje="No hay solicitudes de visita"/>
             ) : (
                 Object.entries(solicitudesPorPropiedad).map(
                     ([propiedadId, grupo]) => (
