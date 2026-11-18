@@ -5,12 +5,18 @@ import { ApiError } from "../../comun/api";
 import { authService } from "../../services/auth";
 import styles from "./Login.module.css";
 
+type ErroresLogin = {
+    email?: string;
+    contrasenia?: string;
+}
+
 export default function Login() {
     const [email, setEmail] = useState("");
     const [contrasenia, setContrasenia] = useState("");
     const [mostrarContrasenia, setMostrarContrasenia] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [errores, setErrores] = useState<ErroresLogin>({});
     const [enviando, setEnviando] = useState(false);
+    const [errorGeneral, setErrorGeneral] = useState<string | null>(null);
 
     const { iniciarSesion } = useAuth();
     const navigate = useNavigate();
@@ -29,12 +35,26 @@ export default function Login() {
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        setError(null);
+        setErrores({});
+        setErrorGeneral(null);
 
-        if (!email.trim() || !contrasenia) {
-            setError("Ingresá tu email y contraseña.");
+        const nuevosErrores: ErroresLogin = {};
+
+        if (!email.trim()) {
+            nuevosErrores.email = "Ingresá tu email.";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+            nuevosErrores.email = "Ingresá un email válido.";
+        }
+
+        if (!contrasenia) {
+            nuevosErrores.contrasenia = "Ingresá tu contraseña.";
+        }
+
+        if (Object.keys(nuevosErrores).length > 0) {
+            setErrores(nuevosErrores);
             return;
         }
+
         setEnviando(true);
 
         try {
@@ -50,14 +70,14 @@ export default function Login() {
             });
         } catch (error) {
             if (error instanceof ApiError) {
-                setError(error.message);
+                setErrorGeneral(error.message);
 
                 if (error.status === 401) {
                     setContrasenia("");
                 }
                 return;
             }
-            setError("No se pudo iniciar sesión.");
+            setErrorGeneral("No se pudo iniciar sesión.");
         } finally {
             setEnviando(false);
         }
@@ -89,6 +109,11 @@ export default function Login() {
                     }
                     autoComplete="email"
                 />
+                {errores.email && (
+                    <p className={styles.error}>
+                        {errores.email}
+                    </p>
+                )}
 
                 <label htmlFor="contrasenia">
                     Contraseña
@@ -122,9 +147,15 @@ export default function Login() {
                     </button>
                 </div>
 
-                {error && (
+                {errores.contrasenia && (
                     <p className={styles.error}>
-                        {error}
+                        {errores.contrasenia}
+                    </p>
+                )}
+
+                {errorGeneral && (
+                    <p className={styles.error}>
+                        {errorGeneral}
                     </p>
                 )}
 

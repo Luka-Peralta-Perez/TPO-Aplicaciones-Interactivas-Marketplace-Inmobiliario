@@ -7,6 +7,16 @@ import styles from "./InmobiliariaPanel.module.css";
 import { EstadoCarga, EstadoError } from "../../components/Estados/Estados";
 import { DialogoConfirmacion } from "../../components/DialogoConfirmacion/DialogoConfirmacion";
 
+type ErroresInmobiliaria = Partial<
+    Record<
+        | "nombre"
+        | "descripcion"
+        | "telefonoContacto"
+        | "emailContacto",
+        string
+    >
+>;
+
 export default function InmobiliariaPanel() {
     const navigate = useNavigate();
     const [inmobiliaria, setInmobiliaria] = useState<InmobiliariaDatos | null>(null);
@@ -23,6 +33,7 @@ export default function InmobiliariaPanel() {
     const [error, setError] = useState<string | null>(null);
     const [mensaje, setMensaje] = useState<string | null>(null);
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+    const [errores, setErrores] = useState<ErroresInmobiliaria>({});
 
     useEffect(() => {
         async function cargarInmobiliaria() {
@@ -52,14 +63,47 @@ export default function InmobiliariaPanel() {
         cargarInmobiliaria();
     }, []);
 
+    function validarFormulario() {
+        const nuevosErrores: ErroresInmobiliaria = {};
+
+        if (!nombre.trim()) {
+            nuevosErrores.nombre = "Ingresá el nombre de la inmobiliaria.";
+        }
+
+        if (!descripcion.trim()) {
+            nuevosErrores.descripcion = "Ingresá una descripción.";
+        }
+
+        if (!telefonoContacto.trim()) {
+            nuevosErrores.telefonoContacto = "Ingresá un teléfono de contacto.";
+        } else if (!/^[0-9]{4}-[0-9]{6}$/.test(telefonoContacto.trim())) {
+            nuevosErrores.telefonoContacto = "Usá el formato 2254-111111";
+        }
+
+        if (!emailContacto.trim()) {
+            nuevosErrores.emailContacto = "Ingresá un email de contacto.";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailContacto.trim())) {
+            nuevosErrores.emailContacto = "Ingresá un email válido.";
+        }
+
+        setErrores(nuevosErrores);
+        return Object.keys(nuevosErrores).length === 0;
+    }
+
     async function manejarSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
+        setErrores({});
+        setError(null);
+        setMensaje(null);
+
+        if (!validarFormulario()) {
+            return;
+        }
 
         if (!inmobiliaria) {
             return;
         }
-        setError(null);
-        setMensaje(null);
 
         const datos: ActualizarInmobiliariaInput = {
             nombre: nombre.trim(),
@@ -114,7 +158,7 @@ export default function InmobiliariaPanel() {
         return (
             <section className={styles.contenedor}>
                 <h1>Mi inmobiliaria</h1>
-                <EstadoCarga mensaje="Cargando inmobiliaria..."/>
+                <EstadoCarga mensaje="Cargando inmobiliaria..." />
             </section>
         );
     }
@@ -123,7 +167,7 @@ export default function InmobiliariaPanel() {
         return (
             <section className={styles.contenedor}>
                 <h1>Mi inmobiliaria</h1>
-                <EstadoError mensaje={error ?? "No se encontró la inmobiliaria."}/>
+                <EstadoError mensaje={error ?? "No se encontró la inmobiliaria."} />
             </section>
         );
     }
@@ -133,7 +177,8 @@ export default function InmobiliariaPanel() {
             <h1>Mi inmobiliaria</h1>
             <form
                 className={styles.formulario}
-                onSubmit={manejarSubmit}>
+                onSubmit={manejarSubmit}
+                noValidate>
                 <div className={styles.campo}>
                     <label htmlFor="nombre">
                         Nombre
@@ -145,6 +190,12 @@ export default function InmobiliariaPanel() {
                         value={nombre}
                         onChange={(event) => setNombre(event.target.value)}
                         required />
+
+                        {errores.nombre && (
+                            <p className={styles.error}>
+                                {errores.nombre}
+                            </p>
+                        )}
                 </div>
 
                 <div className={styles.campo}>
@@ -158,6 +209,12 @@ export default function InmobiliariaPanel() {
                         value={descripcion}
                         onChange={(event) => setDescripcion(event.target.value)}
                         required />
+
+                        {errores.descripcion && (
+                            <p className={styles.error}>
+                                {errores.descripcion}
+                            </p>
+                        )}
                 </div>
 
                 <div className={styles.campo}>
@@ -195,6 +252,12 @@ export default function InmobiliariaPanel() {
                         placeholder="2254-111111"
                         title="Ingresá el teléfono con el formato 2254-111111"
                         required />
+
+                        {errores.telefonoContacto && (
+                            <p className={styles.error}>
+                                {errores.telefonoContacto}
+                            </p>
+                        )}
                 </div>
 
                 <div className={styles.campo}>
@@ -208,6 +271,12 @@ export default function InmobiliariaPanel() {
                         value={emailContacto}
                         onChange={(event) => setEmailContacto(event.target.value)}
                         required />
+
+                        {errores.emailContacto && (
+                            <p className={styles.error}>
+                                {errores.emailContacto}
+                            </p>
+                        )}
                 </div>
 
                 <div className={styles.campo}>
@@ -263,13 +332,13 @@ export default function InmobiliariaPanel() {
             </div>
 
             <DialogoConfirmacion
-            abierto={mostrarConfirmacion}
-            titulo="Eliminar inmobiliaria"
-            mensaje="¿Seguro que querés eliminar la inmobiliaria? Esta acción no se puede deshacer."
-            textoConfirmar="Eliminar"
-            cargando={eliminando}
-            onConfirmar={confirmarEliminarInmobiliaria}
-            onCancelar={() => setMostrarConfirmacion(false)}
+                abierto={mostrarConfirmacion}
+                titulo="Eliminar inmobiliaria"
+                mensaje="¿Seguro que querés eliminar la inmobiliaria? Esta acción no se puede deshacer."
+                textoConfirmar="Eliminar"
+                cargando={eliminando}
+                onConfirmar={confirmarEliminarInmobiliaria}
+                onCancelar={() => setMostrarConfirmacion(false)}
             />
         </section>
     );

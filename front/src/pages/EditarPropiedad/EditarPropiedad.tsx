@@ -7,6 +7,25 @@ import styles from "../NuevaPropiedad/NuevaPropiedad.module.css";
 import { EstadoCarga, EstadoError } from "../../components/Estados/Estados";
 import { DialogoConfirmacion } from "../../components/DialogoConfirmacion/DialogoConfirmacion";
 
+type ErroresPropiedad = Partial<
+    Record<
+        | "titulo"
+        | "descripcion"
+        | "precio"
+        | "direccion"
+        | "zona"
+        | "superficieTotalM2"
+        | "superficieCubiertaM2"
+        | "ambientes"
+        | "dormitorios"
+        | "banios"
+        | "antiguedadAnios"
+        | "fotos"
+        | "fotoPortada",
+        string
+    >
+>;
+
 const AMENITIES = [
     "pileta",
     "cochera",
@@ -44,6 +63,7 @@ export default function EditarPropiedad() {
     const [guardando, setGuardando] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [fotoAEliminar, setFotoAEliminar] = useState<number | null>(null);
+    const [errores, setErrores] = useState<ErroresPropiedad>({});
 
     useEffect(() => {
         async function cargarPropiedad() {
@@ -57,7 +77,7 @@ export default function EditarPropiedad() {
 
             try {
                 const datos = await propiedadesService.obtener(propiedadId);
-                
+
                 setPropiedad(datos);
                 setTitulo(datos.titulo);
                 setDescripcion(datos.descripcion);
@@ -74,7 +94,7 @@ export default function EditarPropiedad() {
                 setBanios(datos.banios?.toString() ?? "");
                 setAntiguedadAnios(datos.antiguedadAnios?.toString() ?? "");
                 setAmenities(datos.amenities);
-                setFotos(datos.fotos.length > 0 
+                setFotos(datos.fotos.length > 0
                     ? datos.fotos
                     : [""]
                 );
@@ -151,38 +171,117 @@ export default function EditarPropiedad() {
         setFotos(fotosActualizadas);
     }
 
+    function validarFormulario() {
+        const nuevosErrores: ErroresPropiedad = {};
+
+        if (!titulo.trim()) {
+            nuevosErrores.titulo = "Ingresá un título.";
+        }
+
+        if (!descripcion.trim()) {
+            nuevosErrores.descripcion = "Ingresá una descripción.";
+        }
+
+        if (!precio) {
+            nuevosErrores.precio = "Ingresá un precio.";
+        } else if (Number(precio) <= 0) {
+            nuevosErrores.precio = "El precio debe ser mayor a 0.";
+        }
+
+        if (!direccion.trim()) {
+            nuevosErrores.direccion = "Ingresá una dirección.";
+        }
+
+        if (!zona.trim()) {
+            nuevosErrores.zona = "Ingresá una zona.";
+        }
+
+        if (!superficieTotalM2) {
+            nuevosErrores.superficieTotalM2 =
+                "Ingresá la superficie total.";
+        } else if (Number(superficieTotalM2) <= 0) {
+            nuevosErrores.superficieTotalM2 =
+                "La superficie total debe ser mayor a 0.";
+        }
+
+        if (tipo !== "TERRENO") {
+            if (
+                superficieCubiertaM2 &&
+                Number(superficieCubiertaM2) <= 0
+            ) {
+                nuevosErrores.superficieCubiertaM2 =
+                    "La superficie cubierta debe ser mayor a 0.";
+            }
+
+            if (ambientes && Number(ambientes) < 1) {
+                nuevosErrores.ambientes =
+                    "La cantidad de ambientes debe ser al menos 1.";
+            }
+
+            if (dormitorios && Number(dormitorios) < 1) {
+                nuevosErrores.dormitorios =
+                    "La cantidad de dormitorios debe ser al menos 1.";
+            }
+
+            if (banios && Number(banios) < 1) {
+                nuevosErrores.banios =
+                    "La cantidad de baños debe ser al menos 1.";
+            }
+        }
+
+        if (
+            tipo !== "TERRENO" &&
+            antiguedadAnios &&
+            Number(antiguedadAnios) < 0
+        ) {
+            nuevosErrores.antiguedadAnios =
+                "La antigüedad no puede ser negativa.";
+        }
+
+        const fotosLimpias = fotos
+            .map((foto) => foto.trim())
+            .filter((foto) => foto !== "");
+
+        if (fotosLimpias.length === 0) {
+            nuevosErrores.fotos =
+                "Tenés que agregar al menos una foto.";
+        }
+
+        const portada = fotoPortada.trim();
+
+        if (!portada) {
+            nuevosErrores.fotoPortada =
+                "Tenés que elegir una foto de portada.";
+        } else if (!fotosLimpias.includes(portada)) {
+            nuevosErrores.fotoPortada =
+                "La foto de portada tiene que pertenecer a la galería.";
+        }
+
+        setErrores(nuevosErrores);
+
+        return Object.keys(nuevosErrores).length === 0;
+    }
+
     async function manejarSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        
+        setErrores({});
+        setError(null);
+
         const propiedadActual = propiedad;
 
         if (!propiedadActual) {
             return;
         }
 
-        setError(null);
+        if (!validarFormulario()) {
+            return;
+        }
 
         const fotosLimpias = fotos
             .map((foto) => foto.trim())
             .filter((foto) => foto !== "");
 
         const portada = fotoPortada.trim();
-
-        if (fotosLimpias.length === 0) {
-            setError("Tenés que agregar al menos una foto.")
-            return;
-        }
-
-        if (!portada) {
-            setError("tenés que elegir una foto de portada.");
-            return;
-        }
-
-        if (!fotosLimpias.includes(portada)) {
-            setError("La foto de portada tiene que pertenecer a la galería de fotos.")
-            return;
-        }
-
         const esTerreno = tipo === "TERRENO";
         const datos: CrearPropiedadInput = {
             titulo: titulo.trim(),
@@ -206,7 +305,7 @@ export default function EditarPropiedad() {
 
         try {
             setGuardando(true);
-            await propiedadesService.actualizar(propiedad.id, datos);
+            await propiedadesService.actualizar(propiedadActual.id, datos);
             navigate("/panel/propiedades");
         } catch (error) {
             if (error instanceof ApiError) {
@@ -220,17 +319,17 @@ export default function EditarPropiedad() {
     }
 
     if (cargando) {
-        return <EstadoCarga mensaje="Cargando propiedad..."/>
+        return <EstadoCarga mensaje="Cargando propiedad..." />
     }
 
-    if(!propiedad) {
+    if (!propiedad) {
         return (
             <section className={styles.contenedor}>
-                <EstadoError mensaje={error ?? "No se encontró la propiedad."}/>
+                <EstadoError mensaje={error ?? "No se encontró la propiedad."} />
                 <button
-                type="button"
-                className={styles.botonSecundario}
-                onClick={() => navigate("/panel/propiedades")}>
+                    type="button"
+                    className={styles.botonSecundario}
+                    onClick={() => navigate("/panel/propiedades")}>
                     Volver
                 </button>
             </section>
@@ -250,9 +349,9 @@ export default function EditarPropiedad() {
                     <strong>{propiedad.estado}</strong>
                 </p>
                 <button
-                type="button"
-                className={styles.botonSecundario}
-                onClick={() => navigate("/panel/propiedades")}>
+                    type="button"
+                    className={styles.botonSecundario}
+                    onClick={() => navigate("/panel/propiedades")}>
                     Volver
                 </button>
             </section>
@@ -267,16 +366,17 @@ export default function EditarPropiedad() {
                         Modificá los datos actuales de la propiedad.
                     </p>
                 </div>
-                <button 
-                type="button"
-                className={styles.botonSecundario}
-                onClick={() => navigate("/panel/propiedades")}>
+                <button
+                    type="button"
+                    className={styles.botonSecundario}
+                    onClick={() => navigate("/panel/propiedades")}>
                     Volver
                 </button>
             </div>
             <form
                 className={styles.formulario}
-                onSubmit={manejarSubmit}>
+                onSubmit={manejarSubmit}
+                noValidate>
                 <div className={styles.seccion}>
                     <h2>Información principal</h2>
                     <div className={styles.campoCompleto}>
@@ -290,6 +390,12 @@ export default function EditarPropiedad() {
                             onChange={(event) => setTitulo(event.target.value)}
                             maxLength={160}
                             required />
+
+                            {errores.titulo && (
+                            <p className={styles.error}>
+                                {errores.titulo}
+                            </p>
+                        )}
                     </div>
 
                     <div className={styles.campoCompleto}>
@@ -302,6 +408,12 @@ export default function EditarPropiedad() {
                             onChange={(event) => setDescripcion(event.target.value)}
                             rows={5}
                             required />
+
+                            {errores.descripcion && (
+                            <p className={styles.error}>
+                                {errores.descripcion}
+                            </p>
+                        )}
                     </div>
 
                     <div className={styles.grilla}>
@@ -357,6 +469,12 @@ export default function EditarPropiedad() {
                                 value={precio}
                                 onChange={(event) => setPrecio(event.target.value)}
                                 required />
+
+                                {errores.precio && (
+                                <p className={styles.error}>
+                                    {errores.precio}
+                                </p>
+                            )}
                         </div>
 
                         <div className={styles.campo}>
@@ -392,6 +510,12 @@ export default function EditarPropiedad() {
                                 onChange={(event) => setDireccion(event.target.value)}
                                 maxLength={255}
                                 required />
+
+                                {errores.direccion && (
+                                <p className={styles.error}>
+                                    {errores.direccion}
+                                </p>
+                            )}
                         </div>
 
                         <div className={styles.campo}>
@@ -405,6 +529,12 @@ export default function EditarPropiedad() {
                                 onChange={(event) => setZona(event.target.value)}
                                 maxLength={120}
                                 required />
+
+                                {errores.zona && (
+                                <p className={styles.error}>
+                                    {errores.zona}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -424,6 +554,12 @@ export default function EditarPropiedad() {
                                 value={superficieTotalM2}
                                 onChange={(event) => setSuperficieTotalM2(event.target.value)}
                                 required />
+
+                                {errores.superficieTotalM2 && (
+                                <p className={styles.error}>
+                                    {errores.superficieTotalM2}
+                                </p>
+                            )}
                         </div>
 
                         {tipo !== "TERRENO" && (
@@ -440,6 +576,12 @@ export default function EditarPropiedad() {
                                         value={superficieCubiertaM2}
                                         onChange={(event) => setSuperficieCubiertaM2(event.target.value)}
                                     />
+
+                                    {errores.superficieCubiertaM2 && (
+                                        <p className={styles.error}>
+                                            {errores.superficieCubiertaM2}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className={styles.campo}>
@@ -453,6 +595,12 @@ export default function EditarPropiedad() {
                                         value={ambientes}
                                         onChange={(event) => setAmbientes(event.target.value)}
                                     />
+
+                                    {errores.ambientes && (
+                                        <p className={styles.error}>
+                                            {errores.ambientes}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className={styles.campo}>
@@ -466,6 +614,12 @@ export default function EditarPropiedad() {
                                         value={dormitorios}
                                         onChange={(event) => setDormitorios(event.target.value)}
                                     />
+
+                                    {errores.dormitorios && (
+                                        <p className={styles.error}>
+                                            {errores.dormitorios}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className={styles.campo}>
@@ -479,6 +633,12 @@ export default function EditarPropiedad() {
                                         value={banios}
                                         onChange={(event) => setBanios(event.target.value)}
                                     />
+
+                                    {errores.banios && (
+                                        <p className={styles.error}>
+                                            {errores.banios}
+                                        </p>
+                                    )}
                                 </div>
                             </>
                         )}
@@ -493,6 +653,12 @@ export default function EditarPropiedad() {
                                 min="0"
                                 value={antiguedadAnios}
                                 onChange={(event) => setAntiguedadAnios(event.target.value)} />
+
+                                {errores.antiguedadAnios && (
+                                <p className={styles.error}>
+                                    {errores.antiguedadAnios}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -590,6 +756,18 @@ export default function EditarPropiedad() {
                     </div>
                 </div>
 
+                {errores.fotos && (
+                    <p className={styles.error}>
+                        {errores.fotos}
+                    </p>
+                )}
+
+                {errores.fotoPortada && (
+                    <p className={styles.error}>
+                        {errores.fotoPortada}
+                    </p>
+                )}
+
                 {error && (
                     <p className={styles.error}>
                         {error}
@@ -613,14 +791,14 @@ export default function EditarPropiedad() {
                     </button>
                 </div>
             </form>
-        
-        <DialogoConfirmacion
-            abierto={fotoAEliminar !== null}
-            titulo="Eliminar foto"
-            mensaje="¿Seguro que querés eliminar esta foto de la propiedad?"
-            textoConfirmar="Eliminar"
-            onConfirmar={confirmarEliminarFoto}
-            onCancelar={() => setFotoAEliminar(null)}
+
+            <DialogoConfirmacion
+                abierto={fotoAEliminar !== null}
+                titulo="Eliminar foto"
+                mensaje="¿Seguro que querés eliminar esta foto de la propiedad?"
+                textoConfirmar="Eliminar"
+                onConfirmar={confirmarEliminarFoto}
+                onCancelar={() => setFotoAEliminar(null)}
             />
 
         </section>

@@ -6,6 +6,12 @@ import type { FiltrosPropiedades, PropiedadPublica } from "../../types";
 import styles from "./Inicio.module.css";
 import { EstadoCarga, EstadoVacio, EstadoError } from "../../components/Estados/Estados";
 
+type ErroresFiltros = {
+    precioMin?: string;
+    precioMax?: string;
+    ambientes?: string;
+};
+
 export default function Inicio() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [propiedades, setPropiedades] = useState<PropiedadPublica[]>([]);
@@ -23,6 +29,7 @@ export default function Inicio() {
     const [amenities, setAmenities] = useState(searchParams.get("amenities") ?? "");
     const [busqueda, setBusqueda] = useState(searchParams.get("q") ?? "");
     const [orden, setOrden] = useState(searchParams.get("sort") ?? "");
+    const [erroresFiltros, setErroresFiltros] = useState<ErroresFiltros>({});
 
     // Mantiene los campos sincronizados con la URL
     useEffect(() => {
@@ -98,6 +105,32 @@ export default function Inicio() {
 
     function aplicarFiltros(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
+        setErroresFiltros({});
+
+        const nuevosErrores: ErroresFiltros = {};
+
+        if(precioMin.trim() && Number(precioMin) < 0) {
+            nuevosErrores.precioMin = "El precio mínimo no puede ser negativo.";
+        }
+
+        if(precioMax.trim() && Number(precioMax) < 0) {
+            nuevosErrores.precioMax = "El precio máximo no puede ser negativo.";
+        }
+
+        if(precioMin.trim() && precioMax.trim() 
+            && Number(precioMin) > Number(precioMax)) {
+            nuevosErrores.precioMax = "El precio máximo debe ser mayor o igual al mínimo.";
+        }
+
+        if(ambientes && Number(ambientes) < 1) {
+            nuevosErrores.ambientes = "La cantidad de ambientes debe ser al menos 1.";
+        }
+
+        if (Object.keys(nuevosErrores).length > 0) {
+            setErroresFiltros(nuevosErrores);
+            return;
+        }
+
         const params = new URLSearchParams();
 
         if (tipo) {
@@ -152,6 +185,7 @@ export default function Inicio() {
         setBusqueda("");
         setOrden("");
         setSearchParams({});
+        setErroresFiltros({});
     }
 
     function cambiarPagina(nuevaPagina: number) {
@@ -173,7 +207,8 @@ export default function Inicio() {
             </div>
             <form
                 className={styles.filtros}
-                onSubmit={aplicarFiltros}>
+                onSubmit={aplicarFiltros}
+                noValidate>
                 <div className={styles.campoBusqueda}>
                     <label htmlFor="busqueda">
                         Buscar
@@ -244,6 +279,12 @@ export default function Inicio() {
                             min="0"
                             value={precioMin}
                             onChange={(event) => setPrecioMin(event.target.value)} />
+
+                            {erroresFiltros.precioMin && (
+                                <p className={styles.error}>
+                                    {erroresFiltros.precioMin}
+                                </p>
+                            )}
                     </div>
 
                     <div className={styles.campo}>
@@ -256,6 +297,12 @@ export default function Inicio() {
                             min="0"
                             value={precioMax}
                             onChange={(event) => setPrecioMax(event.target.value)} />
+
+                            {erroresFiltros.precioMax && (
+                                <p className={styles.error}>
+                                    {erroresFiltros.precioMax}
+                                </p>
+                            )}
                     </div>
 
                     <div className={styles.campo}>
@@ -279,6 +326,12 @@ export default function Inicio() {
                             min="1"
                             value={ambientes}
                             onChange={(event) => setAmbientes(event.target.value)} />
+
+                            {erroresFiltros.ambientes && (
+                                <p className={styles.error}>
+                                    {erroresFiltros.ambientes}
+                                </p>
+                            )}
                     </div>
 
                     <div className={styles.campo}>

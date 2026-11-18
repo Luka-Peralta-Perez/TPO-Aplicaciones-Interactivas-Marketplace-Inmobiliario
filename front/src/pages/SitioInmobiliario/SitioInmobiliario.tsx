@@ -1,10 +1,16 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ApiError} from "../../comun/api";
+import { ApiError } from "../../comun/api";
 import { inmobiliariasService } from "../../services/inmobiliarias";
 import type { InmobiliariaDatos, PropiedadPublica, ReseniaPublica } from "../../types";
 import styles from "./SitioInmobiliario.module.css";
 import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
+
+type ErroresResenia = {
+    nombreAutor?: string;
+    contenido?: string;
+    calificacion?: string;
+};
 
 export default function SitioInmobiliario() {
     const { id } = useParams();
@@ -21,6 +27,7 @@ export default function SitioInmobiliario() {
     const [errorResenia, setErrorResenia] = useState<string | null>(null);
     const [searchParams] = useSearchParams();
     const reseniaOrigen = searchParams.get("resenia");
+    const [erroresResenia, setErroresResenia] = useState<ErroresResenia>({});
 
     useEffect(() => {
         async function cargarInmobiliaria() {
@@ -80,20 +87,26 @@ export default function SitioInmobiliario() {
         if (!inmobiliaria) {
             return;
         }
+
+        setErroresResenia({});
         setErrorResenia(null);
 
+        const nuevosErrores: ErroresResenia = {};
+
         if (!nombreAutor.trim()) {
-            setErrorResenia("Ingresá tu nombre.");
-            return;
+            nuevosErrores.nombreAutor = "Ingresá tu nombre.";
         }
 
         if (!contenido.trim()) {
-            setErrorResenia("La reseña no puede estar vacía.");
-            return;
+            nuevosErrores.contenido = "La reseña no puede estar vacía.";
         }
 
         if (calificacion < 1 || calificacion > 5) {
-            setErrorResenia("La calificación debe ser entre 1 y 5.");
+            nuevosErrores.calificacion = "La calificación debe ser entre 1 y 5.";
+        }
+
+        if (Object.keys(nuevosErrores).length > 0) {
+            setErroresResenia(nuevosErrores);
             return;
         }
 
@@ -125,7 +138,7 @@ export default function SitioInmobiliario() {
         return (
             <section
                 className={styles.contenedor}>
-                <EstadoCarga mensaje="Cargando inmobiliaria..."/>
+                <EstadoCarga mensaje="Cargando inmobiliaria..." />
             </section>
         );
     }
@@ -136,7 +149,7 @@ export default function SitioInmobiliario() {
                 <Link to="/">
                     ← Volver
                 </Link>
-                <EstadoError mensaje={error ?? "No se encontró la inmobiliaria."}/>
+                <EstadoError mensaje={error ?? "No se encontró la inmobiliaria."} />
             </section>
         );
     }
@@ -198,7 +211,7 @@ export default function SitioInmobiliario() {
             <div className={styles.seccion}>
                 <h2>Propiedades publicadas</h2>
                 {propiedades.length === 0 ? (
-                    <EstadoVacio mensaje="Esta inmobiliaria no tiene propiedades publicadas"/>
+                    <EstadoVacio mensaje="Esta inmobiliaria no tiene propiedades publicadas" />
                 ) : (
                     <div className={styles.propiedades}>
                         {propiedades.map((propiedad) => (
@@ -230,7 +243,7 @@ export default function SitioInmobiliario() {
             <div className={styles.seccion}>
                 <h2>Reseñas</h2>
                 {resenias.length === 0 ? (
-                    <EstadoVacio mensaje="Esta inmobiliaria todavía no tiene reseñas"/>
+                    <EstadoVacio mensaje="Esta inmobiliaria todavía no tiene reseñas" />
                 ) : (
                     <div className={styles.resenias}>
                         {resenias.map((resenia) => (
@@ -253,7 +266,8 @@ export default function SitioInmobiliario() {
                 )}
 
                 <form className={styles.formResenia}
-                    onSubmit={enviarResenia}>
+                    onSubmit={enviarResenia}
+                    noValidate>
                     <h3>Dejar una reseña</h3>
                     <div className={styles.campo}>
                         <label htmlFor="nombreAutor">
@@ -263,6 +277,12 @@ export default function SitioInmobiliario() {
                             id="nombreAutor"
                             value={nombreAutor}
                             onChange={(event) => setNombreAutor(event.target.value)} />
+
+                        {erroresResenia.nombreAutor && (
+                            <p className={styles.error}>
+                                {erroresResenia.nombreAutor}
+                            </p>
+                        )}
                     </div>
 
                     <div className={styles.campo}>
@@ -289,6 +309,12 @@ export default function SitioInmobiliario() {
                                 1 - Mala
                             </option>
                         </select>
+
+                        {erroresResenia.calificacion && (
+                            <p className={styles.error}>
+                                {erroresResenia.calificacion}
+                            </p>
+                        )}
                     </div>
 
                     <div className={styles.campo}>
@@ -300,6 +326,12 @@ export default function SitioInmobiliario() {
                             rows={4}
                             value={contenido}
                             onChange={(event) => setContenido(event.target.value)} />
+
+                            {erroresResenia.contenido && (
+                            <p className={styles.error}>
+                                {erroresResenia.contenido}
+                            </p>
+                        )}
                     </div>
 
                     {errorResenia && (

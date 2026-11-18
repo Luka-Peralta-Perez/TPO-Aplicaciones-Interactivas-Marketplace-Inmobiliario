@@ -6,6 +6,17 @@ import type { PropiedadDetalle as PropiedadDetalleType, ComentarioPropiedad } fr
 import styles from "./DetallePropiedad.module.css";
 import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
 
+type ErroresConsulta = {
+    nombreAutor?: string;
+    contenidoConsulta?: string;
+};
+
+type ErroresVisita = {
+    nombreVisita?: string;
+    telefonoVisita?: string;
+    fechaVisita?: string;
+};
+
 export default function DetallePropiedad() {
     const { id } = useParams();
     const [propiedad, setPropiedad] = useState<PropiedadDetalleType | null>(null);
@@ -27,6 +38,9 @@ export default function DetallePropiedad() {
     const [errorVisita, setErrorVisita] = useState<string | null>(null);
     const [exitoVisita, setExitoVisita] = useState<string | null>(null);
     const [mostrarFormularioVisita, setMostrarFormularioVisita] = useState(false);
+
+    const [erroresConsulta, setErroresConsulta] = useState<ErroresConsulta>({});
+    const [erroresVisita, setErroresVisita] = useState<ErroresVisita>({});
 
     useEffect(() => {
         async function cargarPropiedad() {
@@ -69,15 +83,21 @@ export default function DetallePropiedad() {
             return;
         }
 
+        setErroresConsulta({});
         setErrorConsulta(null);
 
+        const nuevosErrores: ErroresConsulta = {};
+
         if (!nombreAutor.trim()) {
-            setErrorConsulta("Ingresá tu nombre.");
-            return;
+            nuevosErrores.nombreAutor = "Ingresá tu nombre.";
         }
 
         if (!contenidoConsulta.trim()) {
-            setErrorConsulta("La consulta no puede estar vacía.");
+            nuevosErrores.contenidoConsulta = "La consulta no puede estar vacía.";
+        }
+
+        if (Object.keys(nuevosErrores).length > 0) {
+            setErroresConsulta(nuevosErrores);
             return;
         }
 
@@ -109,31 +129,38 @@ export default function DetallePropiedad() {
         if (!propiedad) {
             return;
         }
+        setErroresVisita({});
         setErrorVisita(null);
         setExitoVisita(null);
 
+        const nuevosErrores: ErroresVisita = {};
+
         if (!nombreVisita.trim()) {
-            setErrorVisita("Ingresá tu nombre.");
-            return;
+            nuevosErrores.nombreVisita = "Ingresá tu nombre.";
         }
 
         if (!telefonoVisita.trim()) {
-            setErrorVisita("Ingresá tu teléfono.");
-            return;
+            nuevosErrores.telefonoVisita = "Ingresá tu teléfono.";
         }
 
         if (!fechaVisita) {
-            setErrorVisita("Seleccioná una fecha y hora.");
-            return;
-        }
-        const fechaSeleccionada = new Date(fechaVisita);
+            nuevosErrores.fechaVisita = "Seleccioná una fecha y hora.";
+        } else {
+            const fechaSeleccionada = new Date(fechaVisita);
 
-        if (Number.isNaN(fechaSeleccionada.getTime()) ||
-            fechaSeleccionada <= new Date()
-        ) {
-            setErrorVisita("La fecha de la visita debe ser futura.");
+            if (Number.isNaN(fechaSeleccionada.getTime()) ||
+                fechaSeleccionada <= new Date()
+            ) {
+                nuevosErrores.fechaVisita = "La fecha de la visita debe ser futura.";
+            }
+        }
+
+        if (Object.keys(nuevosErrores).length > 0) {
+            setErroresVisita(nuevosErrores);
             return;
         }
+
+        const fechaSeleccionada = new Date(fechaVisita);
 
         try {
             setEnviandoVisita(true);
@@ -163,7 +190,7 @@ export default function DetallePropiedad() {
     if (cargando) {
         return (
             <section className={styles.contenedor}>
-                <EstadoCarga mensaje="Cargando propiedad..."/>
+                <EstadoCarga mensaje="Cargando propiedad..." />
             </section>
         );
     }
@@ -172,7 +199,7 @@ export default function DetallePropiedad() {
         return (
             <section className={styles.contenedor}>
                 <Link to="/">← Volver</Link>
-                <EstadoError mensaje={error ?? "Propiedad no encontrada."}/>
+                <EstadoError mensaje={error ?? "Propiedad no encontrada."} />
             </section>
         );
     }
@@ -330,7 +357,8 @@ export default function DetallePropiedad() {
                     </button>
                     {mostrarFormularioVisita && (
                         <form className={styles.formConsulta}
-                            onSubmit={enviarSolicitudVisita}>
+                            onSubmit={enviarSolicitudVisita}
+                            noValidate>
                             <div className={styles.campoConsulta}>
                                 <label htmlFor="nombreVisita">
                                     Nombre
@@ -340,6 +368,12 @@ export default function DetallePropiedad() {
                                     type="text"
                                     value={nombreVisita}
                                     onChange={(event) => setNombreVisita(event.target.value)} />
+
+                                {erroresVisita.nombreVisita && (
+                                    <p className={styles.errorConsulta}>
+                                        {erroresVisita.nombreVisita}
+                                    </p>
+                                )}
                             </div>
 
                             <div className={styles.campoConsulta}>
@@ -351,6 +385,12 @@ export default function DetallePropiedad() {
                                     type="tel"
                                     value={telefonoVisita}
                                     onChange={(event) => setTelefonoVisita(event.target.value)} />
+
+                                {erroresVisita.telefonoVisita && (
+                                    <p className={styles.errorConsulta}>
+                                        {erroresVisita.telefonoVisita}
+                                    </p>
+                                )}
                             </div>
 
                             <div className={styles.campoConsulta}>
@@ -365,6 +405,12 @@ export default function DetallePropiedad() {
                                         .toISOString()
                                         .slice(0, 16)}
                                     onChange={(event) => setFechaVisita(event.target.value)} />
+
+                                {erroresVisita.fechaVisita && (
+                                    <p className={styles.errorConsulta}>
+                                        {erroresVisita.fechaVisita}
+                                    </p>
+                                )}
                             </div>
 
                             <div className={styles.campoConsulta}>
@@ -402,7 +448,7 @@ export default function DetallePropiedad() {
             <div className={styles.seccion}>
                 <h2>Consultas</h2>
                 {comentarios.length === 0 ? (
-                    <EstadoVacio mensaje="Todavía no hay consultas sobre esta propiedad."/>
+                    <EstadoVacio mensaje="Todavía no hay consultas sobre esta propiedad." />
                 ) : (
                     <div className={styles.comentarios}>
                         {comentarios.map((comentario) => (
@@ -428,7 +474,8 @@ export default function DetallePropiedad() {
                 )}
                 <form
                     className={styles.formConsulta}
-                    onSubmit={enviarConsulta}>
+                    onSubmit={enviarConsulta}
+                    noValidate>
                     <h3>Dejar una consulta</h3>
                     <div className={styles.campoConsulta}>
                         <label htmlFor="nombreAutor">
@@ -439,6 +486,12 @@ export default function DetallePropiedad() {
                             type="text"
                             value={nombreAutor}
                             onChange={(event) => setNombreAutor(event.target.value)} />
+
+                        {erroresConsulta.nombreAutor && (
+                            <p className={styles.errorConsulta}>
+                                {erroresConsulta.nombreAutor}
+                            </p>
+                        )}
                     </div>
 
                     <div className={styles.campoConsulta}>
@@ -450,6 +503,12 @@ export default function DetallePropiedad() {
                             rows={4}
                             value={contenidoConsulta}
                             onChange={(event) => setContenidoConsulta(event.target.value)} />
+
+                            {erroresConsulta.contenidoConsulta && (
+                            <p className={styles.errorConsulta}>
+                                {erroresConsulta.contenidoConsulta}
+                            </p>
+                        )}
                     </div>
 
                     {errorConsulta && (
