@@ -112,6 +112,28 @@
     border-color: #d98c8c;
 }
 
+.botonRealizada {
+    border: 1px solid #b7d8c3;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.botonRealizada:hover:not(:disabled) {
+    background: #dcfce7;
+    border-color: #86c59c;
+}
+
+.botonCancelar {
+    border: 1px solid #f1b5b5;
+    background: #fff8f8;
+    color: #b00020;
+}
+
+.botonCancelar:hover:not(:disabled) {
+    background: #feecec;
+    border-color: #d98c8c;
+}
+
 .boton:disabled {
     opacity: 0.6;
     cursor: not-allowed;

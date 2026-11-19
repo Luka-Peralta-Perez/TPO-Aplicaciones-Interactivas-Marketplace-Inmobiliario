@@ -79,11 +79,19 @@
 
 .boton {
     align-self: flex-start;
-    max-width: 100%;
-    padding: 8px 14px;
+    padding: 0.65rem 1rem;
     border: none;
     border-radius: 8px;
+    background: #315c52;
+    color: white;
     cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.boton:hover:not(:disabled) {
+    background: #26483f;
 }
 
 .boton:disabled {

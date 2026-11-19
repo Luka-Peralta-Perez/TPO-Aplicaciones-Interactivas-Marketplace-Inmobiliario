@@ -52,7 +52,6 @@ export function CaracteristicasPropiedad({ formulario }: Props) {
                                 id="superficieCubierta"
                                 type="number"
                                 min="0.01"
-                                step="0.01"
                                 value={superficieCubiertaM2}
                                 onChange={(event) => setSuperficieCubiertaM2(event.target.value)} />
 
@@ -116,26 +115,26 @@ export function CaracteristicasPropiedad({ formulario }: Props) {
                                 </p>
                             )}
                         </div>
+
+                        <div className={styles.campo}>
+                            <label htmlFor="antiguedad">
+                                Antigüedad
+                            </label>
+                            <input
+                                id="antiguedad"
+                                type="number"
+                                min="0"
+                                value={antiguedadAnios}
+                                onChange={(event) => setAntiguedadAnios(event.target.value)} />
+
+                            {errores.antiguedadAnios && (
+                                <p className={styles.error}>
+                                    {errores.antiguedadAnios}
+                                </p>
+                            )}
+                        </div>
                     </>
                 )}
-
-                <div className={styles.campo}>
-                    <label htmlFor="antiguedad">
-                        Antigüedad
-                    </label>
-                    <input
-                        id="antiguedad"
-                        type="number"
-                        min="0"
-                        value={antiguedadAnios}
-                        onChange={(event) => setAntiguedadAnios(event.target.value)} />
-
-                    {errores.antiguedadAnios && (
-                        <p className={styles.error}>
-                            {errores.antiguedadAnios}
-                        </p>
-                    )}
-                </div>
             </div>
         </div>
     );

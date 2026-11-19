@@ -64,13 +64,17 @@ export function GrupoSolicitudesVisita({ titulo, solicitudes, actualizadoId, onC
                         <div className={styles.acciones}>
                             <button
                                 type="button"
-                                className={`${styles.boton} ${styles.botonConfirmar}`}>
+                                className={`${styles.boton} ${styles.botonConfirmar}`}
+                                disabled={actualizadoId === solicitud.id}
+                                onClick={() => onCambiarEstado(solicitud.id, "CONFIRMADA")}>
                                 Confirmar
                             </button>
 
                             <button
                                 type="button"
-                                className={`${styles.boton} ${styles.botonRechazar}`}>
+                                className={`${styles.boton} ${styles.botonRechazar}`}
+                                disabled={actualizadoId === solicitud.id}
+                                onClick={() => onCambiarEstado(solicitud.id, "RECHAZADA")}>
                                 Rechazar
                             </button>
                         </div>
@@ -79,7 +83,7 @@ export function GrupoSolicitudesVisita({ titulo, solicitudes, actualizadoId, onC
                     {solicitud.estado === "CONFIRMADA" && (
                         <div className={styles.acciones}>
                             <button
-                                className={styles.boton}
+                                className={`${styles.boton} ${styles.botonRealizada}`}
                                 type="button"
                                 disabled={actualizadoId === solicitud.id}
                                 onClick={() => onCambiarEstado(solicitud.id, "REALIZADA")}>
@@ -87,7 +91,7 @@ export function GrupoSolicitudesVisita({ titulo, solicitudes, actualizadoId, onC
                             </button>
 
                             <button
-                                className={styles.boton}
+                                className={`${styles.boton} ${styles.botonCancelar}`}
                                 type="button"
                                 disabled={actualizadoId === solicitud.id}
                                 onClick={() => onCambiarEstado(solicitud.id, "CANCELADA")}>

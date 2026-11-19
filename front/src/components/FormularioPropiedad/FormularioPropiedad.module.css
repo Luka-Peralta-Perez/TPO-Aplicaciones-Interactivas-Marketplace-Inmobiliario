@@ -45,7 +45,7 @@
 .campo select,
 .campoCompleto input,
 .campoCompleto textarea,
-.datosFoto input {
+.datosFoto input[type="text"] {
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
@@ -62,7 +62,7 @@
 .campo select:focus,
 .campoCompleto input:focus,
 .campoCompleto textarea:focus,
-.datosFoto input:focus {
+.datosFoto input[type="text"]:focus {
     border-color: #315c52;
     box-shadow: 0 0 0 3px rgba(49, 92, 82, 0.12);
 }
@@ -99,6 +99,13 @@
 .checkbox input,
 .portada input {
     accent-color: #315c52;
+}
+
+.portada input {
+    width: auto;
+    min-width: auto;
+    padding: 0;
+    margin: 0;
 }
 
 .encabezadoFotos {
