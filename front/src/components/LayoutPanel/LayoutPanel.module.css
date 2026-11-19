@@ -28,6 +28,22 @@
   padding: 1.5rem 0;
 }
 
+.tituloPanel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.enlaceInmobiliaria {
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.enlaceInmobiliaria:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 600px) {
   .header {
     padding: 1rem;

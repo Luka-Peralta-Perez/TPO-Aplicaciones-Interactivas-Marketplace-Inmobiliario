@@ -1,137 +1,29 @@
-import { useEffect, useState } from "react";
-import { ApiError } from "../../comun/api";
-import { inmobiliariasService } from "../../services/inmobiliarias";
-import { visitasService } from "../../services/visitas";
-import type { EstadoSolicitudVisita, SolicitudVisita } from "../../types";
-import styles from "./SolicitudesVisita.module.css"
-import { useSearchParams } from "react-router-dom";
+import styles from "./SolicitudesVisita.module.css";
 import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
 import { DialogoConfirmacion } from "../../components/DialogoConfirmacion/DialogoConfirmacion";
-
-type ConfirmacionVisita = {
-    solicitudId: number;
-    nuevoEstado: EstadoSolicitudVisita;
-    titulo: string;
-    mensaje: string;
-    textoConfirmar: string;
-};
+import { GrupoSolicitudesVisita } from "../../components/GrupoSolicitudesVisita/GrupoSolicitudesVisita";
+import { useSolicitudesVisita } from "../../hooks/useSolicitudesVisita";
 
 export default function SolicitudesVisita() {
-    const [solicitudes, setSolicitudes] = useState<SolicitudVisita[]>([]);
-    const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [actualizadoId, setActualizadoId] = useState<number | null>(null);
-    const [filtro, setFiltro] = useState<"PENDIENTES" | "TODAS">("PENDIENTES");
-    const [searchParams] = useSearchParams();
-    const visitaOrigen = searchParams.get("visita");
-    const [errorAccion, setErrorAccion] = useState<string | null>(null);
-    const [confirmacion, setConfirmacion] = useState<ConfirmacionVisita | null>(null);
-
-    useEffect(() => {
-        async function cargarSolicitudes() {
-            try {
-                setCargando(true);
-                setError(null);
-
-                const inmobiliaria = await inmobiliariasService.obtenerPropia();
-                const datos = await visitasService.listar(inmobiliaria.id);
-
-                setSolicitudes(datos);
-            } catch (error) {
-                if (error instanceof ApiError) {
-                    setError(error.message);
-                } else {
-                    setError("No se pudieron cargar las solicitudes de visita.");
-                }
-            } finally {
-                setCargando(false);
-            }
-        }
-        cargarSolicitudes();
-    }, []);
-
-    useEffect(() => {
-        if (visitaOrigen) {
-            setFiltro("TODAS");
-        }
-    }, [visitaOrigen]);
-
-    useEffect(() => {
-        if (cargando || !visitaOrigen || filtro !== "TODAS") {
-            return;
-        }
-
-        const elemento = document.getElementById(`visita-${visitaOrigen}`);
-
-        elemento?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-        });
-    }, [cargando, visitaOrigen, filtro]);
-
-    async function ejecutarCambiarEstado(solicitudId: number, nuevoEstado: EstadoSolicitudVisita) {
-        try {
-            setActualizadoId(solicitudId);
-            setErrorAccion(null);
-
-            await visitasService.cambiarEstado(solicitudId, nuevoEstado);
-            setSolicitudes((anteriores) => anteriores.map((solicitud) =>
-                solicitud.id === solicitudId ? {
-                    ...solicitud,
-                    estado: nuevoEstado,
-                }
-                    : solicitud
-            ));
-        } catch (error) {
-            if (error instanceof ApiError) {
-                setErrorAccion(error.message);
-            } else {
-                setErrorAccion("No se pudo actualizar la solicitud.");
-            }
-        } finally {
-            setActualizadoId(null);
-        }
-    }
-
-    function cambiarEstado(solicitudId: number, nuevoEstado: EstadoSolicitudVisita) {
-        if (nuevoEstado === "RECHAZADA") {
-            setConfirmacion({
-                solicitudId,
-                nuevoEstado,
-                titulo: "Rechazar solicitud",
-                mensaje: "¿Seguro que querés rechazar esta solicitud de visita?",
-                textoConfirmar: "Rechazar",
-            });
-            return;
-        }
-
-        if (nuevoEstado === "CANCELADA") {
-            setConfirmacion({
-                solicitudId,
-                nuevoEstado,
-                titulo: "Cancelar visita",
-                mensaje: "¿Seguro que querés cancelar esta visita?",
-                textoConfirmar: "Cancelar visita",
-            });
-            return;
-        }
-        void ejecutarCambiarEstado(solicitudId, nuevoEstado);
-    }
-
-    async function confirmarCambioEstado() {
-        if (!confirmacion) {
-            return;
-        }
-
-        const {solicitudId, nuevoEstado} = confirmacion;
-        await ejecutarCambiarEstado(solicitudId, nuevoEstado);
-        setConfirmacion(null);
-    }
+    const {
+        cargando,
+        error,
+        errorAccion,
+        filtro,
+        setFiltro,
+        actualizadoId,
+        confirmacion,
+        setConfirmacion,
+        cambiarEstado,
+        confirmarCambioEstado,
+        solicitudesFiltradas,
+        solicitudesPorPropiedad,
+    } = useSolicitudesVisita();
 
     if (cargando) {
         return (
             <section className={styles.contenedor}>
-                <EstadoCarga mensaje="Cargando solicitudes de visita..."/>
+                <EstadoCarga mensaje="Cargando solicitudes de visita..." />
             </section>
         );
     }
@@ -142,37 +34,17 @@ export default function SolicitudesVisita() {
                 <h1 className={styles.titulo}>
                     Solicitudes de visita
                 </h1>
-                <EstadoError mensaje={error}/>
+                <EstadoError mensaje={error} />
             </section>
         );
     }
-
-    const solicitudesFiltradas = filtro === "PENDIENTES"
-        ? solicitudes.filter((solicitud) => solicitud.estado === "PENDIENTE")
-        : solicitudes;
-
-    const solicitudesPorPropiedad = solicitudesFiltradas.reduce((grupos, solicitud) => {
-        const propiedadId = solicitud.propiedad.id;
-
-        if (!grupos[propiedadId]) {
-            grupos[propiedadId] = {
-                titulo: solicitud.propiedad.titulo,
-                solicitudes: [],
-            };
-        }
-        grupos[propiedadId].solicitudes.push(solicitud);
-        return grupos;
-    }, {} as Record<number, {
-        titulo: string;
-        solicitudes: SolicitudVisita[];
-    }>
-    );
 
     return (
         <section className={styles.contenedor}>
             <h1 className={styles.titulo}>
                 Solicitudes de visita
             </h1>
+
             <div className={styles.filtros}>
                 <button
                     className={styles.botonFiltro}
@@ -181,6 +53,7 @@ export default function SolicitudesVisita() {
                     disabled={filtro === "PENDIENTES"}>
                     Pendientes
                 </button>
+
                 <button
                     className={styles.botonFiltro}
                     type="button"
@@ -195,105 +68,28 @@ export default function SolicitudesVisita() {
                     {errorAccion}
                 </p>
             )}
-            
+
             {solicitudesFiltradas.length === 0 ? (
-                <EstadoVacio mensaje="No hay solicitudes de visita"/>
+                <EstadoVacio mensaje="No hay solicitudes de visita" />
             ) : (
-                Object.entries(solicitudesPorPropiedad).map(
-                    ([propiedadId, grupo]) => (
-                        <section key={propiedadId}
-                            className={styles.grupoPropiedad}>
-                            <h2 className={styles.tituloPropiedad}>
-                                {grupo.titulo}
-                            </h2>
-                            {grupo.solicitudes.map((solicitud) => (
-                                <article
-                                    key={solicitud.id}
-                                    id={`visita-${solicitud.id}`}
-                                    className={styles.tarjeta}>
-                                    <p>
-                                        <strong>Nombre:</strong>{" "}
-                                        {solicitud.nombreSolicitante}
-                                    </p>
-                                    <p>
-                                        <strong>Teléfono:</strong>{" "}
-                                        <a className={styles.telefono}
-                                            href={`tel:${solicitud.telefono.replace(/[^\d+]/g, "")}`}>
-                                            {solicitud.telefono}
-                                        </a>
-                                    </p>
-                                    <p>
-                                        <strong>Fecha propuesta:</strong>{" "}
-                                        {new Date(solicitud.fechaPropuesta).toLocaleString("es-AR")}
-                                    </p>
-                                    {solicitud.mensaje && (
-                                        <p>
-                                            <strong>Mensaje:</strong>{" "}
-                                            {solicitud.mensaje}
-                                        </p>
-                                    )}
-                                    <p>
-                                        <strong>Estado:</strong>{" "}
-                                        <span className={styles.estado}>
-                                            {solicitud.estado}
-                                        </span>
-                                    </p>
-
-                                    {solicitud.estado === "PENDIENTE" && (
-                                        <div className={styles.acciones}>
-                                            <button
-                                                className={styles.boton}
-                                                type="button"
-                                                disabled={actualizadoId === solicitud.id}
-                                                onClick={() => cambiarEstado(solicitud.id, "CONFIRMADA")}>
-                                                Confirmar
-                                            </button>
-                                            <button
-                                                className={styles.boton}
-                                                type="button"
-                                                disabled={actualizadoId === solicitud.id}
-                                                onClick={() => cambiarEstado(solicitud.id, "RECHAZADA")}>
-                                                Rechazar
-                                            </button>
-                                        </div>
-                                    )}
-
-                                    {solicitud.estado === "CONFIRMADA" && (
-                                        <div className={styles.acciones}>
-                                            <button
-                                                className={styles.boton}
-                                                type="button"
-                                                disabled={actualizadoId === solicitud.id}
-                                                onClick={() => cambiarEstado(solicitud.id, "REALIZADA")}>
-                                                Marcar realizada
-                                            </button>
-                                            <button
-                                                className={styles.boton}
-                                                type="button"
-                                                disabled={actualizadoId === solicitud.id}
-                                                onClick={() => cambiarEstado(solicitud.id, "CANCELADA")}>
-                                                Cancelar
-                                            </button>
-                                        </div>
-                                    )}
-
-                                </article>
-                            ))}
-                        </section>
-                    )
-                )
+                Object.entries(solicitudesPorPropiedad).map(([propiedadId, grupo]) => (
+                    <GrupoSolicitudesVisita
+                        key={propiedadId}
+                        titulo={grupo.titulo}
+                        solicitudes={grupo.solicitudes}
+                        actualizadoId={actualizadoId}
+                        onCambiarEstado={cambiarEstado} />
+                ))
             )}
+
             <DialogoConfirmacion
-            abierto={confirmacion !== null}
-            titulo={confirmacion?.titulo ?? ""}
-            mensaje={confirmacion?.mensaje ?? ""}
-            textoConfirmar={confirmacion?.textoConfirmar ?? "Confirmar"}
-            cargando={confirmacion !== null &&
-                actualizadoId === confirmacion.solicitudId
-            }
-            onConfirmar={confirmarCambioEstado}
-            onCancelar={() => setConfirmacion(null)}
-            />
+                abierto={confirmacion !== null}
+                titulo={confirmacion?.titulo ?? ""}
+                mensaje={confirmacion?.mensaje ?? ""}
+                textoConfirmar={confirmacion?.textoConfirmar ?? "Confirmar"}
+                cargando={confirmacion !== null && actualizadoId === confirmacion.solicitudId}
+                onConfirmar={confirmarCambioEstado}
+                onCancelar={() => setConfirmacion(null)} />
         </section>
     );
 }

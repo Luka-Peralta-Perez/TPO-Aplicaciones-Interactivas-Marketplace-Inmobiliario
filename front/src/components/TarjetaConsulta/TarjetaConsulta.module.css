@@ -1,0 +1,103 @@
+.tarjeta {
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    overflow-wrap: anywhere;
+}
+
+.tarjeta p {
+    margin: 6px 0;
+}
+
+.encabezadoConsulta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-width: 0;
+    margin-bottom: 8px;
+}
+
+.fecha {
+    color: #666;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.estadoPendiente,
+.estadoRespondida {
+    display: inline-block;
+    max-width: 100%;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #f1f1f1;
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.respuesta {
+    min-width: 0;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f7f7f7;
+    overflow-wrap: anywhere;
+}
+
+.formRespuesta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    margin-top: 12px;
+}
+
+.textarea {
+    width: 100%;
+    min-width: 0;
+    resize: vertical;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.boton {
+    align-self: flex-start;
+    max-width: 100%;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.boton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error {
+    color: #b00020;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .tarjeta {
+        padding: 14px;
+    }
+
+    .encabezadoConsulta {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .boton {
+        width: 100%;
+        align-self: stretch;
+    }
+}

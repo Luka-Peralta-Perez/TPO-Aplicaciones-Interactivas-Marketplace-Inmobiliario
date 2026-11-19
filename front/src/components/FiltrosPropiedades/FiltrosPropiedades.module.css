@@ -1,0 +1,73 @@
+.filtros {
+    padding: 1.5rem;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.campoBusqueda,
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.campoBusqueda {
+    margin-bottom: 1rem;
+}
+
+.grillaFiltros {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.campo input,
+.campo select,
+.campoBusqueda input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.7rem;
+    border: 1px solid #bbbbbb;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.error {
+    margin: 0.3rem 0 0;
+    color: #c62828;
+    font-size: 0.9rem;
+}
+
+.accionesFiltros {
+    display: flex;
+    gap: 0.7rem;
+    margin-top: 1rem;
+}
+
+.accionesFiltros button {
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .grillaFiltros {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .grillaFiltros {
+        grid-template-columns: 1fr;
+    }
+
+    .accionesFiltros {
+        flex-direction: column;
+    }
+
+    .accionesFiltros button {
+        width: 100%;
+    }
+}

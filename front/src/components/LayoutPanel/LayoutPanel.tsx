@@ -53,12 +53,22 @@ export default function LayoutPanel() {
     return (
         <>
             <header className={styles.header}>
-                <strong>Panel del vendedor</strong>
+                <div className={styles.tituloPanel}>
+                    <strong>Panel del vendedor</strong>
+                    <NavLink
+                        to="/panel/inmobiliaria"
+                        className={styles.enlaceInmobiliaria}
+                    >
+                        Mi inmobiliaria
+                    </NavLink>
+                </div>
 
                 <nav className={styles.nav}>
+
                     <NavLink
                         to="/panel/propiedades"
-                        className={claseEnlace}>
+                        className={claseEnlace}
+                    >
                         Mis propiedades
                     </NavLink>
 

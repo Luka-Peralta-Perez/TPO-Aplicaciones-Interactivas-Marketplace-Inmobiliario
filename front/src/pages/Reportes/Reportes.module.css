@@ -56,72 +56,6 @@
     overflow-wrap: anywhere;
 }
 
-.grafico {
-    display: flex;
-    align-items: flex-end;
-    gap: 1.5rem;
-    min-width: 0;
-    min-height: 220px;
-    overflow-x: auto;
-    padding: 1rem 0;
-}
-
-.grupoMes {
-    min-width: 110px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.barras {
-    height: 170px;
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-}
-
-.barra {
-    width: 28px;
-    min-height: 0;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 4px;
-    border-radius: 5px 5px 0 0;
-    font-size: 0.75rem;
-}
-
-.publicaciones {
-    background: #315a8a;
-    color: white;
-}
-
-.ventas {
-    background: #4e8b57;
-    color: white;
-}
-
-.alquileres {
-    background: #c78a32;
-    color: white;
-}
-
-.mes {
-    font-size: 0.85rem;
-    text-align: center;
-    overflow-wrap: anywhere;
-}
-
-.leyenda {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    min-width: 0;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-}
-
 .tiempoPromedio {
     display: flex;
     align-items: baseline;
@@ -144,16 +78,6 @@
     overflow-wrap: anywhere;
 }
 
-.error {
-    color: #b00020;
-    overflow-wrap: anywhere;
-}
-
-.vacio {
-    color: #666;
-    overflow-wrap: anywhere;
-}
-
 @media (max-width: 600px) {
     .contenedor {
         padding: 1rem;
@@ -169,24 +93,6 @@
 
     .tarjetas {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .grafico {
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: flex-end;
-        gap: 1rem;
-        overflow-x: visible;
-    }
-
-    .grupoMes {
-        flex: 1 1 90px;
-        min-width: 0;
-        max-width: 120px;
-    }
-
-    .leyenda {
-        gap: 0.75rem 1rem;
     }
 
     .tiempoPromedio strong {

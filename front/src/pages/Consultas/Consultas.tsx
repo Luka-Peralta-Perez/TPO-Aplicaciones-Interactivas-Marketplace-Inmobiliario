@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
-import { comentariosService } from "../../services/comentarios";
 import type { ComentarioPropiedad, PropiedadPanel } from "../../types";
 import styles from "./Consultas.module.css";
 import { useSearchParams } from "react-router-dom";
 import { EstadoCarga, EstadoVacio, EstadoError } from "../../components/Estados/Estados";
+import { TarjetaConsulta } from "../../components/TarjetaConsulta/TarjetaConsulta";
 
 type GrupoConsultas = {
     propiedad: PropiedadPanel;
@@ -16,9 +16,6 @@ export default function Consultas() {
     const [grupos, setGrupos] = useState<GrupoConsultas[]>([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [respuestas, setRespuestas] = useState<Record<number, string>>({});
-    const [respondiendoId, setRespondiendoId] = useState<number | null>(null);
-    const [errorRespuesta, setErrorRespuesta] = useState<Record<number, string>>({});
     const [searchParams] = useSearchParams();
     const comentarioOrigen = searchParams.get("comentario");
 
@@ -65,58 +62,21 @@ export default function Consultas() {
         });
     }, [cargando, comentarioOrigen]);
 
-    async function responderComentario(comentarioId: number) {
-        const respuesta = respuestas[comentarioId]?.trim();
-
-        if (!respuesta) {
-            setErrorRespuesta((anteriores) => ({
-                ...anteriores,
-                [comentarioId]: "La respuesta no puede estar vacía.",
-            }));
-            return;
-        }
-
-        try {
-            setRespondiendoId(comentarioId);
-            setError(null);
-            setErrorRespuesta((anteriores) => ({
-                ...anteriores,
-                [comentarioId]: "",
-            }));
-
-            await comentariosService.responder(comentarioId, respuesta);
-
-            setGrupos((anteriores) => anteriores.map((grupo) => ({
-                ...grupo,
-                comentarios: grupo.comentarios.map((comentario) =>
-                    comentario.id === comentarioId ? {
-                        ...comentario,
-                        respuesta,
-                    }
-                        : comentario
-                ),
-            })));
-
-            setRespuestas((anteriores) => {
-                const nuevas = { ...anteriores };
-                delete nuevas[comentarioId];
-                return nuevas;
-            });
-        } catch (error) {
-            if (error instanceof ApiError) {
-                setError(error.message);
-            } else {
-                setError("No se pudo responder la consulta.");
-            }
-        } finally {
-            setRespondiendoId(null);
-        }
+    function actualizarRespuesta(comentarioId: number, respuesta: string) {
+        setGrupos((anteriores) => anteriores.map((grupo) => ({
+            ...grupo,
+            comentarios: grupo.comentarios.map((comentario) =>
+                comentario.id === comentarioId
+                    ? { ...comentario, respuesta }
+                    : comentario
+            ),
+        })));
     }
 
     if (cargando) {
         return (
             <section className={styles.contenedor}>
-                <EstadoCarga mensaje="Cargando consultas..."/>
+                <EstadoCarga mensaje="Cargando consultas..." />
             </section>
         );
     }
@@ -126,74 +86,25 @@ export default function Consultas() {
             <h1 className={styles.titulo}>
                 Consultas recibidas
             </h1>
-            {error && (
-                <EstadoError mensaje={error}/>
-            )}
-            {grupos.length === 0 ? (
-                <EstadoVacio mensaje="No hay consultas recibidas."/>
+            {error ? (
+                <EstadoError mensaje={error} />
+            ) : grupos.length === 0 ? (
+                <EstadoVacio mensaje="No hay consultas recibidas." />
             ) : (
                 grupos.map((grupo) => (
-                    <section key={grupo.propiedad.id}
+                    <section
+                        key={grupo.propiedad.id}
                         className={styles.grupoPropiedad}>
                         <h2 className={styles.tituloPropiedad}>
                             {grupo.propiedad.titulo}
                         </h2>
+
                         {grupo.comentarios.map((comentario) => (
-                            <article
+                            <TarjetaConsulta
                                 key={comentario.id}
-                                id={`comentario-${comentario.id}`}
-                                className={styles.tarjeta}>
-                                <div className={styles.encabezadoConsulta}>
-                                    <strong>{comentario.nombreAutor}</strong>
-                                    <span className={styles.fecha}>
-                                        {new Date(comentario.creadoEn).toLocaleDateString("es-AR")}
-                                    </span>
-                                </div>
-                                <p>{comentario.contenido}</p>
-                                {comentario.respuesta ? (
-                                    <div className={styles.respuesta}>
-                                        <span className={styles.estadoRespondida}>
-                                            Respondida ✓
-                                        </span>
-                                        <p>
-                                            <strong>Respuesta:</strong>
-                                            {" "}
-                                            {comentario.respuesta}
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <div className={styles.formRespuesta}>
-                                        <span className={styles.estadoPendiente}>
-                                            Pendiente
-                                        </span>
-                                        <textarea
-                                            className={styles.textarea}
-                                            rows={3}
-                                            placeholder="Escribir respuesta..."
-                                            value={respuestas[comentario.id] ?? ""}
-                                            onChange={(event) => setRespuestas((anteriores) => ({
-                                                ...anteriores,
-                                                [comentario.id]: event.target.value,
-                                            }))
-                                            }
-                                        />
-                                        {errorRespuesta[comentario.id] && (
-                                            <p className={styles.error}>
-                                                {errorRespuesta[comentario.id]}
-                                            </p>
-                                        )}
-                                        <button
-                                            className={styles.boton}
-                                            type="button"
-                                            disabled={respondiendoId === comentario.id}
-                                            onClick={() => responderComentario(comentario.id)}>
-                                            {respondiendoId === comentario.id ? "Enviando..." : "Responder"}
-                                        </button>
-                                    </div>
-                                )}
-                            </article>
-                        )
-                        )}
+                                comentario={comentario}
+                                onRespondida={actualizarRespuesta} />
+                        ))}
                     </section>
                 ))
             )}

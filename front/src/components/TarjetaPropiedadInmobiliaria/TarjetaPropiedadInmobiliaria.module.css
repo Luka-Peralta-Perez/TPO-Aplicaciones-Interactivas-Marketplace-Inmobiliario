@@ -1,0 +1,30 @@
+.tarjeta {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+.tarjeta img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.contenidoTarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 1rem;
+}
+
+.contenidoTarjeta h3,
+.contenidoTarjeta p {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.contenidoTarjeta strong {
+    overflow-wrap: anywhere;
+}

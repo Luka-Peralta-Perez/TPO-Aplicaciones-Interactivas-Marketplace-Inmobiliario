@@ -22,7 +22,7 @@ export default function LayoutPublico() {
         <>
             <header className={styles.header}>
                 <Link
-                    to="7"
+                    to="/"
                     className={styles.marca}>
                     MarketPlace Inmobiliario
                 </Link>

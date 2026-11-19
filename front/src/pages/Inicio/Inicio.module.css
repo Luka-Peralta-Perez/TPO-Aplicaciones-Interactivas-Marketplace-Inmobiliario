@@ -8,53 +8,6 @@
     margin-bottom: 1.5rem;
 }
 
-.filtros {
-    padding: 1.5rem;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-}
-
-.campoBusqueda,
-.campo {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-}
-
-.campoBusqueda {
-    margin-bottom: 1rem;
-}
-
-.grillaFiltros {
-    display: grid;
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-    gap: 1rem;
-}
-
-.campo input,
-.campo select,
-.campoBusqueda input {
-    width: 100%;
-    min-width: 0;
-    padding: 0.7rem;
-    border: 1px solid #bbbbbb;
-    border-radius: 6px;
-    font: inherit;
-}
-
-.accionesFiltros {
-    display: flex;
-    gap: 0.7rem;
-    margin-top: 1rem;
-}
-
-.accionesFiltros button {
-    padding: 0.7rem 1rem;
-    cursor: pointer;
-}
-
 .resultados {
     margin-bottom: 1rem;
 }
@@ -64,49 +17,6 @@
     grid-template-columns:
         repeat(3, minmax(0, 1fr));
     gap: 1.5rem;
-}
-
-.tarjeta {
-    min-width: 0;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.imagen {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-.contenido {
-    min-width: 0;
-    padding: 1rem;
-}
-
-.contenido h2 {
-    margin: 0.5rem 0;
-}
-
-.contenido h2, 
-.contenido p {
-    overflow-wrap: anywhere;
-}
-
-.operacion {
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.precio {
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-.error {
-    padding: 0.8rem;
-    border: 1px solid #c62828;
-    border-radius: 6px;
 }
 
 .paginacion {
@@ -123,11 +33,6 @@
 }
 
 @media (max-width: 900px) {
-    .grillaFiltros {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
     .propiedades {
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
@@ -138,20 +43,11 @@
     .contenedor {
         padding: 1.25rem 1rem;
     }
-    .filtros {
-        padding: 1rem;
-    }
-    .grillaFiltros,
+    
     .propiedades {
         grid-template-columns: 1fr;
     }
 
-    .accionesFiltros {
-        flex-direction: column;
-    }
-    .accionesFiltros button {
-        width: 100%;
-    }
     .paginacion {
         flex-wrap: wrap;
         gap: 0.75rem;
@@ -159,8 +55,5 @@
     .paginacion button {
         flex: 1;
         min-width: 0;
-    }
-    .imagen {
-        height: 200px;
     }
 }

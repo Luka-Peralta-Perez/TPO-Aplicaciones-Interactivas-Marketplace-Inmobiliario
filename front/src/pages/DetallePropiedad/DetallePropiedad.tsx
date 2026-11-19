@@ -1,46 +1,20 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ApiError } from "../../comun/api";
 import { propiedadesService } from "../../services/propiedades";
 import type { PropiedadDetalle as PropiedadDetalleType, ComentarioPropiedad } from "../../types";
 import styles from "./DetallePropiedad.module.css";
 import { EstadoCarga, EstadoError, EstadoVacio } from "../../components/Estados/Estados";
-
-type ErroresConsulta = {
-    nombreAutor?: string;
-    contenidoConsulta?: string;
-};
-
-type ErroresVisita = {
-    nombreVisita?: string;
-    telefonoVisita?: string;
-    fechaVisita?: string;
-};
+import { FormularioVisita } from "../../components/FormularioVisita/FormularioVisita";
+import { FormularioConsulta } from "../../components/FormularioConsulta/FormularioConsulta";
+import { GaleriaPropiedad } from "../../components/GaleriaPropiedad/GaleriaPropiedad";
 
 export default function DetallePropiedad() {
     const { id } = useParams();
     const [propiedad, setPropiedad] = useState<PropiedadDetalleType | null>(null);
-    const [fotoSeleccionada, setFotoSeleccionada] = useState("");
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
     const [comentarios, setComentarios] = useState<ComentarioPropiedad[]>([]);
-    const [nombreAutor, setNombreAutor] = useState("");
-    const [contenidoConsulta, setContenidoConsulta] = useState("");
-    const [enviandoConsulta, setEnviandoConsulta] = useState(false);
-    const [errorConsulta, setErrorConsulta] = useState<string | null>(null);
-
-    const [nombreVisita, setNombreVisita] = useState("");
-    const [telefonoVisita, setTelefonoVisita] = useState("");
-    const [fechaVisita, setFechaVisita] = useState("");
-    const [mensajeVisita, setMensajeVisita] = useState("");
-    const [enviandoVisita, setEnviandoVisita] = useState(false);
-    const [errorVisita, setErrorVisita] = useState<string | null>(null);
-    const [exitoVisita, setExitoVisita] = useState<string | null>(null);
-    const [mostrarFormularioVisita, setMostrarFormularioVisita] = useState(false);
-
-    const [erroresConsulta, setErroresConsulta] = useState<ErroresConsulta>({});
-    const [erroresVisita, setErroresVisita] = useState<ErroresVisita>({});
 
     useEffect(() => {
         async function cargarPropiedad() {
@@ -62,7 +36,6 @@ export default function DetallePropiedad() {
 
                 setPropiedad(datos);
                 setComentarios(comentariosPropiedad);
-                setFotoSeleccionada(datos.fotoPortada || datos.fotos[0] || "");
             } catch (error) {
                 if (error instanceof ApiError) {
                     setError(error.message);
@@ -75,117 +48,6 @@ export default function DetallePropiedad() {
         }
         cargarPropiedad();
     }, [id]);
-
-    async function enviarConsulta(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        if (!propiedad) {
-            return;
-        }
-
-        setErroresConsulta({});
-        setErrorConsulta(null);
-
-        const nuevosErrores: ErroresConsulta = {};
-
-        if (!nombreAutor.trim()) {
-            nuevosErrores.nombreAutor = "Ingresá tu nombre.";
-        }
-
-        if (!contenidoConsulta.trim()) {
-            nuevosErrores.contenidoConsulta = "La consulta no puede estar vacía.";
-        }
-
-        if (Object.keys(nuevosErrores).length > 0) {
-            setErroresConsulta(nuevosErrores);
-            return;
-        }
-
-        try {
-            setEnviandoConsulta(true);
-
-            const nuevaConsulta = await propiedadesService.crearComentario(propiedad.id, {
-                nombreAutor: nombreAutor.trim(),
-                contenido: contenidoConsulta.trim(),
-            });
-
-            setComentarios((anteriores) => [...anteriores, nuevaConsulta]);
-            setNombreAutor("");
-            setContenidoConsulta("");
-        } catch (error) {
-            if (error instanceof ApiError) {
-                setErrorConsulta(error.message);
-            } else {
-                setErrorConsulta("No se pudo enviar la consulta.")
-            }
-        } finally {
-            setEnviandoConsulta(false);
-        }
-    }
-
-    async function enviarSolicitudVisita(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        if (!propiedad) {
-            return;
-        }
-        setErroresVisita({});
-        setErrorVisita(null);
-        setExitoVisita(null);
-
-        const nuevosErrores: ErroresVisita = {};
-
-        if (!nombreVisita.trim()) {
-            nuevosErrores.nombreVisita = "Ingresá tu nombre.";
-        }
-
-        if (!telefonoVisita.trim()) {
-            nuevosErrores.telefonoVisita = "Ingresá tu teléfono.";
-        }
-
-        if (!fechaVisita) {
-            nuevosErrores.fechaVisita = "Seleccioná una fecha y hora.";
-        } else {
-            const fechaSeleccionada = new Date(fechaVisita);
-
-            if (Number.isNaN(fechaSeleccionada.getTime()) ||
-                fechaSeleccionada <= new Date()
-            ) {
-                nuevosErrores.fechaVisita = "La fecha de la visita debe ser futura.";
-            }
-        }
-
-        if (Object.keys(nuevosErrores).length > 0) {
-            setErroresVisita(nuevosErrores);
-            return;
-        }
-
-        const fechaSeleccionada = new Date(fechaVisita);
-
-        try {
-            setEnviandoVisita(true);
-            await propiedadesService.crearSolicitudVisita(propiedad.id, {
-                nombreSolicitante: nombreVisita.trim(),
-                telefono: telefonoVisita.trim(),
-                fechaPropuesta: fechaSeleccionada.toISOString(),
-                mensaje: mensajeVisita.trim() || undefined,
-            });
-            setNombreVisita("");
-            setTelefonoVisita("");
-            setFechaVisita("");
-            setMensajeVisita("");
-            setExitoVisita("La solicitud de visita fue enviada correctamente.");
-        } catch (error) {
-            if (error instanceof ApiError) {
-                setErrorVisita(error.message);
-            } else {
-                setErrorVisita("No se pudo enviar la solicitud de visita");
-            }
-        } finally {
-            setEnviandoVisita(false);
-        }
-    }
-
 
     if (cargando) {
         return (
@@ -214,33 +76,11 @@ export default function DetallePropiedad() {
                 </Link>
             </div>
 
-            <div className={styles.galeria}>
-                {fotoSeleccionada && (
-                    <img
-                        src={fotoSeleccionada}
-                        alt={propiedad.titulo}
-                        className={styles.fotoPrincipal} />
-                )}
-
-                {propiedad.fotos.length > 1 && (
-                    <div className={styles.miniaturas}>
-                        {propiedad.fotos.map(
-                            (foto, index) => (
-                                <button
-                                    key={`${foto}-${index}`}
-                                    type="button"
-                                    className={styles.botonMiniatura}
-                                    onClick={() => setFotoSeleccionada(foto)}>
-                                    <img
-                                        src={foto}
-                                        alt={`${propiedad.titulo} ${index + 1}`}
-                                        className={styles.miniatura} />
-                                </button>
-                            )
-                        )}
-                    </div>
-                )}
-            </div>
+            <GaleriaPropiedad
+                key={propiedad.id}
+                titulo={propiedad.titulo}
+                fotos={propiedad.fotos}
+                fotoPortada={propiedad.fotoPortada}/>
 
             <div className={styles.informacion}>
                 <div>
@@ -349,100 +189,7 @@ export default function DetallePropiedad() {
             )}
 
             {propiedad.estado === "PUBLICADA" && (
-                <div className={styles.seccion}>
-                    <button
-                        type="button"
-                        onClick={() => setMostrarFormularioVisita((anterior) => !anterior)}>
-                        {mostrarFormularioVisita ? "Cerrar formulario" : "Pedir visita"}
-                    </button>
-                    {mostrarFormularioVisita && (
-                        <form className={styles.formConsulta}
-                            onSubmit={enviarSolicitudVisita}
-                            noValidate>
-                            <div className={styles.campoConsulta}>
-                                <label htmlFor="nombreVisita">
-                                    Nombre
-                                </label>
-                                <input
-                                    id="nombreVisita"
-                                    type="text"
-                                    value={nombreVisita}
-                                    onChange={(event) => setNombreVisita(event.target.value)} />
-
-                                {erroresVisita.nombreVisita && (
-                                    <p className={styles.errorConsulta}>
-                                        {erroresVisita.nombreVisita}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className={styles.campoConsulta}>
-                                <label htmlFor="telefonoVisita">
-                                    Teléfono
-                                </label>
-                                <input
-                                    id="telefonoVisita"
-                                    type="tel"
-                                    value={telefonoVisita}
-                                    onChange={(event) => setTelefonoVisita(event.target.value)} />
-
-                                {erroresVisita.telefonoVisita && (
-                                    <p className={styles.errorConsulta}>
-                                        {erroresVisita.telefonoVisita}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className={styles.campoConsulta}>
-                                <label htmlFor="fechaVisita">
-                                    Fecha y hora
-                                </label>
-                                <input
-                                    id="fechaVisita"
-                                    type="datetime-local"
-                                    value={fechaVisita}
-                                    min={new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                                        .toISOString()
-                                        .slice(0, 16)}
-                                    onChange={(event) => setFechaVisita(event.target.value)} />
-
-                                {erroresVisita.fechaVisita && (
-                                    <p className={styles.errorConsulta}>
-                                        {erroresVisita.fechaVisita}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className={styles.campoConsulta}>
-                                <label htmlFor="mensajeVisita">
-                                    Mensaje (opcional)
-                                </label>
-                                <textarea
-                                    id="mensajeVisita"
-                                    rows={4}
-                                    value={mensajeVisita}
-                                    onChange={(event) => setMensajeVisita(event.target.value)} />
-                            </div>
-
-                            {errorVisita && (
-                                <p className={styles.errorConsulta}>
-                                    {errorVisita}
-                                </p>
-                            )}
-                            {exitoVisita && (
-                                <p className={styles.exitoVisita}>
-                                    {exitoVisita}
-                                </p>
-                            )}
-
-                            <button
-                                type="submit"
-                                disabled={enviandoVisita}>
-                                {enviandoVisita ? "Enviando..." : "Pedir visita"}
-                            </button>
-                        </form>
-                    )}
-                </div>
+                <FormularioVisita propiedadId={propiedad.id} />
             )}
 
             <div className={styles.seccion}>
@@ -472,56 +219,13 @@ export default function DetallePropiedad() {
                         ))}
                     </div>
                 )}
-                <form
-                    className={styles.formConsulta}
-                    onSubmit={enviarConsulta}
-                    noValidate>
-                    <h3>Dejar una consulta</h3>
-                    <div className={styles.campoConsulta}>
-                        <label htmlFor="nombreAutor">
-                            Nombre
-                        </label>
-                        <input
-                            id="nombreAutor"
-                            type="text"
-                            value={nombreAutor}
-                            onChange={(event) => setNombreAutor(event.target.value)} />
-
-                        {erroresConsulta.nombreAutor && (
-                            <p className={styles.errorConsulta}>
-                                {erroresConsulta.nombreAutor}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className={styles.campoConsulta}>
-                        <label htmlFor="consulta">
-                            Consulta
-                        </label>
-                        <textarea
-                            id="consulta"
-                            rows={4}
-                            value={contenidoConsulta}
-                            onChange={(event) => setContenidoConsulta(event.target.value)} />
-
-                            {erroresConsulta.contenidoConsulta && (
-                            <p className={styles.errorConsulta}>
-                                {erroresConsulta.contenidoConsulta}
-                            </p>
-                        )}
-                    </div>
-
-                    {errorConsulta && (
-                        <p className={styles.errorConsulta}>
-                            {errorConsulta}
-                        </p>
-                    )}
-                    <button
-                        type="submit"
-                        disabled={enviandoConsulta}>
-                        {enviandoConsulta ? "Enviando..." : "Enviar consulta"}
-                    </button>
-                </form>
+                <FormularioConsulta propiedadId={propiedad.id}
+                    onConsultaCreada={(nuevaConsulta) =>
+                        setComentarios((anteriores) => [
+                            ...anteriores,
+                            nuevaConsulta,
+                        ])
+                    } />
             </div>
         </section>
     );
