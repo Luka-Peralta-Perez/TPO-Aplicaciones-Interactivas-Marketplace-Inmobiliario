@@ -5,6 +5,19 @@
     padding: 2rem 1.5rem;
 }
 
+.volver {
+    display: inline-block;
+    color: #315c52;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.volver:hover {
+    color: #26483f;
+    transform: translateX(-2px);
+}
+
 .perfil {
     display: flex;
     gap: 1.5rem;
@@ -27,7 +40,9 @@
     width: 120px;
     height: 120px;
     object-fit: contain;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 12px;
+    background: white;
 }
 
 .contacto {
@@ -43,13 +58,26 @@
     flex-direction: column;
     gap: 0.3rem;
     padding: 1rem;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 10px;
+    background: #fbfdfc;
 }
 
 .contacto a,
 .contacto span {
     overflow-wrap: anywhere;
+}
+
+.telefono {
+    color: #315c52;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.telefono:hover {
+    color: #26483f;
+    text-decoration: underline;
 }
 
 .seccion {
@@ -73,8 +101,9 @@
 .resenia {
     min-width: 0;
     padding: 1rem;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 10px;
+    background: white;
     overflow-wrap: anywhere;
 }
 
@@ -83,6 +112,10 @@
     justify-content: space-between;
     gap: 1rem;
     min-width: 0;
+}
+
+.encabezadoResenia span {
+    color: #b78628;
 }
 
 @media (max-width: 800px) {

@@ -33,10 +33,19 @@
     margin-top: 8px;
     padding: 4px 10px;
     border-radius: 999px;
-    background: #f1f1f1;
     font-size: 14px;
     font-weight: 600;
     overflow-wrap: anywhere;
+}
+
+.estadoPendiente {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.estadoRespondida {
+    background: #dcfce7;
+    color: #166534;
 }
 
 .respuesta {
@@ -44,7 +53,8 @@
     margin-top: 12px;
     padding: 12px;
     border-radius: 8px;
-    background: #f7f7f7;
+    background: #f0fdf4;
+    border: 1px solid #dcfce7;
     overflow-wrap: anywhere;
 }
 

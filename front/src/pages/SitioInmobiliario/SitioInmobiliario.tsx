@@ -18,6 +18,7 @@ export default function SitioInmobiliario() {
     const [error, setError] = useState<string | null>(null);
     const [searchParams] = useSearchParams();
     const reseniaOrigen = searchParams.get("resenia");
+    const desdePanel = searchParams.get("desde") === "panel";
 
     useEffect(() => {
         async function cargarInmobiliaria() {
@@ -83,7 +84,7 @@ export default function SitioInmobiliario() {
         return (
             <section
                 className={styles.contenedor}>
-                <Link to="/">
+                <Link to="/" className={styles.volver}>
                     ← Volver
                 </Link>
                 <EstadoError mensaje={error ?? "No se encontró la inmobiliaria."} />
@@ -96,9 +97,15 @@ export default function SitioInmobiliario() {
 
     return (
         <section className={styles.contenedor}>
-            <Link to="/">
-                ← Volver a propiedades
-            </Link>
+            {desdePanel ? (
+                <Link to="/panel/actividad" className={styles.volver}>
+                    ← Volver al panel
+                </Link>
+            ) : (
+                <Link to="/" className={styles.volver}>
+                    ← Volver a propiedades
+                </Link>
+            )}
             <header className={styles.perfil}>
                 {inmobiliaria.logoUrl && (
                     <img
@@ -127,7 +134,9 @@ export default function SitioInmobiliario() {
                     <strong>
                         Teléfono
                     </strong>
-                    <a href={`tel:${inmobiliaria.telefonoContacto}`}>
+                    <a
+                        href={`tel:${inmobiliaria.telefonoContacto}`}
+                        className={styles.telefono}>
                         {inmobiliaria.telefonoContacto}
                     </a>
                 </div>
@@ -154,7 +163,7 @@ export default function SitioInmobiliario() {
                         {propiedades.map((propiedad) => (
                             <TarjetaPropiedadInmobiliaria
                                 key={propiedad.id}
-                                propiedad={propiedad}/>
+                                propiedad={propiedad} />
                         ))}
                     </div>
                 )}

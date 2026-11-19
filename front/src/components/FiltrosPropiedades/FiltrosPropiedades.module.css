@@ -1,8 +1,9 @@
 .filtros {
     padding: 1.5rem;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 12px;
     margin-bottom: 2rem;
+    background: #fbfdfc;
 }
 
 .campoBusqueda,
@@ -18,8 +19,7 @@
 
 .grillaFiltros {
     display: grid;
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem;
 }
 
@@ -28,10 +28,21 @@
 .campoBusqueda input {
     width: 100%;
     min-width: 0;
+    box-sizing: border-box;
     padding: 0.7rem;
-    border: 1px solid #bbbbbb;
-    border-radius: 6px;
+    border: 1px solid #cfd8d5;
+    border-radius: 8px;
+    background: white;
     font: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campoBusqueda input:focus {
+    border-color: #315c52;
+    box-shadow: 0 0 0 3px rgba(49, 92, 82, 0.12);
 }
 
 .error {
@@ -48,13 +59,35 @@
 
 .accionesFiltros button {
     padding: 0.7rem 1rem;
+    border-radius: 8px;
     cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+}
+
+.accionesFiltros button[type="submit"] {
+    border: none;
+    background: #315c52;
+    color: white;
+}
+
+.accionesFiltros button[type="submit"]:hover {
+    background: #26483f;
+}
+
+.accionesFiltros button[type="button"] {
+    border: 1px solid #cfd8d5;
+    background: white;
+    color: #315c52;
+}
+
+.accionesFiltros button[type="button"]:hover {
+    background: #eef4f1;
 }
 
 @media (max-width: 900px) {
     .grillaFiltros {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 

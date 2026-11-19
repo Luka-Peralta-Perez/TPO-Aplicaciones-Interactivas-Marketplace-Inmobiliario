@@ -12,6 +12,16 @@ type Props = {
     ) => void;
 };
 
+const clasesEstado: Record<PropiedadPanelType["estado"], string> = {
+    BORRADOR: styles.borrador,
+    PUBLICADA: styles.publicada,
+    RESERVADA: styles.reservada,
+    PAUSADA: styles.pausada,
+    VENDIDA: styles.vendida,
+    ALQUILADA: styles.alquilada,
+    CANCELADA: styles.cancelada,
+};
+
 export function FilaPropiedadPanel({ propiedad, actualizando, onCambiarEstado }: Props) {
 
     function cambiarEstado(nuevoEstado: PropiedadPanelType["estado"]) {
@@ -45,7 +55,7 @@ export function FilaPropiedadPanel({ propiedad, actualizando, onCambiarEstado }:
             <td>{propiedad.zona}</td>
 
             <td>
-                <span className={styles.estado}>
+                <span className={`${styles.estado} ${clasesEstado[propiedad.estado]}`}>
                     {propiedad.estado}
                 </span>
             </td>

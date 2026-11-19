@@ -16,16 +16,19 @@
 .botonAccion {
     width: 100%;
     padding: 7px 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #cfd8d5;
     border-radius: 7px;
     background: white;
+    color: #315c52;
     cursor: pointer;
     font: inherit;
     font-size: 14px;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .botonAccion:hover:not(:disabled) {
-    background: #f3f3f3;
+    background: #eef4f1;
+    border-color: #315c52;
 }
 
 .botonAccion:disabled {
@@ -49,35 +52,78 @@
     background: #fff1f1;
 }
 
+.botonDestructivo:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .editar {
     width: 100%;
     box-sizing: border-box;
     padding: 7px 10px;
+    border: 1px solid #cfd8d5;
     border-radius: 7px;
+    background: white;
+    color: #315c52;
     text-align: center;
     text-decoration: none;
-    color: inherit;
-    border: 1px solid #ccc;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .editar:hover {
-    background: #f3f3f3;
+    background: #eef4f1;
+    border-color: #315c52;
 }
 
 .estado {
     display: inline-block;
     padding: 4px 9px;
     border-radius: 999px;
-    background: #f1f1f1;
     font-size: 13px;
     font-weight: 600;
+}
+
+.borrador {
+    background: #eeeeee;
+    color: #555;
+}
+
+.publicada {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.reservada {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.pausada {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.vendida {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.alquilada {
+    background: #ccfbf1;
+    color: #0f766e;
+}
+
+.cancelada {
+    background: #fee2e2;
+    color: #b91c1c;
 }
 
 .historial {
     margin-top: 10px;
     padding: 12px;
+    border: 1px solid #dfe7e4;
     border-radius: 8px;
-    background: #f7f7f7;
+    background: #fbfdfc;
     overflow-wrap: anywhere;
 }
 
@@ -92,13 +138,21 @@
 }
 
 .botonHistorial {
-    padding: 6px 10px;
+    padding: 6px 8px;
     border: none;
+    border-radius: 6px;
     background: transparent;
-    text-decoration: underline;
+    color: #315c52;
     cursor: pointer;
     font: inherit;
     font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.botonHistorial:hover {
+    background: #eef4f1;
+    color: #26483f;
 }
 
 @media (max-width: 600px) {

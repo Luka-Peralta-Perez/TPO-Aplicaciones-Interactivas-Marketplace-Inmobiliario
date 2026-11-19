@@ -7,13 +7,15 @@
 
 .seccion {
     padding: 1.5rem;
-    border: 1px solid #d8d8d8;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 12px;
+    background: #fbfdfc;
     min-width: 0;
 }
 
 .seccion h2 {
     margin-top: 0;
+    color: #243c36;
 }
 
 .grilla {
@@ -46,14 +48,28 @@
 .datosFoto input {
     width: 100%;
     min-width: 0;
-    padding: 0.7rem;
-    border: 1px solid #bdbdbd;
-    border-radius: 6px;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    border: 1px solid #cfd8d5;
+    border-radius: 8px;
+    background: white;
     font: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campoCompleto input:focus,
+.campoCompleto textarea:focus,
+.datosFoto input:focus {
+    border-color: #315c52;
+    box-shadow: 0 0 0 3px rgba(49, 92, 82, 0.12);
 }
 
 .campo input:disabled {
-    background: #eeeeee;
+    background: #f1f3f2;
+    cursor: not-allowed;
 }
 
 .amenities {
@@ -69,6 +85,22 @@
     gap: 0.5rem;
 }
 
+.checkbox {
+    padding: 0.45rem 0.7rem;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #e0e7e4;
+}
+
+.checkbox:hover {
+    background: #f3f7f5;
+}
+
+.checkbox input,
+.portada input {
+    accent-color: #315c52;
+}
+
 .encabezadoFotos {
     display: flex;
     justify-content: space-between;
@@ -79,6 +111,7 @@
 
 .encabezadoFotos p {
     margin-bottom: 0;
+    color: #555;
 }
 
 .listaFotos {
@@ -92,8 +125,9 @@
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    border: 1px solid #d8d8d8;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 10px;
+    background: white;
     min-width: 0;
 }
 
@@ -109,7 +143,7 @@
     width: 180px;
     height: 120px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 .accionesFoto {
@@ -119,7 +153,31 @@
 }
 
 .accionesFoto button {
-    padding: 0.4rem 0.7rem;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid #cfd8d5;
+    border-radius: 7px;
+    background: #f7f9f8;
+    cursor: pointer;
+    font: inherit;
+}
+
+.accionesFoto button:hover:not(:disabled) {
+    background: #eef4f1;
+}
+
+.accionesFoto button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.botonEliminar {
+    border-color: #f1b5b5 !important;
+    background: #fff8f8 !important;
+    color: #b00020;
+}
+
+.botonEliminar:hover:not(:disabled) {
+    background: #feecec !important;
 }
 
 .acciones {
@@ -131,19 +189,31 @@
 .botonPrincipal,
 .botonSecundario {
     padding: 0.7rem 1rem;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .botonPrincipal {
     border: none;
-    background: #222222;
+    background: #315c52;
     color: white;
 }
 
+.botonPrincipal:hover:not(:disabled) {
+    background: #26483f;
+}
+
 .botonSecundario {
-    border: 1px solid #999999;
+    border: 1px solid #315c52;
     background: white;
+    color: #315c52;
+}
+
+.botonSecundario:hover:not(:disabled) {
+    background: #eef4f1;
 }
 
 .botonPrincipal:disabled,
@@ -153,9 +223,12 @@
 }
 
 .error {
+    margin: 0;
     padding: 0.8rem;
-    border: 1px solid #c62828;
-    border-radius: 6px;
+    border: 1px solid #f1b5b5;
+    border-radius: 8px;
+    background: #fff8f8;
+    color: #b00020;
     overflow-wrap: anywhere;
 }
 

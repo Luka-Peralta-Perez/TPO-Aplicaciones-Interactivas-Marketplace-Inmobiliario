@@ -17,17 +17,19 @@
 }
 
 .botonNuevaPropiedad {
-    padding: 7px 12px;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    background: white;
-    color: inherit;
+    padding: 0.65rem 0.9rem;
+    border: none;
+    border-radius: 8px;
+    background: #315c52;
+    color: white;
     text-decoration: none;
     font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s ease;
 }
 
 .botonNuevaPropiedad:hover {
-    background: #f3f3f3;
+    background: #26483f;
 }
 
 .tablaContenedor {
@@ -38,18 +40,38 @@
 .tabla {
     width: 100%;
     min-width: 700px;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
 .tabla th,
 .tabla td {
-    padding: 0.75rem;
-    border-bottom: 1px solid #d8d8d8;
+    padding: 0.9rem 0.75rem;
+    border-bottom: 1px solid #dfe7e4;
     text-align: left;
 }
 
 .tabla th {
+    background: #eef4f1;
+    color: #243c36;
+    font-size: 0.9rem;
     font-weight: 600;
+}
+
+.tabla th:first-child {
+    border-radius: 9px 0 0 9px;
+}
+
+.tabla th:last-child {
+    border-radius: 0 9px 9px 0;
+}
+
+.tabla tbody tr {
+    transition: background 0.2s ease;
+}
+
+.tabla tbody tr:hover td {
+    background: #fbfdfc;
 }
 
 .error {
@@ -60,6 +82,14 @@
 @media (max-width: 600px) {
     .contenedor {
         padding: 1rem;
+    }
+
+    .encabezado {
+        align-items: flex-start;
+    }
+
+    .botonNuevaPropiedad {
+        flex: 0 0 auto;
     }
 
     .tablaContenedor {
@@ -87,8 +117,13 @@
         width: 100%;
         min-width: 0;
         padding: 1rem;
-        border: 1px solid #dddddd;
-        border-radius: 8px;
+        border: 1px solid #dfe7e4;
+        border-radius: 10px;
+        background: white;
+    }
+
+    .tabla tbody tr:hover td {
+        background: transparent;
     }
 
     .tabla td {
@@ -105,6 +140,7 @@
 
     .tabla td::before {
         flex: 0 0 85px;
+        color: #315c52;
         font-weight: 600;
     }
 

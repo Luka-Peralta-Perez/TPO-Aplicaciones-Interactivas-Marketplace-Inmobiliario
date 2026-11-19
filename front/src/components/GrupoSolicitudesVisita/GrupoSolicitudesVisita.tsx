@@ -8,6 +8,14 @@ type Props = {
     onCambiarEstado: (solicitudId: number, nuevoEstado: EstadoSolicitudVisita) => void;
 };
 
+const clasesEstado: Record<EstadoSolicitudVisita, string> = {
+    PENDIENTE: styles.pendiente,
+    CONFIRMADA: styles.confirmada,
+    REALIZADA: styles.realizada,
+    CANCELADA: styles.cancelada,
+    RECHAZADA: styles.rechazada,
+};
+
 export function GrupoSolicitudesVisita({ titulo, solicitudes, actualizadoId, onCambiarEstado }: Props) {
     return (
         <section className={styles.grupoPropiedad}>
@@ -47,7 +55,7 @@ export function GrupoSolicitudesVisita({ titulo, solicitudes, actualizadoId, onC
 
                     <p>
                         <strong>Estado:</strong>{" "}
-                        <span className={styles.estado}>
+                        <span className={`${styles.estado} ${clasesEstado[solicitud.estado]}`}>
                             {solicitud.estado}
                         </span>
                     </p>
@@ -55,18 +63,14 @@ export function GrupoSolicitudesVisita({ titulo, solicitudes, actualizadoId, onC
                     {solicitud.estado === "PENDIENTE" && (
                         <div className={styles.acciones}>
                             <button
-                                className={styles.boton}
                                 type="button"
-                                disabled={actualizadoId === solicitud.id}
-                                onClick={() => onCambiarEstado(solicitud.id, "CONFIRMADA")}>
+                                className={`${styles.boton} ${styles.botonConfirmar}`}>
                                 Confirmar
                             </button>
 
                             <button
-                                className={styles.boton}
                                 type="button"
-                                disabled={actualizadoId === solicitud.id}
-                                onClick={() => onCambiarEstado(solicitud.id, "RECHAZADA")}>
+                                className={`${styles.boton} ${styles.botonRechazar}`}>
                                 Rechazar
                             </button>
                         </div>

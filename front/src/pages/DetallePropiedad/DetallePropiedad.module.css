@@ -9,6 +9,19 @@
     margin-bottom: 1.5rem;
 }
 
+.volver {
+    display: inline-block;
+    color: #315c52;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.volver:hover {
+    color: #26483f;
+    transform: translateX(-2px);
+}
+
 .informacion {
     display: flex;
     justify-content: space-between;
@@ -29,6 +42,7 @@
 
 .operacion {
     font-weight: 600;
+    color: #315c52;
 }
 
 .zona {
@@ -56,8 +70,9 @@
     flex-direction: column;
     gap: 0.3rem;
     padding: 1rem;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 10px;
+    background: #fbfdfc;
     overflow-wrap: anywhere;
 }
 
@@ -70,6 +85,22 @@
     overflow-wrap: anywhere;
 }
 
+.verInmobiliaria {
+    display: inline-block;
+    padding: 0.55rem 0.85rem;
+    border-radius: 8px;
+    background: #eef4f1;
+    color: #315c52;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.verInmobiliaria:hover {
+    background: #315c52;
+    color: white;
+}
+
 .amenities {
     display: flex;
     flex-wrap: wrap;
@@ -79,8 +110,11 @@
 .amenity {
     max-width: 100%;
     padding: 0.5rem 0.8rem;
-    border: 1px solid #cccccc;
+    border: 1px solid #d5e2de;
     border-radius: 20px;
+    background: #eef4f1;
+    color: #315c52;
+    font-weight: 600;
     overflow-wrap: anywhere;
 }
 
@@ -95,8 +129,9 @@
 .comentario {
     min-width: 0;
     padding: 1rem;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 10px;
+    background: white;
     overflow-wrap: anywhere;
 }
 
@@ -109,12 +144,13 @@
 .respuesta {
     margin-top: 1rem;
     padding: 0.8rem;
-    border-left: 3px solid #777777;
+    border-left: 3px solid #315c52;
+    border-radius: 0 8px 8px 0;
+    background: #f0f7f4;
     overflow-wrap: anywhere;
 }
 
 @media (max-width: 800px) {
-
     .datos {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -133,7 +169,7 @@
     .datos {
         grid-template-columns: 1fr;
     }
-    
+
     .encabezadoComentario {
         flex-direction: column;
         gap: 0.3rem;

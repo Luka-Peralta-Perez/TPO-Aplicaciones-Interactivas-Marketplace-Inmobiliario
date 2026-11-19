@@ -1,6 +1,7 @@
 .header {
   padding: 1rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #dfe7e4;
+  background: #fbfdfc;
 }
 
 .nav {
@@ -11,14 +12,42 @@
   flex-wrap: wrap;
 }
 
-.enlace {
+.enlace,
+.activo {
   color: inherit;
   text-decoration: none;
   overflow-wrap: anywhere;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.enlace:hover {
+  background: #eef4f1;
+  color: #315c52;
 }
 
 .activo {
-  font-weight: bold;
+  background: #e7f0ec;
+  color: #315c52;
+  font-weight: 600;
+}
+
+.botonSalir {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid #d9a3a3;
+  border-radius: 8px;
+  background: #fff8f8;
+  color: #b00020;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.botonSalir:hover {
+  background: #feecec;
+  border-color: #b00020;
 }
 
 .contenido {
@@ -29,19 +58,44 @@
 }
 
 .tituloPanel {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
 }
 
 .enlaceInmobiliaria {
-    font-size: 0.95rem;
-    text-decoration: none;
-    color: inherit;
+  padding: 0.35rem 0.6rem;
+  border-radius: 7px;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: #315c52;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .enlaceInmobiliaria:hover {
-    text-decoration: underline;
+  background: #eef4f1;
+  color: #26483f;
+}
+
+.inmobiliariaActiva {
+  background: #e7f0ec;
+  color: #315c52;
+  font-weight: 600;
+}
+
+.contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #315c52;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 @media (max-width: 600px) {
@@ -54,8 +108,13 @@
     margin-top: 0.75rem;
   }
 
-  .enlace {
-    padding: 0.35rem 0;
+  .enlace,
+  .activo {
+    padding: 0.35rem 0.6rem;
+  }
+
+  .botonSalir {
+    padding: 0.35rem 0.6rem;
   }
 
   .contenido {

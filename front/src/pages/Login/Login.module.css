@@ -1,7 +1,17 @@
 .contenedor {
   width: min(420px, calc(100% - 2rem));
   min-width: 0;
-  margin: 2rem auto;
+  margin: 3rem auto;
+  padding: 2rem;
+  border: 1px solid #e2e7e5;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.contenedor h1 {
+  margin: 0 0 1.5rem;
+  color: #243c36;
 }
 
 .formulario {
@@ -11,11 +21,26 @@
   min-width: 0;
 }
 
+.formulario label {
+  font-weight: 600;
+}
+
 .formulario input {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  padding: 0.65rem;
+  padding: 0.75rem;
+  border: 1px solid #cfd8d5;
+  border-radius: 8px;
+  background: white;
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formulario input:focus {
+  border-color: #315c52;
+  box-shadow: 0 0 0 3px rgba(49, 92, 82, 0.12);
 }
 
 .campoContrasenia {
@@ -31,6 +56,37 @@
 
 .campoContrasenia button {
   flex: 0 0 auto;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #cfd8d5;
+  border-radius: 8px;
+  background: #f4f7f6;
+  cursor: pointer;
+  font: inherit;
+}
+
+.campoContrasenia button:hover {
+  background: #e9f0ed;
+}
+
+.formulario > button[type="submit"] {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  background: #315c52;
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.formulario > button[type="submit"]:hover:not(:disabled) {
+  background: #26483f;
+}
+
+.formulario > button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .error {
@@ -39,8 +95,34 @@
   overflow-wrap: anywhere;
 }
 
+.exito {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.registro {
+  margin: 1.25rem 0 0;
+  text-align: center;
+}
+
+.registro a {
+  color: #315c52;
+  font-weight: 600;
+}
+
 @media (max-width: 500px) {
   .contenedor {
     margin: 1.5rem auto;
+    padding: 1.5rem;
+  }
+
+  .campoContrasenia {
+    flex-direction: column;
+  }
+
+  .campoContrasenia button {
+    width: 100%;
   }
 }

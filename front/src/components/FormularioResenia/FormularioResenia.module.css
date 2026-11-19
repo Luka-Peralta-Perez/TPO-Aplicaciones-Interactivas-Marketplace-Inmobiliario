@@ -4,6 +4,14 @@
     gap: 1rem;
     min-width: 0;
     margin-top: 2rem;
+    padding: 1.25rem;
+    border: 1px solid #dfe7e4;
+    border-radius: 12px;
+    background: #fbfdfc;
+}
+
+.formResenia h3 {
+    margin: 0 0 0.25rem;
 }
 
 .campo {
@@ -13,26 +21,70 @@
     min-width: 0;
 }
 
+.campo label {
+    font-weight: 600;
+}
+
 .campo input,
 .campo select,
 .campo textarea {
     width: 100%;
     min-width: 0;
-    padding: 0.7rem;
-    border: 1px solid #bbbbbb;
-    border-radius: 6px;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    border: 1px solid #cfd8d5;
+    border-radius: 8px;
+    background: white;
     font: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: #315c52;
+    box-shadow: 0 0 0 3px rgba(49, 92, 82, 0.12);
 }
 
 .error {
+    margin: 0;
     padding: 0.8rem;
-    border: 1px solid #c62828;
-    border-radius: 6px;
+    border: 1px solid #f1b5b5;
+    border-radius: 8px;
+    background: #fff8f8;
+    color: #b00020;
     overflow-wrap: anywhere;
 }
 
+.botonPrincipal {
+    align-self: flex-start;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #315c52;
+    color: white;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+}
+
+.botonPrincipal:hover:not(:disabled) {
+    background: #26483f;
+}
+
+.botonPrincipal:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 @media (max-width: 550px) {
-    .formResenia button {
+    .formResenia {
+        padding: 1rem;
+    }
+
+    .botonPrincipal {
         width: 100%;
+        align-self: stretch;
     }
 }

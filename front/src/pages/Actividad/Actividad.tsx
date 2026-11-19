@@ -58,8 +58,8 @@ export default function Actividad() {
 
             case "RESENA":
                 return inmobiliariaId
-                ? `/inmobiliarias/${inmobiliariaId}?resenia=${actividad.referenciaOrigen}`
-                : "/panel/inmobiliaria";
+                    ? `/inmobiliarias/${inmobiliariaId}?resenia=${actividad.referenciaOrigen}&desde=panel`
+                    : "/panel/inmobiliaria";
 
             default:
                 return "/panel/actividad";
@@ -91,7 +91,7 @@ export default function Actividad() {
                 setMarcandoId(actividad.id);
 
                 await actividadesService.marcarComoLeida(actividad.id);
-                
+
                 disminuirNoLeidas();
 
                 setActividades((anteriores) =>
@@ -116,7 +116,7 @@ export default function Actividad() {
     if (cargando) {
         return (
             <section className={styles.contenedor}>
-                <EstadoCarga mensaje="Cargando actividad..."/>
+                <EstadoCarga mensaje="Cargando actividad..." />
             </section>
         );
     }
@@ -125,40 +125,39 @@ export default function Actividad() {
         <section className={styles.contenedor}>
             <h1 className={styles.titulo}>
                 Actividad
-                </h1>
+            </h1>
             {error && (
-                <EstadoError mensaje={error}/>
+                <EstadoError mensaje={error} />
             )}
             {actividades.length === 0 ? (
-                <EstadoVacio mensaje="No hay actividad registrada."/>
+                <EstadoVacio mensaje="No hay actividad registrada." />
             ) : (
                 <div className={styles.lista}>
-                {actividades.map((actividad) => (
-                    <button
-                        key={actividad.id}
-                        type="button"
-                        disabled={marcandoId === actividad.id}
-                        onClick={() => abrirActividad(actividad)}
-                        className={`${styles.actividad} ${
-                            actividad.leida
-                            ? styles.leida
-                            : styles.noLeida
-                        }`}>
-                        <div className={styles.encabezado}>
-                            <strong>
-                                {actividad.leida ? "○" : "●"}{" "}
-                                {obtenerTexto(actividad)}
-                            </strong>
-                            <span className={styles.estado}>
-                                {actividad.leida ? "Leída" : "Sin leer"}
-                            </span>
-                        </div>
+                    {actividades.map((actividad) => (
+                        <button
+                            key={actividad.id}
+                            type="button"
+                            disabled={marcandoId === actividad.id}
+                            onClick={() => abrirActividad(actividad)}
+                            className={`${styles.actividad} ${actividad.leida
+                                    ? styles.leida
+                                    : styles.noLeida
+                                }`}>
+                            <div className={styles.encabezado}>
+                                <strong>
+                                    {actividad.leida ? "○" : "●"}{" "}
+                                    {obtenerTexto(actividad)}
+                                </strong>
+                                <span className={styles.estado}>
+                                    {actividad.leida ? "Leída" : "Sin leer"}
+                                </span>
+                            </div>
 
-                        <p className={styles.fecha}>
-                            {new Date(actividad.creadoEn).toLocaleString("es-AR")}
-                        </p>
-                    </button>
-                ))}
+                            <p className={styles.fecha}>
+                                {new Date(actividad.creadoEn).toLocaleString("es-AR")}
+                            </p>
+                        </button>
+                    ))}
                 </div>
             )}
         </section>

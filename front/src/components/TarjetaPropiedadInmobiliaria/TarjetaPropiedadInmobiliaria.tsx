@@ -23,7 +23,9 @@ export function TarjetaPropiedadInmobiliaria({ propiedad }: Props) {
                     {Number(propiedad.precio).toLocaleString("es-AR")}
                 </strong>
 
-                <Link to={`/propiedades/${propiedad.id}`}>
+                <Link
+                    to={`/propiedades/${propiedad.id}`}
+                    className={styles.verPropiedad}>
                     Ver propiedad
                 </Link>
             </div>

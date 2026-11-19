@@ -57,8 +57,11 @@ export default function LayoutPanel() {
                     <strong>Panel del vendedor</strong>
                     <NavLink
                         to="/panel/inmobiliaria"
-                        className={styles.enlaceInmobiliaria}
-                    >
+                        className={({ isActive }) =>
+                            isActive
+                                ? `${styles.enlaceInmobiliaria} ${styles.inmobiliariaActiva}`
+                                : styles.enlaceInmobiliaria
+                        }>
                         Mi inmobiliaria
                     </NavLink>
                 </div>
@@ -90,11 +93,10 @@ export default function LayoutPanel() {
                         to="/panel/actividad"
                         className={claseEnlace}
                     >
-                        Actividad
-
+                        Actividad 🔔
                         {noLeidas > 0 && (
-                            <span>
-                                {" "}🔔 {noLeidas}
+                            <span className={styles.contador}>
+                                {noLeidas}
                             </span>
                         )}
                     </NavLink>
@@ -108,8 +110,8 @@ export default function LayoutPanel() {
 
                     <button
                         type="button"
-                        onClick={salir}
-                    >
+                        className={styles.botonSalir}
+                        onClick={salir}>
                         Salir
                     </button>
 

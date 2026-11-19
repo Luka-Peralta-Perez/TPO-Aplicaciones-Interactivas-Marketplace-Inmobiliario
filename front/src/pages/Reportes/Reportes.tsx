@@ -71,8 +71,8 @@ export default function Reportes() {
                 await Promise.all([cargarEstados(), cargarMensual(), cargarTiempo()]);
             } catch (error) {
                 const mensaje = error instanceof ApiError
-                ? error.message
-                : "No se pudo obtener la inmobiliaria";
+                    ? error.message
+                    : "No se pudo obtener la inmobiliaria";
 
                 setErrorEstados(mensaje);
                 setErrorMensual(mensaje);
@@ -88,11 +88,25 @@ export default function Reportes() {
 
     function formatearEstado(estado: string) {
         return estado
-        .toLowerCase()
-        .replace("_", " ")
-        .replace(/^\w/, (letra) =>
-        letra.toUpperCase()
-    );
+            .toLowerCase()
+            .replace("_", " ")
+            .replace(/^\w/, (letra) =>
+                letra.toUpperCase()
+            );
+    }
+
+    function claseEstado(estado: string) {
+        const clases: Record<string, string> = {
+            BORRADOR: styles.borrador,
+            PUBLICADA: styles.publicada,
+            RESERVADA: styles.reservada,
+            PAUSADA: styles.pausada,
+            VENDIDA: styles.vendida,
+            ALQUILADA: styles.alquilada,
+            CANCELADA: styles.cancelada,
+        };
+
+        return clases[estado.toUpperCase()] ?? "";
     }
 
     return (
@@ -103,50 +117,50 @@ export default function Reportes() {
             <section className={styles.seccion}>
                 <h2>Propiedades por estado</h2>
                 {cargandoEstados ? (
-                    <EstadoCarga mensaje="Cargando estados..."/>
-                    ): errorEstados ? (
-                        <EstadoError mensaje={errorEstados}/>
-                    ) : estados ? (
-                        <div className={styles.tarjetas}>
-                            {Object.entries(estados).map(
-                                ([estado, cantidad]) => (
-                                    <article
+                    <EstadoCarga mensaje="Cargando estados..." />
+                ) : errorEstados ? (
+                    <EstadoError mensaje={errorEstados} />
+                ) : estados ? (
+                    <div className={styles.tarjetas}>
+                        {Object.entries(estados).map(
+                            ([estado, cantidad]) => (
+                                <article
                                     key={estado}
-                                    className={styles.tarjeta}>
-                                        <span className={styles.nombreEstado}>
-                                            {formatearEstado(estado)}
-                                        </span>
-                                        <strong className={styles.cantidad}>
-                                            {cantidad}
-                                        </strong>
-                                    </article>
-                                )
-                            )}
-                        </div>
-                    ): (
-                        <EstadoVacio mensaje="No hay datos de propiedades por estado"/>
-                    )}
+                                    className={`${styles.tarjeta} ${claseEstado(estado)}`}>
+                                    <span className={styles.nombreEstado}>
+                                        {formatearEstado(estado)}
+                                    </span>
+                                    <strong className={styles.cantidad}>
+                                        {cantidad}
+                                    </strong>
+                                </article>
+                            )
+                        )}
+                    </div>
+                ) : (
+                    <EstadoVacio mensaje="No hay datos de propiedades por estado" />
+                )}
             </section>
 
             <section className={styles.seccion}>
                 <h2>Publicaciones y operaciones por mes</h2>
                 {cargandoMensual ? (
-                    <EstadoCarga mensaje="Cargando evolución mensual..."/>
-                    ): errorMensual ? (
-                        <EstadoError mensaje={errorMensual}/>
-                    ): mensual.length === 0 ? (
-                        <EstadoVacio mensaje="Todavía no hay datos mensuales."/>
-                    ) : ( 
-                        <GraficoReporteMensual mensual={mensual}/>
-                    )}
+                    <EstadoCarga mensaje="Cargando evolución mensual..." />
+                ) : errorMensual ? (
+                    <EstadoError mensaje={errorMensual} />
+                ) : mensual.length === 0 ? (
+                    <EstadoVacio mensaje="Todavía no hay datos mensuales." />
+                ) : (
+                    <GraficoReporteMensual mensual={mensual} />
+                )}
             </section>
 
             <section className={styles.seccion}>
                 <h2>Tiempo promedio en mercado</h2>
                 {cargandoTiempo ? (
-                    <EstadoCarga mensaje="Cargando tiempo promedio..."/>
-                ): errorTiempo ? (
-                    <EstadoError mensaje={errorTiempo}/>
+                    <EstadoCarga mensaje="Cargando tiempo promedio..." />
+                ) : errorTiempo ? (
+                    <EstadoError mensaje={errorTiempo} />
                 ) : tiempoMercado && tiempoMercado.propiedadesConsideradas > 0 ? (
                     <div className={styles.tiempoPromedio}>
                         <strong>{tiempoMercado.promedioDias}</strong>
@@ -156,13 +170,13 @@ export default function Reportes() {
                             {tiempoMercado.propiedadesConsideradas}{" "}
                             propiedad
                             {tiempoMercado.propiedadesConsideradas !== 1
-                            ? "es"
-                            : ""
-                        }
+                                ? "es"
+                                : ""
+                            }
                         </p>
                     </div>
                 ) : (
-                    <EstadoVacio mensaje="Todavía no hay propiedades vendidas o alquiladas para calcular este indicador"/>
+                    <EstadoVacio mensaje="Todavía no hay propiedades vendidas o alquiladas para calcular este indicador" />
                 )}
             </section>
         </section>

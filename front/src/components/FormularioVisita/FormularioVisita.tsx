@@ -13,7 +13,7 @@ type Props = {
     propiedadId: number;
 };
 
-export function FormularioVisita({propiedadId,}: Props) {
+export function FormularioVisita({ propiedadId, }: Props) {
     const [nombreVisita, setNombreVisita] = useState("");
     const [telefonoVisita, setTelefonoVisita] = useState("");
     const [fechaVisita, setFechaVisita] = useState("");
@@ -98,6 +98,7 @@ export function FormularioVisita({propiedadId,}: Props) {
         <div className={styles.seccion}>
             <button
                 type="button"
+                className={styles.botonSecundario}
                 onClick={() =>
                     setMostrarFormularioVisita((anterior) => !anterior)
                 }>
@@ -203,8 +204,8 @@ export function FormularioVisita({propiedadId,}: Props) {
 
                     <button
                         type="submit"
-                        disabled={enviandoVisita}
-                    >
+                        className={styles.botonPrincipal}
+                        disabled={enviandoVisita}>
                         {enviandoVisita
                             ? "Enviando..."
                             : "Pedir visita"}

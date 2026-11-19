@@ -47,7 +47,7 @@ export default function Login() {
             <h1>Ingresar como vendedor</h1>
 
             {registroExitoso && (
-                <p>
+                <p className={styles.exito}>
                     Cuenta creada correctamente. Ya podés iniciar sesión.
                 </p>
             )}
@@ -110,7 +110,7 @@ export default function Login() {
                 </button>
             </form>
 
-            <p>
+            <p className={styles.registro}>
                 ¿No tenés cuenta?{" "}
                 <Link to="/registro">
                     Registrate

@@ -6,13 +6,13 @@ type Props = {
     propiedad: PropiedadPublica;
 };
 
-export function TarjetaPropiedad({propiedad}: Props) {
+export function TarjetaPropiedad({ propiedad }: Props) {
     return (
         <article className={styles.tarjeta}>
             <img
                 src={propiedad.fotoPortada}
                 alt={propiedad.titulo}
-                className={styles.imagen}/>
+                className={styles.imagen} />
 
             <div className={styles.contenido}>
                 <span className={styles.operacion}>
@@ -40,7 +40,8 @@ export function TarjetaPropiedad({propiedad}: Props) {
                 </p>
 
                 <Link
-                    to={`/propiedades/${propiedad.id}`}>
+                    to={`/propiedades/${propiedad.id}`}
+                    className={styles.verPropiedad}>
                     Ver propiedad
                 </Link>
             </div>

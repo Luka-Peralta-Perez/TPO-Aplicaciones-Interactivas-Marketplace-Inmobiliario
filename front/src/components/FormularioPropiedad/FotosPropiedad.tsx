@@ -88,6 +88,7 @@ export function FotosPropiedad({ formulario, textoFotos }: Props) {
 
                                     <button
                                         type="button"
+                                        className={styles.botonEliminar}
                                         onClick={() => setFotoAEliminar(indice)}>
                                         Eliminar
                                     </button>

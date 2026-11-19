@@ -1,7 +1,7 @@
 :root {
   font-family: system-ui, sans-serif;
-  color: #202124;
-  background: #f7f5f0;
+  color: #1f2926;
+  background: #f6f8f7;
 }
 
 *,
@@ -23,6 +23,10 @@ body,
 
 body {
   margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f6f8f7;
+  color: #1f2926;
 }
 
 img,
@@ -35,13 +39,7 @@ input,
 select,
 textarea,
 button {
-  font: inherit;
-}
-
-input,
-select,
-textarea,
-button {
   max-width: 100%;
   min-width: 0;
+  font: inherit;
 }

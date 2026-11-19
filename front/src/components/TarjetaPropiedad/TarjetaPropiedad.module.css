@@ -1,8 +1,15 @@
 .tarjeta {
     min-width: 0;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 10px;
     overflow: hidden;
+    background: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
 }
 
 .imagen {
@@ -20,7 +27,7 @@
     margin: 0.5rem 0;
 }
 
-.contenido h2, 
+.contenido h2,
 .contenido p {
     overflow-wrap: anywhere;
 }
@@ -28,11 +35,29 @@
 .operacion {
     font-size: 0.85rem;
     font-weight: 600;
+    color: #315c52;
 }
 
 .precio {
     font-size: 1.2rem;
     font-weight: 700;
+}
+
+.verPropiedad {
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: 8px;
+    background: #eef4f1;
+    color: #315c52;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.verPropiedad:hover {
+    background: #315c52;
+    color: white;
 }
 
 @media (max-width: 600px) {

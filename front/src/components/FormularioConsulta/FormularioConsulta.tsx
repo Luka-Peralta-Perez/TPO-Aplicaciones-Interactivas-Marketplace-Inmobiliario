@@ -85,7 +85,7 @@ export function FormularioConsulta({ propiedadId, onConsultaCreada, }: Props) {
                     id="nombreAutor"
                     type="text"
                     value={nombreAutor}
-                    onChange={(event) =>setNombreAutor(event.target.value)}/>
+                    onChange={(event) => setNombreAutor(event.target.value)} />
 
                 {erroresConsulta.nombreAutor && (
                     <p className={styles.errorConsulta}>
@@ -121,8 +121,8 @@ export function FormularioConsulta({ propiedadId, onConsultaCreada, }: Props) {
 
             <button
                 type="submit"
-                disabled={enviandoConsulta}
-            >
+                className={styles.botonPrincipal}
+                disabled={enviandoConsulta}>
                 {enviandoConsulta
                     ? "Enviando..."
                     : "Enviar consulta"}

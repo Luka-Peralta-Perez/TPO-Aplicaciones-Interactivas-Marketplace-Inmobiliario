@@ -60,7 +60,9 @@ export default function DetallePropiedad() {
     if (error || !propiedad) {
         return (
             <section className={styles.contenedor}>
-                <Link to="/">← Volver</Link>
+                <Link to="/" className={styles.volver}>
+                    ← Volver
+                </Link>
                 <EstadoError mensaje={error ?? "Propiedad no encontrada."} />
             </section>
         );
@@ -71,7 +73,7 @@ export default function DetallePropiedad() {
     return (
         <section className={styles.contenedor}>
             <div className={styles.encabezado}>
-                <Link to="/">
+                <Link to="/" className={styles.volver}>
                     ← Volver a propiedades
                 </Link>
             </div>
@@ -80,7 +82,7 @@ export default function DetallePropiedad() {
                 key={propiedad.id}
                 titulo={propiedad.titulo}
                 fotos={propiedad.fotos}
-                fotoPortada={propiedad.fotoPortada}/>
+                fotoPortada={propiedad.fotoPortada} />
 
             <div className={styles.informacion}>
                 <div>
@@ -182,7 +184,8 @@ export default function DetallePropiedad() {
                 <div className={styles.seccion}>
                     <h2>Inmobiliaria</h2>
                     <Link
-                        to={`/inmobiliarias/${propiedad.inmobiliaria.id}`}>
+                        to={`/inmobiliarias/${propiedad.inmobiliaria.id}`}
+                        className={styles.verInmobiliaria}>
                         Ver {propiedad.inmobiliaria.nombre}
                     </Link>
                 </div>

@@ -130,7 +130,10 @@ export function FormularioResenia({ inmobiliariaId, onReseniaCreada }: Props) {
                 </p>
             )}
 
-            <button type="submit" disabled={enviando}>
+            <button
+                type="submit"
+                className={styles.botonPrincipal}
+                disabled={enviando}>
                 {enviando ? "Enviando..." : "Enviar reseña"}
             </button>
         </form>

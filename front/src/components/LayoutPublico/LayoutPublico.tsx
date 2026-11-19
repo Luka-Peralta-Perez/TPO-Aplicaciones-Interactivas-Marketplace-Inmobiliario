@@ -39,7 +39,9 @@ export default function LayoutPublico() {
                         Buscar
                     </button>
                 </form>
-                <Link to="/login">
+                <Link
+                    to="/login"
+                    className={styles.ingreso}>
                     Ingresar como vendedor
                 </Link>
             </header>

@@ -1,8 +1,15 @@
 .tarjeta {
     min-width: 0;
     overflow: hidden;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
+    border: 1px solid #dfe7e4;
+    border-radius: 10px;
+    background: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
 }
 
 .tarjeta img {
@@ -19,6 +26,12 @@
     padding: 1rem;
 }
 
+.contenidoTarjeta > span {
+    color: #315c52;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
 .contenidoTarjeta h3,
 .contenidoTarjeta p {
     margin: 0;
@@ -27,4 +40,23 @@
 
 .contenidoTarjeta strong {
     overflow-wrap: anywhere;
+    font-size: 1.1rem;
+}
+
+.verPropiedad {
+    align-self: flex-start;
+    display: inline-block;
+    margin-top: 0.3rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: 8px;
+    background: #eef4f1;
+    color: #315c52;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.verPropiedad:hover {
+    background: #315c52;
+    color: white;
 }

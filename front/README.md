@@ -4,6 +4,10 @@ Frontend del Trabajo Práctico Obligatorio de **Aplicaciones Interactivas**.
 
 La aplicación está desarrollada con **React, TypeScript y Vite** y consume la API REST ubicada en la carpeta `back/`.
 
+## Convención de estilos
+
+El frontend utiliza estilos globales para la base de la aplicación, CSS Modules para los estilos específicos de páginas y componentes, y estilos inline únicamente para valores calculados dinámicamente durante el render.
+
 ## Requisitos
 
 - Node.js

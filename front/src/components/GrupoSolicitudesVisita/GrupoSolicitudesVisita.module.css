@@ -14,7 +14,7 @@
 .tarjeta {
     min-width: 0;
     padding: 18px;
-    border: 1px solid #ddd;
+    border: 1px solid #dfe7e4;
     border-radius: 10px;
     background: white;
     overflow-wrap: anywhere;
@@ -25,9 +25,15 @@
 }
 
 .telefono {
-    color: inherit;
+    color: #315c52;
     font-weight: 600;
+    text-decoration: none;
     overflow-wrap: anywhere;
+}
+
+.telefono:hover {
+    color: #26483f;
+    text-decoration: underline;
 }
 
 .estado {
@@ -36,10 +42,34 @@
     margin-top: 8px;
     padding: 4px 10px;
     border-radius: 999px;
-    background: #f1f1f1;
     font-size: 14px;
     font-weight: 600;
     overflow-wrap: anywhere;
+}
+
+.pendiente {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.confirmada {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.realizada {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.cancelada {
+    background: #eeeeee;
+    color: #555;
+}
+
+.rechazada {
+    background: #fee2e2;
+    color: #b91c1c;
 }
 
 .acciones {
@@ -52,10 +82,34 @@
 
 .boton {
     max-width: 100%;
-    padding: 8px 14px;
-    border: none;
+    padding: 0.65rem 1rem;
     border-radius: 8px;
     cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.botonConfirmar {
+    border: 1px solid #b7d8c3;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.botonConfirmar:hover:not(:disabled) {
+    background: #dcfce7;
+    border-color: #86c59c;
+}
+
+.botonRechazar {
+    border: 1px solid #f1b5b5;
+    background: #fff8f8;
+    color: #b00020;
+}
+
+.botonRechazar:hover:not(:disabled) {
+    background: #feecec;
+    border-color: #d98c8c;
 }
 
 .boton:disabled {
